@@ -1,0 +1,20 @@
+{
+	"id": "Balatrhodes",
+	"name": "Balatrhodes Island",
+	"author": ["Vicarius"],
+	"description": "Various Jokers and Consumables based around Arknights.",
+	"prefix": "akts",
+	"main_file": "Balatrhodes.lua",
+	"priority": 0,
+	"badge_colour": "6B2980",
+	"badge_text_colour": "FFFFFF",
+  "display_name": "Balatrhodes",
+	"version": "0.0.1",
+	"dependencies": [
+			"Steamodded (>=1.0.0~BETA-0711a)",
+      "Lovely (>=0.6)"
+	],
+  "conflicts": [],
+	"provides": [],
+	"dump_loc": false 
+}
