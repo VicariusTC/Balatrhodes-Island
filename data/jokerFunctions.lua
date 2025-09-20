@@ -173,12 +173,17 @@ function get_current_pool(_type, _rarity, _legendary, _append)
     return _pool, _pool_key
 end
 -------------------------------------------------------
-Create_Joker = function (itemList, card, edition)
-    card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("akts_plus_summon"), G.C.ATTENTION})
+Create_Joker = function (itemList, card, edition, debuffed, msg)
+    if msg then
+        card_eval_status_text(card or G.jokers.cards[1], 'extra', nil, nil, nil, {message = msg, G.C.ATTENTION})
+    end  
     local pickedJoker = pseudorandom_element(itemList, pseudoseed(math.random(500)))
     local new_card = create_card('Joker', G.jokers, nil,nil,nil,nil,pickedJoker)
     if edition then
         new_card:set_edition(edition, true)
+    end
+    if debuffed then
+        SMODS.debuff_card(new_card, true, "notGettingUndebuffedPal")
     end
     new_card:add_to_deck()
     G.jokers:emplace(new_card)
@@ -694,4 +699,65 @@ MergeLists = function (list1, list2)
     end
 
     return result
+end
+
+HandleEblanaServant = function (card)
+    if not (G.jokers and G.jokers.cards) then
+        return
+    end
+    local maxUpgradeLevel = G.AKTS_Globals.lesserServantMaxLevel
+    local maxServantCount = G.AKTS_Globals.servantMaxCount
+    local servants = {}
+
+    for _, joker in pairs(G.jokers.cards) do
+        local ability = joker.ability
+        if ability and type(ability.extra) == "table" then
+            local id = IdOf(joker)
+            if id == "j_akts_ServantLesser" or id == "j_akts_ServantGreater" then
+                table.insert(servants, joker)
+            end
+        end
+    end
+
+    if #servants < maxServantCount then
+        Create_Joker({"j_akts_ServantLesser"}, card, {negative = true}, false, localize("akts_plus_summon"))
+        return
+    end
+    local UpgradeLesserServant = function (card, index, servantCount, maxUpgradeLevel)
+        servantCount[index].ability.extra.upgradeCount = servantCount[index].ability.extra.upgradeCount + 1
+        if servantCount[1].ability.extra.upgradeCount >= maxUpgradeLevel and servantCount[2].ability.extra.upgradeCount >= maxUpgradeLevel 
+        and servantCount[1].ability.name == servantCount[2].ability.name then
+            servantCount[1]:set_eternal(false)
+            servantCount[2]:set_eternal(false)
+            SMODS.destroy_cards(servantCount[1])
+            SMODS.destroy_cards(servantCount[2])
+            Create_Joker({"j_akts_ServantGreater"}, card, {negative = true})
+        else
+            card_eval_status_text(servantCount[index], 'extra', nil, nil, nil, {message = localize('k_upgrade_ex'), G.C.TAROT})
+        end
+    end
+    local s1, s2 = servants[1], servants[2]
+
+    if IdOf(s1) == "j_akts_ServantGreater" or IdOf(s2) == "j_akts_ServantGreater" then
+        local greaterIndex = nil
+        for k, joker in pairs(servants) do
+            local ability = joker.ability
+            if IdOf(joker) == "j_akts_ServantLesser" and ability.extra.upgradeCount < maxUpgradeLevel then
+                UpgradeLesserServant(card, k, servants, maxUpgradeLevel)
+                return
+            else
+                greaterIndex = k
+            end
+        end
+        servants[greaterIndex].ability.extra.upgradeCount = servants[greaterIndex].ability.extra.upgradeCount + 1
+        card_eval_status_text(servantCount[index], 'extra', nil, nil, nil, {message = localize('k_upgrade_ex'), G.C.TAROT})
+    elseif servants[1].ability.extra.upgradeCount <= servants[2].ability.extra.upgradeCount then
+        UpgradeLesserServant(card, 1, servants, maxUpgradeLevel)
+    else
+        UpgradeLesserServant(card, 2, servants, maxUpgradeLevel)
+    end
+end
+
+IdOf = function(card) 
+    return "j_akts_" .. card.ability.name
 end

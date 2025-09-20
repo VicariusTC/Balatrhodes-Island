@@ -10,6 +10,7 @@ SMODS.current_mod.reset_game_globals = function(run_start)
         G.AKTS_Globals.yatosSold = 0
         G.AKTS_Globals.cloneChips = 25
         G.AKTS_Globals.burnBurstFactor = 1
+        G.AKTS_Globals.necrassDestroyed = 0
     end
 end
 
@@ -26,6 +27,9 @@ G.AKTS_Globals = {
     yatosSold = 0,
     yatosSoldCondition = 2,
     cloneChips = 25,
+    necrassDestroyed = 0,
+    lesserServantMaxLevel = 3,
+    servantMaxCount = 2
 }
 
 G.AKTS_Colors = {

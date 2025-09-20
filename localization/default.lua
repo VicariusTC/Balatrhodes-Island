@@ -728,6 +728,74 @@ return {
                     }
                 },
             },
+
+            j_akts_Necrass = {
+                name = "Necrass",
+                text = {
+                    {
+                        "{C:attention}Destroys{} debuffed Jokers ",
+                        "when {C:attention}hand is played{}.",
+                    },
+                    {
+                        "Creates a {C:dark_edition}Negative{}", 
+                        "{C:spectral}Servant of Lamentation{} when", 
+                        "a Joker is {C:attention}destroyed",
+                        "or a {C:attention}Blind{} is defeated. {C:inactive}(Max. 2)",
+                        "Upgrades the {C:attention}least upgraded",
+                        "{C:spectral}Servant of Lamentation{} instead",
+                        "if you own {C:attention}#1#{} {C:spectral}Servants of Lamentation{}"
+                    }
+                },
+            },
+
+            j_akts_ServantLesser = {
+                name = "Servant of Lamentation",
+                text = {
+                    {
+                        "This Joker has been upgraded {C:attention}#5#{} times.",
+                        "{C:attention}Eternal{}, but destroys itself if",
+                        "you dont own a {C:spectral}Necrass Joker{}.",
+                    },
+                    {
+                        "{C:chips}+#1#{} Chips and {C:mult}+#2#{} Mult.",
+                        "{X:attention,C:white}Upgrade 1:{} {C:chips}+#3#{} Chips for every",
+                        "Joker destroyed by a {C:spectral}Necrass{}",
+                        "Joker this run. {C:inactive}(Currently {C:chips}+#4#{}{C:inactive} Chips)",
+                    },
+                    {
+                        "{X:attention,C:white}Upgrade 2:{} Earn {C:money}$#6#{} when",
+                        "another Joker is {C:attention}destroyed{}.",
+                    },
+                    {
+                        "{X:attention,C:white}Upgrade 3:{} If you own another",
+                        "fully upgraded {C:spectral}Servant of Lamentation{}",
+                        "{C:attention}fuses{} into a {C:spectral}Special Form{} with it.",
+                    }
+                },
+            },
+
+            j_akts_ServantGreater = {
+                name = "Greater Servant of Lamentation",
+                text = {
+                    {
+                        "This Joker has been upgraded {C:attention}#4#{} times.",
+                        "Can be upgraded {C:attention}infinitely{}.",
+                        "{C:attention}Eternal{}, but destroys itself if",
+                        "you dont own a {C:spectral}Necrass{} Joker.",
+                    },
+                    {
+                        "{X:chips,C:white}X#1#{} Chips and {X:mult,C:white}X#2#{} Mult.",
+                        "Gains {X:chips,C:white}X#3#{} Chips each time",
+                        "this Joker is upgraded",
+                        "by a {C:spectral}Necrass{} Joker.",
+                    },
+                    {
+                        "Creates a {C:attention}debuffed{} {C:dark_edition}Negative{}",
+                        "{C:spectral}Joker{} at end of round",
+                        "after this Joker has been upgraded {C:attention}#5# times{}."
+                    }
+                },
+            },
         },
         SummonConsumableType = {
             c_akts_Mon3tr = {
@@ -938,6 +1006,7 @@ return {
             k_akts_Higashi = "Higashi",
             k_akts_RimBil = "Rim Billiton",
             k_akts_Victoria = "Victoria",
+            k_akts_Tara = "Tara",
             k_akts_Babel = "Babel",
 
             akts_plus_summon = "+1 Summon",
@@ -975,6 +1044,8 @@ return {
             akts_surfer_score = "DEF Down!",
 
             akts_silence_immortal = "Immortal!",
+
+            akts_summon_greater = "Fused!",
 
             akts_plus_hook = "Hooked!",
 

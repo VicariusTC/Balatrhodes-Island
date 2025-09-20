@@ -34,7 +34,7 @@ SMODS.Joker{
             table.insert(excluList, "j_akts_AmiyaC")
             local rhodesList = calcTagged(card.ability.extra.tagFaction[1], excluList)
             if #rhodesList > 0 then
-                Create_Joker(rhodesList, card)
+                Create_Joker(rhodesList, card, nil, nil, localize("akts_plus_summon"))
             end
         else
             card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("akts_no_space"), G.C.INACTIVE})
