@@ -13,8 +13,8 @@ SMODS.Joker{
     config = { 
       extra = {
         multScaleFirst = 1,
-        multScaleSecond = 2,
-        multScaleThird = 3,
+        multScaleSecond = 3,
+        multScaleThird = 5,
         multStorage = 0,
         tagClass = {"Caster"},
         tagFaction = {"Rhine", "Columbia"}
@@ -357,6 +357,68 @@ SMODS.Joker{
             card.ability.extra.targetRetriggered = true
         end
 
+    end,
+    set_badges = function(self, card, badges)
+        aktsBadgeHelper(self,card,badges)
+    end
+}
+
+SMODS.Joker{
+    key = 'Ifrit',
+    name = 'Ifrit',
+    rarity = 2,
+    atlas = 'Jokers',
+	cost = 6,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    pos = {x = 4, y = 14}, 
+    config = { 
+      extra = {
+        akts_burn_burst = true,
+        multFactor = 2,
+        burnFactor = 2,
+        multFactorScale = 1,
+        burnFactorScale = 1,
+        handTypes = {"Straight", "Straight Flush"},
+        tagClass = {"Caster"},
+        tagFaction = {"Rhine", "Columbia"}
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        info_queue[#info_queue+1] = {set = 'Other', key = "elementalInjury"}
+        info_queue[#info_queue+1] = {set = 'Other', key = "burnBurst"}
+        return {vars = {center.ability.extra.multFactor, center.ability.extra.burnFactor, ((G.GAME.hands[center.ability.extra.handTypes[1]].played + G.GAME.hands[center.ability.extra.handTypes[2]].played) or 0) * center.ability.extra.multFactor, center.ability.extra.multFactorScale}}
+    end,
+    calculate = function(self,card,context)
+        if context.joker_main then
+            if not G.AKTS_Globals.burnBurstApplied then
+                local addedElemInj = ((G.GAME.hands[card.ability.extra.handTypes[1]].played + G.GAME.hands[card.ability.extra.handTypes[2]].played) or 0) * card.ability.extra.burnFactor
+                calculateElemInjury(card, 'Burn', addedElemInj)
+                card_eval_status_text(card, 'extra', nil, nil, nil, {message = elemBurstChangeText(addedElemInj), G.C.ATTENTION})
+            elseif next(context.poker_hands[card.ability.extra.handTypes[2]]) and not context.blueprint then
+                card.ability.extra.multFactor = card.ability.extra.multFactor + card.ability.extra.multFactorScale
+                card.ability.extra.burnFactor = card.ability.extra.burnFactor + card.ability.extra.burnFactorScale
+                card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex'), G.C.MULT})
+            end
+            return {
+			    mult = ((G.GAME.hands[card.ability.extra.handTypes[1]].played + G.GAME.hands[card.ability.extra.handTypes[2]].played) or 0) * card.ability.extra.multFactor,
+                card = card
+		    }
+        end
+
+        --Burn Apply
+        if context.post_trigger and leftmostActivatedTrue("akts_burn_burst", getJokerSlot(card)) and G.AKTS_Globals.burnBurstApplied and not context.blueprint and context.other_ret.jokers then
+            local returnMult = calculateBurnBurst(card, context, context.other_ret.jokers)
+            if returnMult > 0 then
+                return {
+                    mult = returnMult,
+                    card = context.other_card
+                }
+            end
+        end
     end,
     set_badges = function(self, card, badges)
         aktsBadgeHelper(self,card,badges)

@@ -624,6 +624,24 @@ return {
                 },
             },
 
+            j_akts_Ifrit = {
+                name = "Ifrit",
+                text = {
+                    {
+                        "{C:mult}+#1#{} Mult and {C:attention}+#1#{} {C:red}Burn Elemental Injury{}",
+                        "for each {C:attention}Straight{} or {C:attention}Straight Flush",
+                        "played this run. {C:inactive}(Currently {C:red}+#3#{}{C:inactive})",
+                    },
+                    {
+                        "If you play a {C:attention}Straight Flush{} while",
+                        "the blind is under the effect ",
+                        "of a {C:red}Burn Elemental Burst{},",
+                        "increases this Joker's",
+                        "{C:attention}other effect's{} values by {C:attention}#4#{}."
+                    }
+                },
+            },
+
             j_akts_Provence = {
                 name = "Provence",
                 text = {
