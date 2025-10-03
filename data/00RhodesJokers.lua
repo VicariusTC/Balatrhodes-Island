@@ -232,10 +232,7 @@ SMODS.Joker{
             end
             G.E_MANAGER:add_event(Event({func = (function() card:juice_up(); return true end)}))
             return {
-                Xmult_mod = returnMult,
-                message = 'X' .. returnMult,
-                colour = G.C.MULT,
-                card = context.other_card
+                xmult = returnMult,
             }
         end
         if context.cardarea == G.jokers and context.scoring_hand then
@@ -309,10 +306,7 @@ SMODS.Joker{
             end 
             G.E_MANAGER:add_event(Event({func = (function() card:juice_up(); return true end)}))
             return {
-                Xmult_mod = returnMult,
-                message = 'X' .. returnMult,
-                colour = G.C.MULT,
-                card = context.other_card
+                Xmult = returnMult,
             }
         end
 
@@ -927,7 +921,7 @@ SMODS.Joker{
                         end
                     end
                 end
-                if #card.ability.extra.aoEMain > 0 then
+                if #card.ability.extra.aoEMain[1] > 0 then
                     for i, v in pairs(card.ability.extra.aoEMain[1]) do
                         v:juice_up()
                     end

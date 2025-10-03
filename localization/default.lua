@@ -319,7 +319,7 @@ return {
                         "Gains {C:blue}+#3#{} Chips each",
                         "time a {C:attention}Steel{} or",
                         "{C:attention}Gold Card is scored.",
-                        "{C:inactive}Currently {}{C:blue}+#4# {C:inactive}Chips.{}",
+                        "{C:inactive}(Currently {}{C:blue}+#4# {C:inactive}Chips.){}",
                     },
                     --[[
                     {
@@ -329,6 +329,20 @@ return {
                         "{C:inactive}(Max. #2#)"
                     },
                     ]]
+                },
+            },
+
+            j_akts_Glaucus = {
+                name = "Glaucus",
+                text = {
+                    {
+                        "Each {C:attention}Gold{} or {C:attention}Steel{} Card held in hand ",
+                        "has a {C:green}#1# in #2#{} chance to be",
+                        "unenhanced at {C:attention}end of round{}.",
+                        "Gives {C:money}$#3#{} and gains {X:mult,C:white}X#4#{} Mult",
+                        "for {C:attention}each card{} unenhanced this way.",
+                        "{C:inactive}(Currently{} {X:mult,C:white}X#5#{} {C:inactive}Mult)"
+                    },
                 },
             },
 
@@ -652,6 +666,25 @@ return {
                         "the amount of Chips.",
                         "{C:inactive}Changes to {}{C:green}#3# in #5#{}{C:inactive} if you own",
                         "{C:attention}#6#+{} {C:red}#7#{} {C:inactive}and/or{} {C:red}#8# {}{C:inactive}Jokers.",
+                    },
+                },
+            },
+
+            j_akts_Vulpisfoglia = {
+                name = "Vulpisfoglia",
+                text = {
+                    {
+                        "Earn an extra {C:money}$#1#{} of {C:attention}interest{} for",
+                        "every {C:money}$#2#{} you have at end of round",
+                    },
+                    {
+                        "Gives {C:chips}+#4#{} Chips if played hand",
+                        "contains exactly {C:attention}#3#{} scoring cards.",
+                        "{C:inactive,s:0.8}(Reduces by 1 each time this effect",
+                        "{C:inactive,s:0.8}triggers and resets otherwise.)",
+                        "If this effect triggers when {C:attention}1{} card",
+                        "{C:attention}is scored{}, also earns {C:money}$#5#{}",
+                        "and gives {C:mult}+#6#{} Mult."
                     },
                 },
             },

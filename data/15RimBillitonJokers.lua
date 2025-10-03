@@ -59,7 +59,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = 'Warmy',
     name = 'Warmy',
-    rarity = 2,
+    rarity = 1,
     atlas = 'Jokers',
 	cost = 4,
     unlocked = true, 
@@ -114,9 +114,7 @@ SMODS.Joker{
             
             if G.AKTS_Globals.burnBurstApplied then
                 return {
-                    Xmult_mod = card.ability.extra.elemBurstXMult,
-                    message = "X" .. card.ability.extra.elemBurstXMult,
-                    colour = G.C.MULT,
+                    xmult = card.ability.extra.elemBurstXMult,
                     delay = 0.5,
                 }
             end

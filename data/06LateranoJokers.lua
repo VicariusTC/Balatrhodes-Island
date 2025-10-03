@@ -225,9 +225,7 @@ SMODS.Joker{
                         returnMult = 2* returnMult
                     end
                     return {
-                        Xmult_mod = 1+ returnMult,
-                        message = 'X' .. 1+ returnMult,
-                        colour = G.C.MULT,
+                        xmult = 1+ returnMult,
                         card = other_card
                     }
                 end

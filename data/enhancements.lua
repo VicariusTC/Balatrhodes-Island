@@ -130,9 +130,7 @@ SMODS.Enhancement {
                     card.ability.extra.remainingTurn = card.ability.extra.remainingTurn - 1
                     return {
                     card = card,
-                    Xmult_mod = card.ability.extra.h_x_mult,
-                    message = "X".. card.ability.extra.h_x_mult,
-                    colour = G.C.MULT
+                    xmult = card.ability.extra.h_x_mult,
                 }
                 else
                     card:set_ability(G.P_CENTERS.c_base, nil, true)

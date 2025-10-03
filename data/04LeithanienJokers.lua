@@ -42,9 +42,7 @@ SMODS.Joker{
                         card.ability.extra.storedAttack = 0
                         return {
                             card = card,
-                            Xmult_mod = card.ability.extra.effectiveMult,
-                            message = 'X' .. card.ability.extra.effectiveMult,
-                            colour = G.C.MULT,
+                            xmult = card.ability.extra.effectiveMult,
                         }
                     end
                 else
@@ -60,9 +58,7 @@ SMODS.Joker{
                     card.ability.extra.storedAttack = 0
                     return {
                         card = card,
-                        Xmult_mod = card.ability.extra.effectiveMult,
-                        message = 'X' .. card.ability.extra.effectiveMult,
-                        colour = G.C.MULT,
+                        xmult = card.ability.extra.effectiveMult,
                     }
                 end
             end          

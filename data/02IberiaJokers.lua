@@ -85,4 +85,56 @@ SMODS.Joker{
     end 
 }
 
+SMODS.Joker{
+    key = 'Glaucus',
+    name = 'Glaucus',
+    rarity = 1,
+    atlas = 'Jokers',
+	cost = 4,
+    unlocked = true, 
+    discovered = true, 
+    blueprint_compat = false, 
+    eternal_compat = true, 
+    perishable_compat = true,
+    pos = {x = 1, y = 4}, 
+    config = { 
+      extra = {
+        unenhanceChance = 2,
+        unenhanceBonusCash = 5,
+        unenhanceBonusMult = 0.2,
+        xMultStorage = 1,
+        tagClass = {"Supporter"},
+        tagFaction = {"Iberia"}
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        info_queue[#info_queue+1] = G.P_CENTERS.m_steel
+        info_queue[#info_queue+1] = G.P_CENTERS.m_gold
+        return {vars = {G.GAME.probabilities.normal, center.ability.extra.unenhanceChance, center.ability.extra.unenhanceBonusCash, center.ability.extra.unenhanceBonusMult, center.ability.extra.xMultStorage}}
+    end,
+    calculate = function(self,card,context)
+        if context.cardarea == G.hand and context.individual and not context.other_card.debuff and context.end_of_round
+        and (context.other_card.config.center == G.P_CENTERS.m_akts_TempSteel or context.other_card.config.center == G.P_CENTERS.m_steel or context.other_card.config.center == G.P_CENTERS.m_gold) then
+            local performUnenhance = math.random() <= G.GAME.probabilities.normal/card.ability.extra.unenhanceChance
+            if performUnenhance then
+                context.other_card:set_ability(G.P_CENTERS.c_base, nil, true)
+                card.ability.extra.xMultStorage = card.ability.extra.xMultStorage + card.ability.extra.unenhanceBonusMult
+                card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex'), G.C.MULT})
+                return {
+                    dollars = card.ability.extra.unenhanceBonusCash
+                }
+            end
+        end
+
+        if context.joker_main then
+            return
+            {
+                xmult = card.ability.extra.xMultStorage
+            }
+        end
+    end,
+    set_badges = function(self, card, badges)
+        aktsBadgeHelper(self,card,badges)
+    end 
+}
 ----------------------------------------Base Iberia end----------------------------------------

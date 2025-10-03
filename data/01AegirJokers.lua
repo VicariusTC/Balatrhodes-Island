@@ -50,7 +50,7 @@ SMODS.Joker{
                         table.insert(excluList, "j_akts_SpecterAlter")
                         local abyssalList = calcTagged(card.ability.extra.tagFaction[2], excluList)
                         if #abyssalList > 0 then
-                            Create_Joker(abyssalList, card, localize("akts_plus_summon"))
+                            Create_Joker(abyssalList, card, nil, nil, localize("akts_plus_summon"))
                         end
                     else
                         card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("akts_no_space"), G.C.INACTIVE})
@@ -106,9 +106,7 @@ SMODS.Joker{
         if context.joker_main then
             return {
                 card = card,
-                Xmult_mod = skadiMultModCalc(card.ability.extra),
-                message = localize('akts_tidal'),
-                colour = G.C.MULT,
+                xmult = skadiMultModCalc(card.ability.extra),
                 delay = 0.5,
             }
         end
@@ -238,9 +236,7 @@ SMODS.Joker{
                 return {
                 chips = card.ability.extra.returnchipbonus,
                 mult = card.ability.extra.returnmultbonus,
-                Xmult_mod = card.ability.extra.currentXMult,
-                message = 'X' .. card.ability.extra.currentXMult,
-                colour = G.C.MULT,
+                xmult = card.ability.extra.currentXMult,
                 card = card
                 }
             else

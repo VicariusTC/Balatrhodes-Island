@@ -1,3 +1,4 @@
+--should probably update the upgrade function to be compatible with shit that clones jokers, so you have more than 2 servants. Maybe just cause that to trigger an upgrade as well.
 SMODS.Joker{
     key = 'Necrass',
     name = 'Necrass',
@@ -65,8 +66,9 @@ SMODS.Joker{
         bonusChips = 40,
         bonusMult = 10,
         upgradeCount = 0,
-        necrassDestructChipBonus = 20,
+        necrassDestructChipBonus = 30,
         upgrade2Cash = 5,
+        markedForDestruction = false
       }
     },
     loc_vars = function(self,info_queue,center)
@@ -74,6 +76,9 @@ SMODS.Joker{
     end,
     add_to_deck = function(self, card, from_debuff)
         card:set_eternal(true)
+        if card.ability.extra.upgradeCount == G.AKTS_Globals.lesserServantMaxLevel then
+            IsServantFusion(card, card, GetEblanaServants(), G.AKTS_Globals.lesserServantMaxLevel)
+        end
     end,
     calculate = function(self,card,context)
         if context.joker_main then
@@ -101,7 +106,7 @@ SMODS.Joker{
                 card:set_eternal(false)
                 SMODS.destroy_cards(card)
             end
-            if context.joker_type_destroyed and card.ability.extra.upgradeCount >= 2 then
+            if context.joker_type_destroyed and card.ability.extra.upgradeCount >= 2 and not (context.card.ability.name == "ServantGreater" or context.card.ability.name == "ServantLesser") then
                 return{
                     dollars = card.ability.extra.upgrade2Cash
                 }
@@ -127,7 +132,7 @@ SMODS.Joker{
       extra = {
         bonusXChips = 1.5,
         bonusXMult = 1.5,
-        upgradeBonusChips = 0.1,
+        upgradeBonusChips = 0.15,
         upgradeCount = 0,
         upgradeSummonReq = 3,
         upgradeSummonTarget = "j_joker",
@@ -138,28 +143,13 @@ SMODS.Joker{
         return {vars = {center.ability.extra.bonusXChips + (center.ability.extra.upgradeCount * center.ability.extra.upgradeBonusChips), center.ability.extra.bonusXMult, center.ability.extra.upgradeBonusChips, center.ability.extra.upgradeCount, center.ability.extra.upgradeSummonReq}}
     end,
     add_to_deck = function(self, card, from_debuff)
-        local servantCount = 0
-        for _, joker in pairs(G.jokers.cards) do
-            local ability = joker.ability
-            if ability and type(ability.extra) == "table" then
-                local id = IdOf(joker)
-                if id == "j_akts_ServantGreater" and joker ~= card then
-                    aktsDestroy(card)
-                    joker.ability.extra.upgradeCount = joker.ability.extra.upgradeCount + 1
-                    return
-                end
-            end
-        end
-        card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('akts_summon_greater'), G.C.TAROT})
         card:set_eternal(true)
     end,
     calculate = function(self,card,context)
         if context.joker_main then
             return{
                 xchips = card.ability.extra.bonusXChips + (card.ability.extra.upgradeCount * card.ability.extra.upgradeBonusChips),
-                Xmult_mod = card.ability.extra.bonusXMult,
-                message = "X".. card.ability.extra.bonusXMult,
-                colour = G.C.MULT,
+                xmult = card.ability.extra.bonusXMult,
                 delay = 0.5,
                 card = card
             }

@@ -74,7 +74,7 @@ SMODS.Joker{
     pos = {x = 1, y = 6}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
-        chipRequirement = 50,
+        chipRequirement = 70,
         transformLength = 5,
         transformLink = "j_akts_MlynarActive",
         tagClass = {"Guard"},
