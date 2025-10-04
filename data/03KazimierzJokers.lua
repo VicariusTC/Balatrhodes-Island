@@ -125,6 +125,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
+        info_queue[#info_queue+1] = G.P_CENTERS.m_akts_True
         return {vars = {center.ability.extra.globalCut, center.ability.extra.trueCut, center.ability.extra.finalCut, center.ability.extra.transformLength}}
     end,
     add_to_deck = function(self, card, from_debuff)

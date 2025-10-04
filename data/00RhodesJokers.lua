@@ -200,6 +200,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
+        info_queue[#info_queue+1] = G.P_CENTERS.e_foil
         info_queue[#info_queue+1] = G.P_CENTERS.m_wild
         return {vars = {center.ability.extra.scoredLower, center.ability.extra.scoredUpper, center.ability.extra.wildLower, center.ability.extra.wildUpper}}
     end,
@@ -268,6 +269,7 @@ SMODS.Joker{
     pos = {x = 3, y = 0}, 
     config = { 
       extra = {
+        minReqScore = 50,
         currentdebt = 0,
         fulldebt = 0,
         debtPayment = 0.05,
@@ -284,7 +286,7 @@ SMODS.Joker{
     loc_vars = function(self,info_queue,center)
         info_queue[#info_queue+1] = G.P_CENTERS.m_wild
         info_queue[#info_queue+1] = {set = 'Other', key = "ChipDebt"}
-        return {vars = {center.ability.extra.scoredLower, center.ability.extra.scoredUpper, center.ability.extra.wildLower, center.ability.extra.wildUpper, center.ability.extra.currentdebt, center.ability.extra.fulldebt}}
+        return {vars = {center.ability.extra.scoredLower, center.ability.extra.scoredUpper, center.ability.extra.wildLower, center.ability.extra.wildUpper, center.ability.extra.currentdebt, center.ability.extra.fulldebt, center.ability.extra.minReqScore}}
     end,
     add_to_deck = function(self, card, from_debuff)
         G.GAME.pool_flags.akts_gavial_transform = true
@@ -312,11 +314,11 @@ SMODS.Joker{
 
         if context.end_of_round and context.cardarea == G.jokers then
             local cardExtra = card.ability.extra
-            local fullyDebted = G.GAME.chips - (card.ability.extra.debtPayment * card.ability.extra.fulldebt) <= 0
+            local fullyDebted = (G.GAME.chips - (cardExtra.debtPayment * cardExtra.fulldebt)) /G.GAME.blind.chips < cardExtra.minReqScore / 100
             if fullyDebted then
                 G.GAME.chips = gavialAlterDebtPayment(card, G.GAME.chips, 'tax')
             end
-            if G.GAME.chips/G.GAME.blind.chips < 1 and not fullyDebted  and card.ability.extra.akts_save and leftmostActivatedTrue("akts_save", getJokerSlot(card)) then
+            if G.GAME.chips/G.GAME.blind.chips < 1 and not fullyDebted and cardExtra.akts_save and leftmostActivatedTrue("akts_save", getJokerSlot(card)) then
                 cardExtra.currentdebt = cardExtra.currentdebt + (G.GAME.blind.chips - G.GAME.chips)
                 cardExtra.fulldebt = cardExtra.fulldebt + (G.GAME.blind.chips - G.GAME.chips)
                 card:set_eternal(true)
@@ -331,15 +333,6 @@ SMODS.Joker{
             else
                 local overflowScore = G.GAME.chips - G.GAME.blind.chips
                 G.GAME.chips = G.GAME.chips - (overflowScore - gavialAlterDebtPayment(card, overflowScore, 'full'))
-            end
-        end
-
-        if context.setting_blind and context.main_eval then
-            if card.ability.extra.currentdebt > G.GAME.blind.chips then
-                card.ability.extra.akts_save = false
-                end_round()
-            else
-                card.ability.extra.akts_save = true
             end
         end
     end,

@@ -79,19 +79,18 @@ return {
                         "{X:mult,C:white}X#3#{} and {X:mult,C:white}X#4#{} Mult instead."
                     },
                     {
-                        "Prevents Death and adds",
-                        "required chips to {C:red}Chip Debt{}",
-                        "if score is greater than {C:attention}0{}.",
-                        "Gains {C:dark_edition}Eternal{} while you",
-                        "have {C:red}Chip Debt{}",
+                        "{C:attention}Prevents Death{} and adds required",
+                        "chips to {C:red}Chip Debt{} if score is",
+                        "greater than {C:attention}#7#%{} of Blind Requirement.",
+                        "Gains {C:dark_edition}Eternal{} while you have {C:red}Chip Debt{}",
                         "{C:inactive,s:0.8}Currently{} {C:red,s:0.8}#5#{} {C:inactive,s:0.8}in debt.",
                         "{C:inactive,s:0.8}(total debt is {}{C:red,s:0.8}#6#{}{C:inactive,s:0.8} chips){}"
                     },
-                    {
+                    --[[{
                         "You {C:attention}lose{} if {C:red}Chip Debt{}",
                         "is greater than the current",
                         "blind requirement.",
-                    }
+                    }]]
                 }
             },
             j_akts_Yato = {

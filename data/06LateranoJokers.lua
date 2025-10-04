@@ -69,7 +69,7 @@ SMODS.Joker{
     name = 'Lemuen',
     rarity = 3,
     atlas = 'Jokers', 
-	cost = 8,
+	cost = 7,
     unlocked = true, 
     discovered = true, 
     blueprint_compat = true, 
@@ -83,7 +83,7 @@ SMODS.Joker{
         handCount = 1,
         numRetriggers = 0,
         retriggerTarget = 1,
-        planetCopies = 2,
+        planetCopies = 3,
         twiceRetriggerOrder = 8,
         thriceRetriggerOrder = 4,
         aktsSettingPrice = false,
@@ -128,10 +128,11 @@ SMODS.Joker{
                                 _card:set_edition({negative = true}, true)
                                 _card:add_to_deck()
                                 G.consumeables:emplace(_card)
-                                delay(0.4)
-                                local copyCard = copy_card(_card, nil)
-                                copyCard:add_to_deck()
-                                G.consumeables:emplace(copyCard) 
+                                for i = 1, card.ability.extra.planetCopies - 1, 1 do
+                                    local copyCard = copy_card(_card, nil)
+                                    copyCard:add_to_deck()
+                                    G.consumeables:emplace(copyCard)
+                                end
                                 --Disable Custom Sell Price Mode
                                 card.ability.extra.aktsSettingPrice = false
                                 return true
