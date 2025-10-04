@@ -164,7 +164,7 @@ SMODS.Joker{
         end
 
         if context.retrigger_joker_check and not card.ability.extra.targetRetriggered and #CalcOwnedPlanets() >= card.ability.extra.planetCond and context.other_card ~= card then
-            local targetList = MergeLists(calcTaggedOwned(card.ability.extra.targetGroup[1]), calcTaggedOwned(card.ability.extra.targetGroup[2]))
+            local targetList = MergeLists(CalcTaggedOwned(card.ability.extra.targetGroup[1]), CalcTaggedOwned(card.ability.extra.targetGroup[2]))
             for index, joker in pairs(targetList) do
                 local ability = context.other_card.ability
                 if ability and ability.extra and type(ability.extra) == "table" and "j_akts_" .. ability.name == joker then
@@ -339,7 +339,7 @@ SMODS.Joker{
         end
 
         if context.retrigger_joker_check and not card.ability.extra.targetRetriggered and context.other_card ~= card then
-            local targetList = MergeLists(calcTaggedOwned(card.ability.extra.targetGroup[3]), MergeLists(calcTaggedOwned(card.ability.extra.targetGroup[1]), calcTaggedOwned(card.ability.extra.targetGroup[2])))
+            local targetList = MergeLists(CalcTaggedOwned(card.ability.extra.targetGroup[3]), MergeLists(CalcTaggedOwned(card.ability.extra.targetGroup[1]), CalcTaggedOwned(card.ability.extra.targetGroup[2])))
             for index, joker in pairs(targetList) do
                 local ability = context.other_card.ability
                 if ability and ability.extra and type(ability.extra) == "table" and "j_akts_" .. ability.name == joker then

@@ -77,7 +77,7 @@ end
 
 -- function for setting costs on other stuff to be used in set_cost
 setCustomSellPrice = function()
-    local activePriceSetter = calcTaggedOwnedTitle('aktsSettingPrice')
+    local activePriceSetter = CalcTaggedOwnedTitle('aktsSettingPrice')
     if #activePriceSetter > 0 then
         return activePriceSetter[1].ability.extra.aktsNewSellPrice
     end
@@ -143,8 +143,8 @@ end
 local cardGetId = Card.get_id
 function Card:get_id()
     if self.ability.effect == 'Stone Card' and not self.vampired
-    and #calcTaggedOwnedTitle("stoneCardRank") > 0 and calcTaggedOwnedTitle("stoneCardRank")[1].ability.extra.stoneCardRank ~= 0 then
-        return calcTaggedOwnedTitle("stoneCardRank")[1].ability.extra.stoneCardRank
+    and #CalcTaggedOwnedTitle("stoneCardRank") > 0 and CalcTaggedOwnedTitle("stoneCardRank")[1].ability.extra.stoneCardRank ~= 0 then
+        return CalcTaggedOwnedTitle("stoneCardRank")[1].ability.extra.stoneCardRank
     end
     return cardGetId(self)
 end
@@ -191,7 +191,6 @@ end
 
 
 ----------------------------------------------------------
---function for consumables that enhance or affect cards
 flip_cards = function(card)
    card:flip()
    delay(0.1)
@@ -206,7 +205,7 @@ flip_cards = function(card)
    )
 end
 ----------------------------------------
---Added in order to shortcut for when shatter is needed.
+--Added for instant destruction when scoring.
 aktsDestroy = function(card, selectType)
     if card.ability.name == 'Glass Card' or (selectType and selectType == "m_glass") then 
         card:shatter()
@@ -254,8 +253,8 @@ end
 
 --for skadi's mult effect
 skadiMultModCalc = function(extra)
-    local totalBonus = extra.baseMult + #calcTaggedOwned(extra.tagFaction[1]) * extra.multBonus
-    if #calcTaggedOwned(extra.tagFaction[1]) >= extra.exmultBonusReq then
+    local totalBonus = extra.baseMult + #CalcTaggedOwned(extra.tagFaction[1]) * extra.multBonus
+    if #CalcTaggedOwned(extra.tagFaction[1]) >= extra.exmultBonusReq then
         totalBonus = totalBonus + extra.exmultBonus
     end
     return totalBonus
@@ -286,7 +285,7 @@ gavialAlterDebtPayment = function(card, chipPool, mode)
             card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('akts_debt_payment'), colour = G.C.MULT})
         end
     end
-    --Set full debt to 0 and uneternal her
+    
     if cardExtra.currentdebt == 0 then
         card:set_eternal(false)
         cardExtra.fulldebt = 0
@@ -501,7 +500,7 @@ setGeekDebuff = function(card)
 end
 
 handleAmmo = function(card, effect)
-    if calcTaggedOwnedTitleHelper(card, 'ammoCount') then
+    if CalcTaggedOwnedTitleHelper(card, 'ammoCount') then
     --Expend Ammo
         card.ability.extra.ammoCount = card.ability.extra.ammoCount + (effect or -1)
         if not effect or effect < 0 then  
@@ -597,9 +596,9 @@ PerformFastRedeploy = function(cardName, card)
 end
 
 GetFastRedeployList = function(cardName)
-    local excluList = calcTaggedRarity("akts_Transformed")
+    local excluList = CalcTaggedRarity("akts_Transformed")
     table.insert(excluList, cardName)
-    local frdList = calcTaggedTitle("fastRedeployFlag", excluList)
+    local frdList = CalcTaggedTitle("fastRedeployFlag", excluList)
     if G.AKTS_Globals.yatosSold > G.AKTS_Globals.yatosSoldCondition then
         if frdList and #frdList > 0 then
             for i, v in pairs(frdList) do

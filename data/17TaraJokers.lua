@@ -1,4 +1,3 @@
---should probably update the upgrade function to be compatible with shit that clones jokers, so you have more than 2 servants. Maybe just cause that to trigger an upgrade as well.
 SMODS.Joker{
     key = 'Necrass',
     name = 'Necrass',

@@ -52,19 +52,17 @@ SMODS.Joker{
                 end
                 if card.ability.extra.cleanseSuccess == true then
                     card.ability.extra.cleanseSuccess = false
-                    handleAmmo(card)         
-                delay(0.2) 
+                    handleAmmo(card)
+                    delay(0.2)
                 end
             end
         end
         if context.joker_main then
             card.ability.extra.cleanseCount = 0
-            if card.ability.extra.chipStorage > 0 then
-                return {
-                    card = card,
-                    chips = card.ability.extra.chipStorage,
-                }
-            end
+            return {
+                card = card,
+                chips = card.ability.extra.chipStorage,
+            }
         end
         if context.cardarea == G.play and context.individual and not context.other_card.debuff and not context.end_of_round and (context.other_card.config.center == G.P_CENTERS.m_akts_TempSteel or context.other_card.config.center == G.P_CENTERS.m_gold or context.other_card.config.center == G.P_CENTERS.m_steel) then
             --[[
@@ -104,7 +102,7 @@ SMODS.Joker{
         unenhanceBonusMult = 0.2,
         xMultStorage = 1,
         tagClass = {"Supporter"},
-        tagFaction = {"Iberia"}
+        tagFaction = {"Iberia", "Aegir"}
       }
     },
     loc_vars = function(self,info_queue,center)

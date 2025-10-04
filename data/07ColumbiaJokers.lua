@@ -27,11 +27,6 @@ SMODS.Joker{
     add_to_deck = function(self, card, from_debuff)
         if #(G.jokers and G.jokers.cards) < card.ability.extra.bonusMoneyLessThanCondition +1 then
             ease_dollars(card.ability.extra.bonusMoney)
-            return {
-                colour = G.C.MONEY,
-                delay = 0.45, 
-                card = card
-            }
         end
     end, 
     calculate = function(self,card,context)

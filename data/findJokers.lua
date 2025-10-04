@@ -18,7 +18,7 @@ local isExcludedCenter = function(card, exclusions)
     return false
 end
 
-local calcTaggedListHelper = function(Tag, abilityExtra)
+CalcTaggedListHelper = function(Tag, abilityExtra)
     if not abilityExtra.tagFaction then
         return false
     end
@@ -40,14 +40,14 @@ local calcTaggedListHelper = function(Tag, abilityExtra)
 end
 
 --lists all owned jokers names with specified tag content (e.g. Sniper or Iberia)
-calcTaggedOwned = function(tag, exclusions)
+CalcTaggedOwned = function(tag, exclusions)
     local found = {}
     local jokers = G.jokers and G.jokers.cards
     if not jokers then return found end
 
     for _, card in pairs(jokers) do
         local ability = card.ability
-        if ability and ability.extra and type(ability.extra) == "table" and calcTaggedListHelper(tag, ability.extra) then
+        if ability and ability.extra and type(ability.extra) == "table" and CalcTaggedListHelper(tag, ability.extra) then
             if not isExcluded(card, exclusions) then
                 table.insert(found, "j_akts_" .. ability.name)
             end
@@ -56,7 +56,7 @@ calcTaggedOwned = function(tag, exclusions)
     return found
 end
 
-calcTaggedOwnedTitleHelper = function(card, Tag)
+CalcTaggedOwnedTitleHelper = function(card, Tag)
     if card.ability and (card.ability.extra and type(card.ability.extra) == "table" and card.ability.extra[Tag]) then
         return true
     end
@@ -64,14 +64,14 @@ calcTaggedOwnedTitleHelper = function(card, Tag)
 end
 
 --lists all owned jokers with specified tagtitle (e.g. card.ability.extra.ammoCount)
-calcTaggedOwnedTitle = function(tag, exclusions)
+CalcTaggedOwnedTitle = function(tag, exclusions)
     local found = {}
     local jokers = G.jokers and G.jokers.cards
     if not jokers then return found end
 
     for _, card in pairs(jokers) do
         local ability = card.ability
-        if calcTaggedOwnedTitleHelper(card, tag) then
+        if CalcTaggedOwnedTitleHelper(card, tag) then
             if not isExcluded(card, exclusions) then
                 table.insert(found, card)
             end
@@ -82,14 +82,14 @@ end
 
 
 --lists all owned jokers names and positions with specified tag
-calcTaggedOwnedPos = function(Tag, exclusions)
+CalcTaggedOwnedPos = function(Tag, exclusions)
     local found = {}
     local jokers = G.jokers and G.jokers.cards
     if not jokers then return found end
 
     for _, card in pairs(jokers) do
         local ability = card.ability
-        if ability and (ability.extra and type(ability.extra) == "table" and calcTaggedListHelper(Tag, ability.extra)) then
+        if ability and (ability.extra and type(ability.extra) == "table" and CalcTaggedListHelper(Tag, ability.extra)) then
             if not isExcluded(card, exclusions) then
                 table.insert(found, {"j_akts_" .. card.ability.name, _})
             end
@@ -105,7 +105,7 @@ local calcTaggedTitleHelper = function(card, Tag)
     return false
 end
 --lists all arknights jokers with specified tag content (e.g. Sniper/Rhodes)
-calcTagged = function(Tag,exclusions)
+CalcTagged = function(Tag,exclusions)
     local pool = {}
 
     for k, center in pairs(G.P_CENTERS) do
@@ -123,7 +123,7 @@ calcTagged = function(Tag,exclusions)
             end
         end
 
-        if calcTaggedListHelper(Tag, extra) then
+        if CalcTaggedListHelper(Tag, extra) then
             table.insert(pool, k)
         end
 
@@ -148,7 +148,7 @@ local calcTaggedTitleHelper = function(card, Tag)
 end
 
 --lists all arknights jokers with specified tag (e.g. FastRedeployFlag)
-calcTaggedTitle = function(Tag,exclusions)
+CalcTaggedTitle = function(Tag,exclusions)
     local pool = {}
 
     for k, center in pairs(G.P_CENTERS) do
@@ -177,7 +177,7 @@ calcTaggedTitle = function(Tag,exclusions)
 end 
 
 --lists all jokers of given rarity
-calcTaggedRarity = function(Rarity)
+CalcTaggedRarity = function(Rarity)
     local pool = {}
     for k, jokers in pairs(G.P_CENTERS) do
         if jokers.rarity == Rarity then

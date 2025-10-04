@@ -63,11 +63,11 @@ SMODS.Consumable{
                 conv_card:set_ability(G.P_CENTERS.m_akts_True, nil, true)
             end
             G.E_MANAGER:add_event(Event({
-                    func = function()
-                        flip_cards(conv_card)
-                        G.hand:unhighlight_all(); return true
-                    end
-                }))
+                func = function()
+                    flip_cards(conv_card)
+                    G.hand:unhighlight_all(); return true
+                end
+             }))
         end
     end,
 }
@@ -113,9 +113,10 @@ SMODS.Consumable{
                 for i = 1, #context.scoring_hand do
                     if context.scoring_hand[i].config.center == G.P_CENTERS.m_akts_True then
                         TrueScored = true
+                        break
                     end
                 end
-                if TrueScored == true then
+                if TrueScored then
                     ease_dollars(-card.ability.extra.cashReq, true)
                     return {
                         card = card,

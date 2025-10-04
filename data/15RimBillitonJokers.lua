@@ -33,16 +33,16 @@ SMODS.Joker{
         
         if context.joker_main then
             return {
-					chips = card.ability.extra.bonusChips,
-					card = card
+				chips = card.ability.extra.bonusChips,
+				card = card
 			}
 		end
         
-        if context.end_of_round and context.cardarea == G.jokers then
+        if context.end_of_round and context.cardarea == G.jokers and not card.ability.extra.factorApplied then
             card.ability.extra.bonusChips = card.ability.extra.bonusChipsMax
             if card.ability.extra.bonusChipFactorIncreaseTimer > 0 then
                 card.ability.extra.bonusChipFactorIncreaseTimer = card.ability.extra.bonusChipFactorIncreaseTimer - 1
-            elseif not card.ability.extra.factorApplied then
+            else
                 card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex'), G.C.ATTENTION})
                 card.ability.extra.factorApplied = true
                 card.ability.extra.bonusChips = card.ability.extra.bonusChipFactor * card.ability.extra.bonusChips
@@ -94,7 +94,7 @@ SMODS.Joker{
             trigger = "after", 
             delay = 0.25,
             func = function() 
-                if #calcTaggedOwnedTitle("burnBurstMultiplier") == 0 then
+                if #CalcTaggedOwnedTitle("burnBurstMultiplier") == 0 then
                     G.AKTS_Globals.burnBurstFactor = 1
                 end
                 return true

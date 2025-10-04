@@ -76,7 +76,10 @@ SMODS.Enhancement {
                 if card.ability.extra.activated then
                     local copyPos = 0
                     for i = 1, #context.full_hand do
-                        if context.full_hand[i] == card then copyPos = i-1 end
+                        if context.full_hand[i] == card then
+                            copyPos = i-1
+                            break
+                        end
                     end
                     if copyPos > 0 then
                         copy_card(card, context.full_hand[copyPos])

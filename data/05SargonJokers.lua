@@ -51,6 +51,7 @@ SMODS.Joker{
             end
         end
         if context.cardarea == G.play and context.individual and not context.other_card.debuff and not context.end_of_round and card.ability.extra.chosenEffect == 3 then
+            --Effect 3, upgrade individual
             context.other_card.ability.perma_bonus = context.other_card.ability.perma_bonus + card.ability.extra.permaBuff
             G.E_MANAGER:add_event(Event({func = (function() card:juice_up(); return true end)}))
             return {

@@ -29,18 +29,20 @@ SMODS.Joker{
             local _card = create_card("SummonConsumableType", G.consumeables, nil, nil, nil, nil, 'c_akts_NearlTheRadiant')
             _card:add_to_deck()
             G.consumeables:emplace(_card)
-            card_eval_status_text(_card, 'extra', nil, nil, nil, {message = localize("akts_plus_summon"), G.C.PURPLE})
+            card_eval_status_text(_card, 'extra', nil, nil, nil, {message = localize("akts_plus_summon"), G.C.ATTENTION})
         end
 
         if context.cardarea == G.jokers and context.scoring_hand then
             if context.before and next(context.poker_hands['Straight']) then
-                local Kings = 0
+                local kingFound = false
                 for i = 1, #context.scoring_hand do
-                    if context.scoring_hand[i]:get_id() == 13 then Kings = Kings + 1 end
+                    if context.scoring_hand[i]:get_id() == 13 then 
+                        kingFound = true
+                    end
                 end
-                if Kings > 0 then
+                if kingFound then
                     _card = context.scoring_hand[1]
-                    card_eval_status_text(_card, 'extra', nil, nil, nil, {message = localize("akts_textRadiantJ"), G.C.PURPLE})
+                    card_eval_status_text(_card, 'extra', nil, nil, nil, {message = localize("akts_textRadiantJ"), G.C.ATTENTION})
                     delay(0.25)
                     _card:set_ability(G.P_CENTERS.m_akts_True, nil, true)
                     G.E_MANAGER:add_event(Event({
@@ -49,7 +51,7 @@ SMODS.Joker{
                             return true
                         end
                     }))
-                delay(0.1)
+                    delay(0.1)
                 end
             end
         end
@@ -60,18 +62,18 @@ SMODS.Joker{
 }
 
 SMODS.Joker{
-    key = 'Mlynar', 
+    key = 'Mlynar',
     name = 'Mlynar',
     rarity = 3,
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers',
 	cost = 7,
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = false, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
-    no_pool_flag = 'akts_mlynar_transform', --cant show up in shop even while transformed
-    pos = {x = 1, y = 6}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = false,
+    eternal_compat = true,
+    perishable_compat = true,
+    no_pool_flag = 'akts_mlynar_transform',
+    pos = {x = 1, y = 6},
     config = { 
       extra = {
         chipRequirement = 70,
@@ -88,7 +90,6 @@ SMODS.Joker{
     calculate = function(self,card,context)
         if context.cardarea == G.jokers and context.scoring_hand then
             if context.before and G.GAME.current_round.hands_left == 0 and (G.GAME.chips/G.GAME.blind.chips) < (card.ability.extra.chipRequirement * 0.01) then
-                G.GAME.pool_flags.akts_mlynar_transform = false
                 card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("akts_transform"), G.C.ATTENTION})
                 jokerTransform(card, card.ability.extra.transformLink)
             end
@@ -100,22 +101,22 @@ SMODS.Joker{
 }
 
 SMODS.Joker{
-    key = 'MlynarActive', 
+    key = 'MlynarActive',
     name = 'MlynarActive',
     rarity = 'akts_Transformed',
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers',
 	cost = 7,
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = false, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
-    pos = {x = 2, y = 6}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = false,
+    eternal_compat = true,
+    perishable_compat = true,
+    pos = {x = 2, y = 6},
     config = { 
       extra = {
-        globalCut = 2.5,
-        finalCut = 3,
-        trueCut = 2.5,
+        globalCut = 2,
+        finalCut = 4,
+        trueCut = 2,
         transformLength = 5,
         transformRevert = "j_akts_Mlynar",
         tagClass = {"Guard"},
@@ -187,30 +188,20 @@ SMODS.Joker{
     end,
     add_to_deck = function(self, card, from_debuff)
         if not from_debuff then
-            card.ability.extra.currentChance = G.GAME.probabilities.normal -1 
-            if #calcTaggedOwned(card.ability.extra.tagFaction[1], card) > 0 then
-                if math.random() <= (2 * G.GAME.probabilities.normal)/card.ability.extra.editionReq then
-                    G.E_MANAGER:add_event(Event({
-                        trigger = "after", 
-                        delay = 0.25,
-                        func = function() 
-                            card:set_edition({negative = true}, true)
-                            return true 
-                        end
-                    }))
-                    
-                end
-            else
-                if math.random() <= G.GAME.probabilities.normal/card.ability.extra.editionReq then
-                    G.E_MANAGER:add_event(Event({
-                        trigger = "after", 
-                        delay = 0.25,
-                        func = function() 
-                            card:set_edition({negative = true}, true)
-                            return true 
-                        end
-                    }))
-                end
+            card.ability.extra.currentChance = G.GAME.probabilities.normal -1
+            local kaziFactor = 1
+            if #CalcTaggedOwned(card.ability.extra.tagFaction[2], card) > 0 then
+                kaziFactor = 2
+            end
+            if math.random() <= (kaziFactor * G.GAME.probabilities.normal)/card.ability.extra.editionReq then
+                G.E_MANAGER:add_event(Event({
+                    trigger = "after", 
+                    delay = 0.25,
+                    func = function() 
+                        card:set_edition({negative = true}, true)
+                        return true 
+                    end
+                }))
             end
         end
     end,
@@ -260,17 +251,16 @@ SMODS.Joker{
       extra = {
         multAddFactor = 0,
         returnMult = 0,
-        activated = false,
         tagClass = {"Sniper"},
         tagFaction = {"Pinus", "Kazimierz"}
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {(#calcTaggedOwned(center.ability.extra.tagFaction[1]))}}
+        return {vars = {(#CalcTaggedOwned(center.ability.extra.tagFaction[1]))}}
     end,
     calculate = function(self,card,context)
         if context.joker_main then
-            card.ability.extra.multAddFactor = #calcTaggedOwned(card.ability.extra.tagFaction[1])
+            card.ability.extra.multAddFactor = #CalcTaggedOwned(card.ability.extra.tagFaction[1])
             local lowestRank = 14
             local highestRank = 0
             card.ability.extra.returnMult = 0
@@ -289,21 +279,19 @@ SMODS.Joker{
 			    mult = card.ability.extra.returnMult * card.ability.extra.multAddFactor
 		    }
         end
-        if context.end_of_round and context.cardarea == G.jokers then
-            card.ability.extra.activated = false
+        if context.end_of_round and context.main_eval and context.game_over == false and context.cardarea == G.jokers then
             if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
                 local handRank = {false, false, false, false, false, false, false, false, false, false, false, false, false}
                 local duplicate = false
                 for k, v in ipairs(G.hand.cards) do
-                    if handRank[v:get_id()-1] then
+                    if handRank[v:get_id()] then
                         duplicate = true
                         break
                     else
-                        handRank[v:get_id()-1] = true
+                        handRank[v:get_id()] = true
                     end
                 end
-                if not duplicate and not card.ability.extra.activated then
-                    card.ability.extra.activated = true
+                if not duplicate then
                     local _card = create_card("Tarot", G.consumeables, nil, nil, nil, nil, nil)
                     _card:add_to_deck()
                     G.consumeables:emplace(_card)
@@ -314,6 +302,6 @@ SMODS.Joker{
     end,
     set_badges = function(self, card, badges)
         aktsBadgeHelper(self,card,badges)
-    end 
+    end
 }
 ----------------------------------------Pinus Sylvestris end----------------------------------------

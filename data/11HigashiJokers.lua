@@ -28,7 +28,7 @@ SMODS.Joker{
         return {vars = {center.ability.extra.actualSellValue, center.ability.extra.bonusMultMultiplier, center.ability.extra.bonusMultMultiplier * CalcOwnedMissingSellValue()}}
     end,
     calculate = function(self,card,context)
-        --needs visual text
+        --needs visual text, maybe
         if context.setting_blind and context.main_eval then
             card.ability.extra.aktsSellValue = card.ability.extra.actualSellValue
             if G.GAME.blind and card.sell_cost > card.ability.extra.aktsSellValue then
@@ -40,8 +40,8 @@ SMODS.Joker{
 
         if context.joker_main and CalcOwnedMissingSellValue() > 0 then
             return {
-                    mult = card.ability.extra.bonusMultMultiplier * CalcOwnedMissingSellValue(),
-                    card = card
+                mult = card.ability.extra.bonusMultMultiplier * CalcOwnedMissingSellValue(),
+                card = card
             }
         end
     end,

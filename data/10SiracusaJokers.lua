@@ -1,3 +1,4 @@
+-- Make Vulpisfoglia reset drop you back to 4 if that hand has 5 cards?
 SMODS.Joker{
     key = 'Provence', 
     name = 'Provence',
@@ -30,8 +31,8 @@ SMODS.Joker{
       if context.cardarea == G.jokers and context.joker_main then
         if G.GAME.blind then
           local currentChips =  ((hand_chips * mult) + G.GAME.chips)/G.GAME.blind.chips
-          local snipersOwned = calcTaggedOwned(card.ability.extra.bonusChanceConditionTypes[1])
-          local siracusaOwned = calcTaggedOwned(card.ability.extra.bonusChanceConditionTypes[2], snipersOwned)
+          local snipersOwned = CalcTaggedOwned(card.ability.extra.bonusChanceConditionTypes[1])
+          local siracusaOwned = CalcTaggedOwned(card.ability.extra.bonusChanceConditionTypes[2], snipersOwned)
           local bonusChips = math.floor(currentChips / (0.01 * card.ability.extra.bonusChipsInterval)) * card.ability.extra.bonusChips
           local bonusChance = false
           if #siracusaOwned + #snipersOwned >= card.ability.extra.bonusChanceCondition then
@@ -41,10 +42,7 @@ SMODS.Joker{
           end
           if bonusChance then
             card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('akts_crit')})
-            return {
-              card = card,
-              chips = card.ability.extra.bonusChanceMultiplier * bonusChips
-            }
+            bonusChips = card.ability.extra.bonusChanceMultiplier * bonusChips
           end
           return {
             card = card,
@@ -58,7 +56,6 @@ SMODS.Joker{
     end  
 }
 
---Interest is all kinds of fucked up rn.
 SMODS.Joker{
     key = 'Vulpisfoglia',
     name = 'Vulpisfoglia',

@@ -25,16 +25,16 @@ SMODS.Joker{
     },
     loc_vars = function(self,info_queue,center)
         info_queue[#info_queue+1] = {set = 'Other', key = center.ability.extra.subClass}
-        return {vars = {#calcTaggedOwned(center.ability.extra.targetClass), center.ability.extra.debuffChance, center.ability.extra.minusHandCount, center.ability.extra.minusHandChance, G.GAME.probabilities.normal}}
+        return {vars = {#CalcTaggedOwned(center.ability.extra.targetClass), center.ability.extra.debuffChance, center.ability.extra.minusHandCount, center.ability.extra.minusHandChance, G.GAME.probabilities.normal}}
     end,
     add_to_deck = function(self, card, from_debuff)
         card.ability.extra.aktsCostValue = math.max(card.cost, card.ability.extra.aktsCostValue)
     end,
     calculate = function(self,card,context)
-        if context.cardarea == G.play and context.repetition then         
+        if context.cardarea == G.play and context.repetition then     
             return {
                 message = localize('k_again_ex'),
-                repetitions = 1 + #calcTaggedOwned(card.ability.extra.targetClass),
+                repetitions = 1 + #CalcTaggedOwned(card.ability.extra.targetClass),
                 card = card
             }
         end
@@ -146,7 +146,7 @@ SMODS.Joker{
         
         if context.cardarea == G.play and context.repetition and card.ability.extra.numRetriggers > 0 and (context.other_card == context.scoring_hand[card.ability.extra.retriggerTarget]) then
             local requiredRetriggers = card.ability.extra.numRetriggers
-            card.ability.extra.numRetriggers = 0         
+            card.ability.extra.numRetriggers = 0
             return {
                 message = localize('k_again_ex'),
                 repetitions = requiredRetriggers,

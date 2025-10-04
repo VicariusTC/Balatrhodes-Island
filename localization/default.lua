@@ -443,9 +443,9 @@ return {
                     {
                         "During {C:attention}Small Blind{} or",
                         "{C:attention}Big Blind{}, automatically",
-                        "{C:attention}stores{} Mult instead of",
-                        "giving Mult if hand",
-                        "contains no scoring",
+                        "{C:attention}stores{} {C:mult}Mult{} instead of",
+                        "giving {C:mult}Mult{} if hand",
+                        "contains {C:attention}no{} scoring",
                         "{C:attention}face cards."
                     }
                 },
@@ -1061,7 +1061,6 @@ return {
             k_akts_Babel = "Babel",
 
             akts_plus_summon = "+1 Summon",
-            akts_no_space = "No Space!",
             akts_retreat = "RETREAT!",
             akts_AoE = "AoE!",
             akts_smeared_aoe = "Smeared!",

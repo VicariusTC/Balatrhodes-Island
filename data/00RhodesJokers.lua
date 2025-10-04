@@ -26,18 +26,18 @@ SMODS.Joker{
 
     add_to_deck = function(self, card, from_debuff)
         if G.jokers.config.card_limit > (#G.jokers.cards + G.GAME.joker_buffer + 1) then
-            local excluList = calcTaggedOwned(card.ability.extra.tagFaction[1])
-            local excluListAwoken = calcTaggedRarity("akts_Transformed")
+            local excluList = CalcTaggedOwned(card.ability.extra.tagFaction[1])
+            local excluListAwoken = CalcTaggedRarity("akts_Transformed")
             for _, v in ipairs(excluListAwoken) do
                 table.insert(excluList, v)
             end
             table.insert(excluList, "j_akts_AmiyaC")
-            local rhodesList = calcTagged(card.ability.extra.tagFaction[1], excluList)
+            local rhodesList = CalcTagged(card.ability.extra.tagFaction[1], excluList)
             if #rhodesList > 0 then
                 Create_Joker(rhodesList, card, nil, nil, localize("akts_plus_summon"))
             end
         else
-            card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("akts_no_space"), G.C.INACTIVE})
+            card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_no_space_ex"), G.C.INACTIVE})
         end
     end,
     calculate = function(self,card,context)
@@ -49,7 +49,7 @@ SMODS.Joker{
 
         --Check for Rhodes Trigger
         if not context.blueprint and (context.post_trigger) and card.ability.extra.maxMultScaleCurrent < card.ability.extra.maxMultScaleRound then --and calcTaggedOwned(card.ability.extra.tagFaction[1])[context.other_joker.name]
-            local ownedRhodes = calcTaggedOwned(card.ability.extra.tagFaction[1])
+            local ownedRhodes = CalcTaggedOwned(card.ability.extra.tagFaction[1])
             if isInTable('j_akts_' .. context.other_card.ability.name, ownedRhodes) ~= 0 and context.other_card ~= card then
                 card.ability.extra.maxMultScaleCurrent = card.ability.extra.maxMultScaleCurrent + 1
                 card.ability.extra.multStore = card.ability.extra.multStore + card.ability.extra.multScale
@@ -93,11 +93,10 @@ SMODS.Joker{
     end,
     add_to_deck = function(self, card, from_debuff)
         if not from_debuff and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-        local _card = create_card('SummonConsumableType', G.consumeables, nil, nil, nil, nil, 'c_akts_Mon3tr')
-        _card:add_to_deck()
-        G.consumeables:emplace(_card)
-        card_eval_status_text(_card, 'extra', nil, nil, nil, {message = localize('akts_plus_Mon3tr'), colour = G.C.PURPLE})
-        return true
+            local _card = create_card('SummonConsumableType', G.consumeables, nil, nil, nil, nil, 'c_akts_Mon3tr')
+            _card:add_to_deck()
+            G.consumeables:emplace(_card)
+            card_eval_status_text(_card, 'extra', nil, nil, nil, {message = localize('akts_plus_Mon3tr'), colour = G.C.PURPLE})
         end
     end,
     calculate = function(self,card,context)
@@ -107,14 +106,12 @@ SMODS.Joker{
             }
         end
 
-        if context.setting_blind and context.main_eval then
-            if G.GAME.blind and (G.GAME.blind.boss) then
-                if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-                    local _card = create_card("SummonConsumableType", G.consumeables, nil, nil, nil, nil, 'c_akts_Mon3tr')
-                    _card:add_to_deck()
-                    G.consumeables:emplace(_card)
-                    card_eval_status_text(_card, 'extra', nil, nil, nil, {message = localize("akts_plus_Mon3tr"), G.C.PURPLE})
-                end
+        if context.setting_blind and context.main_eval and G.GAME.blind and (G.GAME.blind.boss) then
+            if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+                local _card = create_card("SummonConsumableType", G.consumeables, nil, nil, nil, nil, 'c_akts_Mon3tr')
+                _card:add_to_deck()
+                G.consumeables:emplace(_card)
+                card_eval_status_text(_card, 'extra', nil, nil, nil, {message = localize("akts_plus_Mon3tr"), G.C.PURPLE})
             end
         end
     end,
@@ -207,19 +204,18 @@ SMODS.Joker{
         return {vars = {center.ability.extra.scoredLower, center.ability.extra.scoredUpper, center.ability.extra.wildLower, center.ability.extra.wildUpper}}
     end,
     add_to_deck = function(self, card, from_debuff)
-        local medics = calcTaggedOwnedPos(card.ability.extra.tagClass[1], card)
-        if #medics > 0 then
-            local nonEnhancedList = {}
-            for i, v in pairs(medics) do
-                if not v[1].edition then
-                    table.insert(nonEnhancedList, v)
-                end
+        local jokers = G.jokers and G.jokers.cards
+        local unenhanced = {}
+        for _, jonkler in pairs(jokers) do
+            local ability = jonkler.ability
+            if ability and (ability.extra and type(ability.extra) == "table" and not jonkler.edition and CalcTaggedListHelper(card.ability.extra.tagClass[1], ability.extra)) then
+                table.insert(unenhanced, jonkler)
             end
-            if nonEnhancedList and #nonEnhancedList > 0 then
-                local pickedMed = pseudorandom_element(nonEnhancedList, pseudoseed(math.random(500)))
-                G.jokers.cards[pickedMed[2]]:set_edition(card.ability.extra.enhanceChoice, true)
-                card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('akts_gavial_edition'), colour = G.C.PURPLE})
-            end
+        end
+        if #unenhanced > 0 then
+            local pickedMed = pseudorandom_element(unenhanced, pseudoseed(math.random(500)))
+            pickedMed:set_edition(card.ability.extra.enhanceChoice, true)
+            card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('akts_gavial_edition'), colour = G.C.PURPLE})
         end
     end,
     calculate = function(self,card,context)
