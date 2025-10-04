@@ -38,6 +38,7 @@ SMODS.Joker{
                 for i = 1, #context.scoring_hand do
                     if context.scoring_hand[i]:get_id() == 13 then 
                         kingFound = true
+                        break
                     end
                 end
                 if kingFound then
