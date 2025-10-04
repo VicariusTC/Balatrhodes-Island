@@ -556,8 +556,8 @@ calculateBurnBurst = function(card, context, returnTable)
     --1.2x Mult on all triggered abilities.
     if context.post_trigger and leftmostActivatedTrue("akts_burn_burst", getJokerSlot(card)) and context.other_ret then
         local returnMult = 0
-        if returnTable.mult or returnTable.Xmult_mod then
-            returnMult = ((0.2 * (mult - (mult /(returnTable.Xmult_mod or 1) - (returnTable.mult or 0))))) --get 0.2x change in mult
+        if returnTable.mult or returnTable.Xmult_mod or returnTable.xmult then
+            returnMult = ((0.2 * (mult - (mult /(returnTable.Xmult_mod or returnTable.xmult or 1) - (returnTable.mult or 0))))) --get 0.2x change in mult
         end
         return returnMult
     end

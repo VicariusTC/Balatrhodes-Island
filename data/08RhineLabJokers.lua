@@ -390,7 +390,7 @@ SMODS.Joker{
     loc_vars = function(self,info_queue,center)
         info_queue[#info_queue+1] = {set = 'Other', key = "elementalInjury"}
         info_queue[#info_queue+1] = {set = 'Other', key = "burnBurst"}
-        return {vars = {center.ability.extra.multFactor, center.ability.extra.burnFactor, ((G.GAME.hands[center.ability.extra.handTypes[1]].played + G.GAME.hands[center.ability.extra.handTypes[2]].played) or 0) * center.ability.extra.multFactor, center.ability.extra.multFactorScale}}
+        return {vars = {center.ability.extra.multFactor, center.ability.extra.burnFactor, ((G.GAME.hands[center.ability.extra.handTypes[1]].played + G.GAME.hands[center.ability.extra.handTypes[2]].played) or 0) * center.ability.extra.multFactor, center.ability.extra.multFactorScale, elemBurstText('Burn')}}
     end,
     calculate = function(self,card,context)
         if context.joker_main then

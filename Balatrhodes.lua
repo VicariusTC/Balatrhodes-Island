@@ -49,7 +49,16 @@ SMODS.current_mod.config_tab = function()
             {n = G.UIT.C, config = { align = "cl", padding = 0.05 }, nodes = {
                 create_toggle{ col = true, label = localize("akts_jokers_only_config"), scale = 1, w = 0, shadow = true, ref_table = Balatrhodes_Config, ref_value = "balatrhodes_only"},
             }},
-            
+        }},
+        {n = G.UIT.R, config = {align = "cl", padding = 0}, nodes = {
+            {n = G.UIT.C, config = { align = "cl", padding = 0.05 }, nodes = {
+                {n = G.UIT.T, config = {text = localize("akts_jokers_only_config_NoLegendaryNote"), colour = G.C.UI.TEXT_LIGHT, scale = 0.33, shadow = true}}
+            }},
+        }},
+        {n = G.UIT.R, config = {align = "cl", padding = 0}, nodes = {
+            {n = G.UIT.C, config = { align = "cl", padding = 0.05 }, nodes = {
+                {n = G.UIT.T, config = {text = localize("akts_jokers_only_config_NoLegendaryNote2"), colour = G.C.UI.TEXT_LIGHT, scale = 0.33, shadow = true}}
+            }},
         }},
 	}}
 end

@@ -478,17 +478,21 @@ SMODS.Joker{
         return {vars = {G.GAME.round_resets.hands + center.ability.extra.handDivisor or 5, math.max(center.ability.extra.firstHandDivisorLimit, G.GAME.round_resets.hands - center.ability.extra.handDivisorMinus)}}
     end,
     calculate = function(self,card,context)
+        if context.hand_drawn then
+            G.AKTS_Globals.redMaxChips = 0
+        end
         if context.cardarea == G.jokers and context.scoring_hand and context.final_scoring_step then
             local returnChips = (1/ (G.GAME.round_resets.hands + card.ability.extra.handDivisor)) * G.GAME.blind.chips
             if card.ability.extra.isFirstHand then
                 returnChips = (1/math.max(card.ability.extra.firstHandDivisorLimit, G.GAME.round_resets.hands - card.ability.extra.handDivisorMinus)) * G.GAME.blind.chips
             end
             card.ability.extra.isFirstHand = false
-            if returnChips > (mult * hand_chips) then
+            if returnChips > (mult * hand_chips) and returnChips > G.AKTS_Globals.redMaxChips then
                 card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("akts_red_active"), G.C.ATTENTION})
                 mult = 0
                 hand_chips = 0
-                G.GAME.chips = G.GAME.chips + returnChips
+                G.GAME.chips = G.GAME.chips + (returnChips - G.AKTS_Globals.redMaxChips)
+                G.AKTS_Globals.redMaxChips = returnChips
             end
 		end
 
@@ -582,7 +586,7 @@ SMODS.Joker{
 }
 ----------------------------------------Base Rhodes end----------------------------------------
 SMODS.Joker{
-    key = 'Logos', 
+    key = 'Logos',
     name = 'Logos',
     rarity = 3,
     atlas = 'Jokers',
@@ -595,6 +599,7 @@ SMODS.Joker{
     pos = {x = 0, y = 1}, 
     config = { 
       extra = {
+        playedRankMult = 5,
         playedRank = {false, false, false, false, false, false, false, false, false, false, false, false, false},
         playedRankPlus = 0,
         handReduction = 1,
@@ -609,7 +614,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.playedRankPlus, center.ability.extra.handReduction, center.ability.extra.handRedReqCt, center.ability.extra.handRedReqCtr, logosHandSizeCalc(center.ability.extra), center.ability.extra.handInc}}
+        return {vars = {center.ability.extra.playedRankPlus, center.ability.extra.handReduction, center.ability.extra.handRedReqCt, center.ability.extra.handRedReqCtr, logosHandSizeCalc(center.ability.extra), center.ability.extra.handInc, center.ability.extra.playedRankMult, center.ability.extra.playedRankPlus * center.ability.extra.playedRankMult}}
     end,
     add_to_deck = function(self, card, from_debuff)
         G.hand:change_size(card.ability.extra.curHandSize)
@@ -665,10 +670,17 @@ SMODS.Joker{
             card.ability.extra.playedRank = {false, false, false, false, false, false, false, false, false, false, false, false, false}
             card.ability.extra.playedRankPlus = 0
         end
+
+        if context.joker_main then
+            return {
+                mult = card.ability.extra.playedRankPlus * card.ability.extra.playedRankMult,
+				card = card
+			}
+        end
     end,
     set_badges = function(self, card, badges)
         aktsBadgeHelper(self,card,badges)
-    end  
+    end
 }
 
 SMODS.Joker{

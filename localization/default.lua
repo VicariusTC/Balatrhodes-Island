@@ -99,9 +99,9 @@ return {
                 text = {
                     {
                         "{X:attention,C:white,s:1.25}Fast Redeploy",
-                        "{C:blue}+#1#{} Chips during first",
-                        "hand of a round or during",
-                        "first hand after being obtained."
+                        "{C:blue}+#1#{} Chips during {C:attention}first",
+                        "{C:attention}hand of{} a {C:attention}round{} or during",
+                        "first hand {C:attention}after being obtained."
                     },
                 }
             },
@@ -111,8 +111,8 @@ return {
                     {
                         "{X:attention,C:white,s:1.25}Fast Redeploy",
                         "{C:blue}+#1#{} Chips and {C:red}+#2#{} Mult during",
-                        "first hand of a round or during",
-                        "first hand after being obtained.",
+                        "{C:attention}first hand of{} a {C:attention}round{} or during",
+                        "first hand {C:attention}after being obtained.",
                         "This Effect applies {C:attention}16{} times if",
                         "this Joker was obtained {C:attention}this round."
                     },
@@ -154,10 +154,15 @@ return {
                 name = "Logos",
                 text = {
                     {
+                        "{C:mult}+#7#{} Mult for {C:attention}each rank",
+                        "that was scored this round.",
+                        "{C:inactive}(Currently{} {C:mult}+#8#{} {C:inactive}Mult)"
+                    },
+                    {
                         "Instantly {C:attention}win the Blind",
                         "if {C:attention}every rank{} was",
                         "scored this round.",
-                        "{C:inactive}Currently #1# out of 13 played."
+                        "{C:inactive}(Currently #1# out of 13 played)"
                     },
                     {
                         "{C:attention}+#6#{} hand size, but",
@@ -652,7 +657,10 @@ return {
                         "of a {C:red}Burn Elemental Burst{},",
                         "increases this Joker's",
                         "{C:attention}other effect's{} values by {C:attention}#4#{}."
-                    }
+                    },
+                    {
+                        "#5#",
+                    },
                 },
             },
 
@@ -1110,7 +1118,8 @@ return {
             k_akts_redeploy_pack = "Fast Redeploy Pack",
 
             akts_jokers_only_config = "Balatrhodes Jokers only?",
-
+            akts_jokers_only_config_NoLegendaryNote = "*NOTE: This mod does not have a Legendary Joker,",
+            akts_jokers_only_config_NoLegendaryNote2 = "so using a Soul with this setting will crash the game",
         },
         labels = {
             k_akts_transformed = "Awoken",
