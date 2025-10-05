@@ -180,23 +180,10 @@ SMODS.Joker{
 
         if context.end_of_round and context.main_eval and context.game_over == false then
             card.ability.extra.targetRetriggered = true
-            local maxSellValLoss = 0
-            local healTarget = 0
-            local jokers = G.jokers and G.jokers.cards
-            if not jokers then
-                return
-            end
-            for index, joker in pairs(jokers) do
-                local jokerSellValLoss = math.max(0,(math.max(1, math.floor(joker.cost / 2)) - joker.sell_cost))
-                if maxSellValLoss <  jokerSellValLoss then
-                    maxSellValLoss = jokerSellValLoss
-                    healTarget = index
-                end
-            end
-
-            if maxSellValLoss > 0 and healTarget ~= nil then
-                HealJoker(card, G.jokers.cards[healTarget])
-                card.ability.extra.transformCondCurrent = card.ability.extra.transformCondCurrent + math.min(maxSellValLoss, card.ability.extra.healAmount)
+            local lowestHP = FindGreatestSellValueLoss()
+            if lowestHP and lowestHP.maxSellValLoss > 0 then
+                HealJoker(card, G.jokers.cards[lowestHP.healTarget])
+                card.ability.extra.transformCondCurrent = card.ability.extra.transformCondCurrent + math.min(lowestHP.maxSellValLoss, card.ability.extra.healAmount)
             end
 
             if card.ability.extra.transformCondCurrent >= card.ability.extra.transformCond then
@@ -309,29 +296,15 @@ SMODS.Joker{
                 end
             end
 
-            local maxSellValLoss = 0
-            local healTarget = 0
-            local jokers = G.jokers and G.jokers.cards
-            if not jokers then
-                return
+            local lowestHP = FindGreatestSellValueLoss()
+            if lowestHP and lowestHP.healTarget > 0 then
+                HealJoker(card, G.jokers.cards[lowestHP.healTarget])
             end
-            for index, joker in pairs(jokers) do
-                local jokerSellValLoss = math.max(0,(math.max(1, math.floor(joker.cost / 2)) - joker.sell_cost))
-                if maxSellValLoss <  jokerSellValLoss then
-                    maxSellValLoss = jokerSellValLoss
-                    healTarget = index
-                end
+            local leftoverHeal = math.max(0, card.ability.extra.healAmount - lowestHP.maxSellValLoss)
+            if leftoverHeal > 0 then
+                card.ability.extra.chipStorage = card.ability.extra.chipStorage + leftoverHeal * card.ability.extra.chipGain
+                card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex'), G.C.CHIPS})
             end
-
-            if maxSellValLoss > 0 and healTarget ~= nil then
-                HealJoker(card, G.jokers.cards[healTarget])
-                local leftoverHeal = math.max(0, card.ability.extra.healAmount - maxSellValLoss)
-                if leftoverHeal > 0 then
-                    card.ability.extra.chipStorage = card.ability.extra.chipStorage + leftoverHeal * card.ability.extra.chipGain
-                    card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex'), G.C.CHIPS})
-                end
-            end
-
             return{
                 chips = card.ability.extra.chipStorage,
                 card = card

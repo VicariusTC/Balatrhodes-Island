@@ -1,4 +1,3 @@
--- Make Vulpisfoglia reset drop you back to 4 if that hand has 5 cards?
 SMODS.Joker{
     key = 'Provence', 
     name = 'Provence',
@@ -75,8 +74,8 @@ SMODS.Joker{
         nextScoredCount = 5,
         scoredCountDefault = 5,
         bonusChips = 60,
-        bonusMult = 25,
-        bonusCash = 7,
+        bonusMult = 20,
+        bonusCash = 6,
         tagClass = {"Vanguard"},
         tagFaction = {"Siracusa"}
       }
@@ -93,8 +92,6 @@ SMODS.Joker{
     calculate = function(self,card,context)
       if context.cardarea == G.jokers and context.joker_main then
         if #context.scoring_hand ~= card.ability.extra.nextScoredCount then
-          card.ability.extra.nextScoredCount = card.ability.extra.scoredCountDefault
-          card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_reset')})
           return
         end
         if card.ability.extra.nextScoredCount == 1 then

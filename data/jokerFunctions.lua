@@ -645,9 +645,13 @@ end
 
 HealJoker = function (healer, target)
     local sellValue = target.sell_cost
-    if sellValue < math.max(math.floor(target.cost/2), 1) then
+    local targetCost = target.cost
+    if target.ability and type(target.ability.extra) == "table" and target.ability.extra.aktsCostValue then
+        targetCost = math.min(targetCost, target.ability.extra.aktsCostValue)
+    end
+    if sellValue < math.max(math.floor(targetCost/2), 1) then
         healer.ability.extra.aktsSettingPrice = true
-        healer.ability.extra.aktsNewSellPrice =  math.min(math.max(math.floor(target.cost/2), 1), sellValue + healer.ability.extra.healAmount)
+        healer.ability.extra.aktsNewSellPrice =  math.min(math.max(math.floor(targetCost/2), 1), sellValue + healer.ability.extra.healAmount)
         if target.ability.extra.aktsSellValue then
             target.ability.extra.aktsSellValue = healer.ability.extra.aktsNewSellPrice
         end
@@ -658,6 +662,30 @@ HealJoker = function (healer, target)
     end
 end
 
+FindGreatestSellValueLoss = function ()
+    local maxSellValLoss = 0
+    local healTarget = -1
+    local jokers = G.jokers and G.jokers.cards
+    if not jokers then
+        return
+    end
+    for index, joker in pairs(jokers) do
+        local jokerCost = joker.cost
+        if joker.ability and type(joker.ability.extra) == "table" and joker.ability.extra.aktsCostValue then
+            jokerCost = math.min(jokerCost, joker.ability.extra.aktsCostValue)
+        end
+        local jokerSellValLoss = math.max(0,(math.max(1, math.floor(jokerCost / 2)) - joker.sell_cost))
+        if maxSellValLoss <  jokerSellValLoss then
+            maxSellValLoss = jokerSellValLoss
+            healTarget = index
+        end
+    end
+    return
+    {
+        maxSellValLoss = maxSellValLoss,
+        healTarget = healTarget
+    }
+end
 GetRankName = function (rank)
     if rank <= 10 then
         return "" .. rank

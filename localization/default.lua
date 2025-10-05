@@ -690,7 +690,7 @@ return {
                         "Gives {C:chips}+#4#{} Chips if played hand",
                         "contains exactly {C:attention}#3#{} scoring cards.",
                         "{C:inactive,s:0.8}(Reduces by 1 each time this effect",
-                        "{C:inactive,s:0.8}triggers and resets otherwise.)",
+                        "{C:inactive,s:0.8}triggers and resets at 0.)",
                         "If this effect triggers when {C:attention}1{} card",
                         "{C:attention}is scored{}, also earns {C:money}$#5#{}",
                         "and gives {C:mult}+#6#{} Mult."
