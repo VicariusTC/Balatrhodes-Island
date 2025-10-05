@@ -245,6 +245,9 @@ SMODS.Joker{
                         card.ability.extra.prevDeathTriggerDesc = 0
                         card.ability.extra.akts_save = false
                         card.ability.extra.currentXMult = card.ability.extra.extraXMult
+                        G.GAME.chips = G.GAME.blind.chips
+                        G.STATE = G.STATES.HAND_PLAYED
+                        G.STATE_COMPLETE = true
                         return true
                     end
                     })) 

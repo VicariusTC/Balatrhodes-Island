@@ -31,7 +31,7 @@ SMODS.Joker{
     end, 
     calculate = function(self,card,context)
         if context.joker_main then
-            local blindCutMultiplier = G.GAME.round_resets.hands - G.GAME.current_round.hands_left
+            local blindCutMultiplier = G.GAME.current_round.hands_played
             local totalCut = blindCutMultiplier * card.ability.extra.blindCut
             G.GAME.blind.chips = G.GAME.blind.chips * (1 - (totalCut * 0.01))
             G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)

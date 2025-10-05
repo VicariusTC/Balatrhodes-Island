@@ -127,8 +127,10 @@ return {
                         "{C:attention}1/#1#{} of Blind Requirement, that",
                         "played hand's score becomes {C:attention}1/#1#{}",
                         "of Blind Requirement.",
-                        "{C:inactive}(Changes to {}{C:attention}1/#2#{} {C:inactive}during first",
-                        "{C:inactive}hand after this Joker is obtained.)"
+                        "{C:inactive}(Changes to {}{C:attention}1/#2#{} {C:inactive}during {C:attention}first",
+                        "{C:inactive}hand after this Joker {C:attention}is obtained{}{C:inactive}.)",
+                        "{C:inactive}(Values adjust based on",
+                        "{C:attention}number of hands {}{C:inactive}per round.)"
                     },
                 },      
             },

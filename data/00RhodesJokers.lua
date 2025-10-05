@@ -304,7 +304,7 @@ SMODS.Joker{
             end 
             G.E_MANAGER:add_event(Event({func = (function() card:juice_up(); return true end)}))
             return {
-                Xmult = returnMult,
+                xmult = returnMult,
             }
         end
 
@@ -442,7 +442,6 @@ SMODS.Joker{
     end  
 }
 
---Add a check during first played hand of a round, if #hands is greater than round reset hands and use that instead if thats the case. (E.G. Burglar completely breaks this Joker atm)
 SMODS.Joker{
     key = 'ProjektRed', 
     name = 'ProjektRed',
@@ -457,6 +456,7 @@ SMODS.Joker{
     pos = {x = 7, y = 0}, 
     config = { 
       extra = {
+        targetHands = nil,
         fastRedeployFlag = true,
         isFirstHand = true,
         handDivisor = 2,
@@ -468,27 +468,37 @@ SMODS.Joker{
     },
     loc_vars = function(self,info_queue,center)
         info_queue[#info_queue+1] = {set = 'Other', key = "FastRedeploy"}
-        return {vars = {G.GAME.round_resets.hands + center.ability.extra.handDivisor or 5, math.max(center.ability.extra.firstHandDivisorLimit, G.GAME.round_resets.hands - center.ability.extra.handDivisorMinus)}}
+        return {vars = {
+            (center.ability.extra.targetHands or G.GAME.round_resets.hands) + center.ability.extra.handDivisor, math.max(center.ability.extra.firstHandDivisorLimit, (center.ability.extra.targetHands or G.GAME.round_resets.hands) - center.ability.extra.handDivisorMinus)}}
     end,
     calculate = function(self,card,context)
         if context.hand_drawn then
+            if G.GAME.current_round.hands_played + G.GAME.current_round.hands_left > card.ability.extra.targetHands 
+            and G.GAME.current_round.hands_played + G.GAME.current_round.hands_left > G.GAME.round_resets.hands + 1 then
+                card.ability.extra.targetHands = G.GAME.current_round.hands_played + G.GAME.current_round.hands_left
+            end
             G.AKTS_Globals.redMaxChips = 0
         end
+
         if context.cardarea == G.jokers and context.scoring_hand and context.final_scoring_step then
-            local returnChips = (1/ (G.GAME.round_resets.hands + card.ability.extra.handDivisor)) * G.GAME.blind.chips
-            if card.ability.extra.isFirstHand then
-                returnChips = (1/math.max(card.ability.extra.firstHandDivisorLimit, G.GAME.round_resets.hands - card.ability.extra.handDivisorMinus)) * G.GAME.blind.chips
+            local abExtra = card.ability.extra
+            local returnChips = (1/ (abExtra.targetHands + abExtra.handDivisor)) * G.GAME.blind.chips
+            if abExtra.isFirstHand then
+                returnChips = (1/math.max(abExtra.firstHandDivisorLimit, abExtra.targetHands - abExtra.handDivisorMinus)) * G.GAME.blind.chips
             end
-            card.ability.extra.isFirstHand = false
+            abExtra.isFirstHand = false
             if returnChips > (mult * hand_chips) and returnChips > G.AKTS_Globals.redMaxChips then
                 card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("akts_red_active"), G.C.ATTENTION})
-                mult = 0
-                hand_chips = 0
+                mult = mod_mult(0)
+                hand_chips = mod_chips(0)
                 G.GAME.chips = G.GAME.chips + (returnChips - G.AKTS_Globals.redMaxChips)
                 G.AKTS_Globals.redMaxChips = returnChips
             end
 		end
 
+        if context.setting_blind and context.main_eval and G.GAME.blind then
+            card.ability.extra.targetHands = G.GAME.round_resets.hands
+        end
         if context.selling_self and not context.blueprint then
             PerformFastRedeploy("j_akts_ProjektRed", card)
         end
