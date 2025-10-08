@@ -1075,6 +1075,7 @@ return {
             akts_smeared_aoe = "Smeared!",
             akts_plus_Stored = "Stored!",
             akts_hp_down = "Health Down!",
+            akts_no_hp = "No HP!",
             akts_bind_apply = "Bound!",
             akts_downgrade = "Downgrade!",
             akts_crit = "Critical!",

@@ -491,7 +491,23 @@ end
 setGeekDebuff = function(card)
     if card.sell_cost <= 0 then 
         card:juice_up()
-        card:set_debuff(true)
+        card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('akts_no_hp'), colour = G.C.MULT})
+        SMODS.debuff_card(card, true, "GeekDebuff")
+        G.E_MANAGER:add_event(Event({
+            func = function() 
+                if not G.STATES.DRAW_TO_HAND and not G.STATE_COMPLETE then
+                    return false
+                end
+                G.E_MANAGER:add_event(Event({
+                    func = function() 
+                        SMODS.debuff_card(card, false, "GeekDebuff")
+                        return true
+                    end,
+                }))
+                return true
+            end,
+            blocking = false
+        }))
     else
         card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('akts_hp_down'), colour = G.C.MULT})
         card.ability.extra.aktsSellValue = card.ability.extra.aktsSellValue - 1
@@ -675,7 +691,7 @@ FindGreatestSellValueLoss = function ()
             jokerCost = math.min(jokerCost, joker.ability.extra.aktsCostValue)
         end
         local jokerSellValLoss = math.max(0,(math.max(1, math.floor(jokerCost / 2)) - joker.sell_cost))
-        if maxSellValLoss <  jokerSellValLoss then
+        if maxSellValLoss <  jokerSellValLoss or (healTarget ~= -1 and maxSellValLoss == jokerSellValLoss and joker.sell_cost < jokers[healTarget].sell_cost) then
             maxSellValLoss = jokerSellValLoss
             healTarget = index
         end

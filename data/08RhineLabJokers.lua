@@ -274,12 +274,17 @@ SMODS.Joker{
             if card.ability.extra.undebuffCount > 0 and jokers then
                 for index, joker in pairs(jokers) do
                     if joker.debuff and (not joker.edition or not joker.edition.type == "negative") then
-                        card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("akts_silence_immortal"), G.C.ATTENTION})
-                        joker.ability.extra.undebuffable = true
-                        joker.debuff = false
-                        HealJoker(card, joker)
-                        joker:set_edition(card.ability.extra.enhanceChoice, true)
-                        card.ability.extra.undebuffCount = card.ability.extra.undebuffCount - 1
+                        G.E_MANAGER:add_event(Event({
+                            func = function() 
+                                card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("akts_silence_immortal"), G.C.ATTENTION})
+                                joker.ability.extra.undebuffable = true
+                                joker.debuff = false
+                                HealJoker(card, joker)
+                                joker:set_edition(card.ability.extra.enhanceChoice, true)
+                                card.ability.extra.undebuffCount = card.ability.extra.undebuffCount - 1
+                                return true
+                            end,
+                        }))
                         local currentAnte = G.GAME.round_resets.ante
                         G.E_MANAGER:add_event(Event({
                             func = function() 
