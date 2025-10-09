@@ -155,12 +155,12 @@ return {
                 name = "Logos",
                 text = {
                     {
-                        "{C:mult}+#7#{} Mult for {C:attention}each rank",
+                        "{C:mult}+#7#{} Mult for {C:attention}each unique rank",
                         "that was scored this round.",
                         "{C:inactive}(Currently{} {C:mult}+#8#{} {C:inactive}Mult)"
                     },
                     {
-                        "Instantly {C:attention}win the Blind",
+                        "Immediately {C:attention}win the Blind",
                         "if {C:attention}every rank{} was",
                         "scored this round.",
                         "{C:inactive}(Currently #1# out of 13 played)"
