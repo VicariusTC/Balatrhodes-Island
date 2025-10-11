@@ -447,36 +447,6 @@ aoEEnhancement = function(joker, card, handSelect, range, efficacy)
     return returnTable
 end
 
-RecalcAoEHandType = function (context, card)
-    if not G.hand.highlighted or #G.hand.highlighted ~= 5 then
-        return nil
-    end
-    local optionsSuits = {"Hearts", "Diamonds", "Clubs", "Spades"}
-    for i = 1, #G.hand.highlighted do
-        if #optionsSuits == 0 then
-            return nil
-        end
-        if G.hand.highlighted[i].config.center ~= G.P_CENTERS.m_wild then
-            for j = 1, #optionsSuits do
-                if not G.hand.highlighted[i]:is_suit(optionsSuits[j]) then
-                    table.remove(optionsSuits, j)
-                    j = j - 1
-                end
-            end
-        end
-    end
-    if context.scoring_name == "Five of a Kind" then
-        return "Flush Five"
-    end
-    if context.scoring_name == 'Full House' then
-        return "Flush House"
-    end
-    if context.scoring_name == 'Straight' then
-        return "Straight Flush"
-    end
-    return "Flush"
-end
-
 --Returns a table to be used during individual context, (int mult, int dollars)
 parseEnhancement = function(card, context, otherCard)
     local returnMultDol = {0, 0}
