@@ -117,7 +117,7 @@ SMODS.Joker{
       extra = {
         globalCut = 2,
         finalCut = 4,
-        trueCut = 2,
+        trueCut = 3,
         transformLength = 5,
         transformRevert = "j_akts_Mlynar",
         tagClass = {"Guard"},
@@ -146,9 +146,15 @@ SMODS.Joker{
                     totalCut = totalCut + card.ability.extra.trueCut
                 end
             end
-            G.GAME.blind.chips = G.GAME.blind.chips * (1 - (totalCut * 0.01))
-            G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
             card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("akts_mlynar_score"), G.C.ATTENTION})
+            G.E_MANAGER:add_event(Event({
+                func = function()
+                    G.GAME.blind.chips = G.GAME.blind.chips * (1 - (totalCut * 0.01))
+                    G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+                    return true
+                end
+            }))
+            
         end
         if (context.hand_drawn or context.end_of_round) and card.ability.extra.transformLength <= 0 then
             card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("akts_transform_revert"), G.C.ATTENTION})
