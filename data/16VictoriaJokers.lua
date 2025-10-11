@@ -90,10 +90,10 @@ SMODS.Joker{
     end,
     calculate = function(self,card,context)
         if context.cardarea == G.hand and context.individual and not context.other_card.debuff and not context.end_of_round then
-            local returnChips = context.other_card:get_id()
-            if math.random() <= G.GAME.probabilities.normal/card.ability.extra.explosionChance then
+            local returnChips = math.max(context.other_card:get_id(), 0)
+            if math.random() <= G.GAME.probabilities.normal/card.ability.extra.explosionChance and returnChips > 0 then
                 SMODS.destroy_cards(context.other_card)
-                returnChips = card.ability.extra.explosionMultiplier * context.other_card:get_id()
+                returnChips = card.ability.extra.explosionMultiplier * returnChips
             end
             return {
                 chips = returnChips,
