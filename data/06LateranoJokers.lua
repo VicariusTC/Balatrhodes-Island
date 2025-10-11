@@ -100,7 +100,7 @@ SMODS.Joker{
             if context.before then
                 local currentHandLevel = getCurrentHandLevel(context)
                 local currentHand = getCurrentHandName(context)
-                if currentHandLevel >= card.ability.extra.targetLevel and card.ability.extra.ammoCount > 0 then
+                if currentHand and currentHandLevel >= card.ability.extra.targetLevel and card.ability.extra.ammoCount > 0 then
                     local retriggerFactor = 1  
                     if currentHand.order <= card.ability.extra.thriceRetriggerOrder then
                         retriggerFactor = 3

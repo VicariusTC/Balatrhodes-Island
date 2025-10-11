@@ -99,6 +99,7 @@ SMODS.Joker{
         aoEMain = {},
         baseAoE = {-1, 1},
         fullAoE = {-1, 1, -2, 2},
+        calculatedHandType = nil,
         tagClass = {"Guard"},
         tagFaction = {"Sargon"}
       }
@@ -108,31 +109,32 @@ SMODS.Joker{
         return {vars = {center.ability.extra.aoEEfficacy[3]}}
     end,
     calculate = function(self,card,context)
-        if context.cardarea == G.jokers and context.scoring_hand then
-            if context.before then
-                card.ability.extra.aoESuitTarget = {}
-                card.ability.extra.aoEMain = {}
-                card.ability.extra.aoEUndebuffable = false
-                local centerPlayed = context.full_hand[math.floor((#context.full_hand/2) +0.5)]
-                if centerPlayed.config.center ~= G.P_CENTERS.c_base then
-                    if not card.ability.extra.lastRoundAoE then
-                        card.ability.extra.aoEMain = aoEEnhancement(card, centerPlayed, context.full_hand, card.ability.extra.baseAoE, card.ability.extra.aoEEfficacy)
-                        card.ability.extra.lastRoundAoE = true
-                    else
-                        card.ability.extra.aoEMain = aoEEnhancement(card, centerPlayed, context.full_hand, card.ability.extra.fullAoE, card.ability.extra.aoEEfficacy)
+        if context.press_play then
+            card.ability.extra.aoESuitTarget = {}
+            card.ability.extra.aoEMain = {}
+            card.ability.extra.aoEUndebuffable = false
+            local centerPlayed = G.hand.highlighted[math.floor((#G.hand.highlighted/2) +0.5)]
+            if centerPlayed.config.center ~= G.P_CENTERS.c_base then
+                if not card.ability.extra.lastRoundAoE then
+                    card.ability.extra.aoEMain = aoEEnhancement(card, centerPlayed, G.hand.highlighted, card.ability.extra.baseAoE, card.ability.extra.aoEEfficacy)
+                    card.ability.extra.lastRoundAoE = true
+                else
+                    card.ability.extra.aoEMain = aoEEnhancement(card, centerPlayed, G.hand.highlighted, card.ability.extra.fullAoE, card.ability.extra.aoEEfficacy)
+                end
+            elseif card.ability.extra.lastRoundAoE then
+                card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_reset')})
+                card.ability.extra.lastRoundAoE = false
+            end
+        end
+
+        if context.cardarea == G.jokers and context.scoring_hand and context.before then
+            if card.ability.extra.aoEMain and card.ability.extra.aoEMain[1] and card.ability.extra.aoEMain[1][1] then
+                card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('akts_AoE')})
+                for i, v in pairs(card.ability.extra.aoEMain[1][1]) do
+                    v:juice_up()
+                    if card.ability.extra.aoEUndebuffable then
+                        v.debuff = false
                     end
-                    if card.ability.extra.aoEMain and card.ability.extra.aoEMain[1] and card.ability.extra.aoEMain[1][1] then
-                        card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('akts_AoE')})
-                        for i, v in pairs(card.ability.extra.aoEMain[1][1]) do
-                            v:juice_up()
-                            if card.ability.extra.aoEUndebuffable then
-                                v.debuff = false
-                            end
-                        end
-                    end
-                elseif card.ability.extra.lastRoundAoE then
-                    card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_reset')})
-                    card.ability.extra.lastRoundAoE = false
                 end
             end
         end
