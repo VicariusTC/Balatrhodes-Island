@@ -473,6 +473,9 @@ SMODS.Joker{
     end,
     calculate = function(self,card,context)
         if context.hand_drawn then
+            if not card.ability.extra.targetHands then
+                card.ability.extra.targetHands = G.GAME.round_resets.hands
+            end
             if G.GAME.current_round.hands_played + G.GAME.current_round.hands_left > card.ability.extra.targetHands 
             and G.GAME.current_round.hands_played + G.GAME.current_round.hands_left > G.GAME.round_resets.hands + 1 then
                 card.ability.extra.targetHands = G.GAME.current_round.hands_played + G.GAME.current_round.hands_left

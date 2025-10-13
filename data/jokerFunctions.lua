@@ -553,8 +553,13 @@ calculateElemInjury = function(card, burstType, elemDamage, blind)
     if burstType == 'Burn' then
         G.AKTS_Globals.burnElementalInjury = math.min(G.AKTS_Globals.burnElementalInjury + elemDamage, 100)
         if G.AKTS_Globals.burnElementalInjury == 100 then
-            G.GAME.chips = G.GAME.chips + (G.AKTS_Globals.burnBurstFactor * 0.1 * G.GAME.blind.chips)
             G.AKTS_Globals.burnBurstApplied = true
+            G.E_MANAGER:add_event(Event({
+                func = function()
+                    G.GAME.chips = G.GAME.chips + (G.AKTS_Globals.burnBurstFactor * 0.1 * G.GAME.blind.chips)
+                    return true
+                end
+            }))
         end
     end
     
