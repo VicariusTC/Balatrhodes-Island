@@ -11,8 +11,8 @@ The Goal of this mod is to faithfully recreate many Arknights Operators and tran
 
 # Requirements
 
-- Steamodded ≥ `1.0.0-beta-0827c`
-- Lovely ≥ `0.7`
+- [Steamodded](https://github.com/Steamodded/smods)  ≥ `1.0.0-beta-0827c`
+- [Lovely](https://github.com/ethangreen-dev/lovely-injector) ≥ `0.7`
 
 # Installation
 1. Download the latest release zip file.
