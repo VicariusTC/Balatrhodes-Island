@@ -9,7 +9,7 @@
 	"badge_colour": "6B2980",
 	"badge_text_colour": "FFFFFF",
   "display_name": "Balatrhodes",
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"dependencies": [
 			"Steamodded (>=1.0.0~BETA-0711a)",
       "Lovely (>=0.6)"
