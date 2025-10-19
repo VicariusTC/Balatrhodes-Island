@@ -24,7 +24,7 @@ SMODS.Joker{
     calculate = function(self,card,context)
         if context.joker_main and G.jokers and G.jokers.cards then
             for k, joker in pairs(G.jokers.cards) do
-                if joker.debuff then
+                if joker.debuff and not joker.ability.eternal then
                     G.E_MANAGER:add_event(Event({
                         trigger = "after", 
                         delay = 0.01,
