@@ -547,6 +547,27 @@ return {
                 },
             },
 
+            j_akts_Executor = {
+                name = "Executor",
+                text = {
+                    {
+                        "Enhances rightmost unenhanced",
+                        "scored card to {C:attention}Glass Card{}",
+                        "until after scoring if poker hand",
+                        "is a {C:attention}Three of a Kind{}",
+                        "{C:green}#1# in #2#{} chance for this effect",
+                        "to enhance {C:attention}two{} cards instead.",
+                    },
+                    {
+                        "Transforms into",
+                        "{C:spectral}Executor the Ex Foedere{}",
+                        "after using 1 each of",
+                        "{C:tarot}Justice, Judgement{} and {C:tarot}Emperor{}",
+                        "Tarot cards. {C:inactive}(#3# of 3 used.)"
+                    }
+                },
+            },
+
             j_akts_Surfer = {
                 name = "Surfer",
                 text = {
@@ -1130,11 +1151,12 @@ return {
             akts_mlynar_score = "CUT!",
             akts_Dodged = "Dodged!",
 
+            akts_double_trigger = "Double Trigger!",
+
             akts_surfer_score = "DEF Down!",
 
             akts_silence_immortal = "Immortal!",
 
-            akts_leizi_chain = "Thunderclap!",
             akts_summon_greater = "Fused!",
 
             akts_plus_hook = "Hooked!",

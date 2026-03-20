@@ -65,13 +65,13 @@ SMODS.Joker{
 }
 
 SMODS.Joker{
-    key = 'Lemuen', 
+    key = 'Lemuen',
     name = 'Lemuen',
     rarity = 3,
-    atlas = 'Jokers', 
+    atlas = 'Jokers',
 	cost = 7,
-    unlocked = true, 
-    discovered = true, 
+    unlocked = true,
+    discovered = true,
     blueprint_compat = true, 
     eternal_compat = true, 
     perishable_compat = true, 
@@ -235,6 +235,91 @@ SMODS.Joker{
 
         if context.end_of_round then
             card.ability.extra.aoEMain = {}
+        end
+    end,
+    set_badges = function(self, card, badges)
+        aktsBadgeHelper(self,card,badges)
+    end 
+}
+
+SMODS.Joker{
+    key = 'Executor',
+    name = 'Executor',
+    rarity = 2,
+    atlas = 'Jokers',
+	cost = 6,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = true,
+    eternal_compat = true, 
+    perishable_compat = true,
+    no_pool_flag = 'akts_executor_transform',
+    pos = {x = 3, y = 11},
+    config = {
+      extra = {
+        doubleTriggerChance = 4,
+        judgementUsed = false,
+        justiceUsed = false,
+        emperorUsed = false,
+        glassTargets = {},
+        transformProgress = 0,
+        transformLink = "",
+        tagClass = {"Sniper"},
+        tagFaction = {"Laterano"}
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {G.GAME.probabilities.normal or 1, center.ability.extra.doubleTriggerChance, center.ability.extra.transformProgress}}
+    end,
+    calculate = function(self,card,context)
+        if context.before and not context.blueprint and context.scoring_name == "Three of a Kind" then
+            local doubleTrigger = math.random() <= G.GAME.probabilities.normal/card.ability.extra.doubleTriggerChance
+            for i = 0, #context.scoring_hand - 1 do
+                local target = context.scoring_hand[#context.scoring_hand - i]
+                if target and target.config.center == G.P_CENTERS.c_base then
+                    table.insert(card.ability.extra.glassTargets, target)
+                    target:set_ability(G.P_CENTERS.m_glass, nil, true)
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            target:juice_up()
+                            return true
+                        end,
+                    }))
+                    if not doubleTrigger then
+                        break
+                    end
+                    card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("akts_double_trigger"), G.C.ATTENTION})
+                    delay(0.25)
+                    doubleTrigger = false
+                end
+            end
+           
+        end
+        if context.after then
+            for index, value in ipairs(card.ability.extra.glassTargets) do
+                if value and value.config and value.config.center then
+                    value:set_ability(G.P_CENTERS.c_base, nil, true)
+                end
+            end
+            card.ability.extra.glassTargets = {}
+        end
+
+        if context.using_consumeable then
+            if context.consumeable.ability.name == 'The Emperor' then
+                card.ability.extra.emperorUsed = true
+            elseif context.consumeable.ability.name == 'Justice' then
+                card.ability.extra.justiceUsed = true
+            elseif context.consumeable.ability.name == 'Judgement' then
+                card.ability.extra.judgementUsed = true
+            end
+            card.ability.extra.transformProgress = (card.ability.extra.emperorUsed and 1 or 0) 
+                                                + (card.ability.extra.justiceUsed and 1 or 0) 
+                                                + (card.ability.extra.judgementUsed and 1 or 0)
+            if card.ability.extra.emperorUsed and card.ability.extra.judgementUsed and card.ability.extra.justiceUsed then
+                G.GAME.pool_flags.akts_silence_transform = true
+                card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("akts_transform"), G.C.ATTENTION})
+                jokerTransform(card, card.ability.extra.transformLink)
+            end
         end
     end,
     set_badges = function(self, card, badges)

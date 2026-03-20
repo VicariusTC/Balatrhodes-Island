@@ -372,17 +372,20 @@ SMODS.Joker{
     end,
     calculate = function(self,card,context)
         if context.joker_main then
+            local scoreMultiplier = ((G.GAME.hands[card.ability.extra.handTypes[1]].played + G.GAME.hands[card.ability.extra.handTypes[2]].played) or 0) * card.ability.extra.multFactor
             if not G.AKTS_Globals.burnBurstApplied then
-                local addedElemInj = ((G.GAME.hands[card.ability.extra.handTypes[1]].played + G.GAME.hands[card.ability.extra.handTypes[2]].played) or 0) * card.ability.extra.burnFactor
-                calculateElemInjury(card, 'Burn', addedElemInj)
-                card_eval_status_text(card, 'extra', nil, nil, nil, {message = elemBurstChangeText(addedElemInj), G.C.ATTENTION})
+                if scoreMultiplier > 0 then
+                    local addedElemInj = ((G.GAME.hands[card.ability.extra.handTypes[1]].played + G.GAME.hands[card.ability.extra.handTypes[2]].played) or 0) * card.ability.extra.burnFactor
+                    calculateElemInjury(card, 'Burn', addedElemInj)
+                    card_eval_status_text(card, 'extra', nil, nil, nil, {message = elemBurstChangeText(addedElemInj), G.C.ATTENTION})
+                end
             elseif next(context.poker_hands[card.ability.extra.handTypes[2]]) and not context.blueprint then
                 card.ability.extra.multFactor = card.ability.extra.multFactor + card.ability.extra.multFactorScale
                 card.ability.extra.burnFactor = card.ability.extra.burnFactor + card.ability.extra.burnFactorScale
                 card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex'), G.C.MULT})
             end
             return {
-			    mult = ((G.GAME.hands[card.ability.extra.handTypes[1]].played + G.GAME.hands[card.ability.extra.handTypes[2]].played) or 0) * card.ability.extra.multFactor,
+			    mult = scoreMultiplier,
                 card = card
 		    }
         end
