@@ -715,6 +715,34 @@ return {
                     }
                 },
             },
+            
+            j_akts_Kichisei = {
+                name = "Kichisei",
+                text = {
+                    {
+                        "{C:chips}+#1#{} Chips for each {C:attention}suit{} that scored ",
+                        "a {C:attention}Flush{} this blind.",
+                        "{C:inactive,s:0.8}(Currently{} {C:chips,s:0.8}+#2#{}{C:inactive,s:0.8} Chips.)",
+                    }
+                },
+            },
+
+            j_akts_Leizi = {
+                name = "Leizi",
+                text = {
+                    {
+                        "If the card to the {C:attention}right{} of a {C:attention}scored",
+                        "{C:attention}enhanced card{} is unenhanced, {C:attention}move{}",
+                        "that enhancement to card to the right.",
+                        "{C:inactive}(Triggers up to twice per hand){}",
+                    },
+                    {
+                        "Transforms into",
+                        "{C:spectral}Leizi the Thunderbringer{}",
+                        "after this effect triggers {C:attention}#1#{} {C:inactive}[#2#]{} times.",
+                    }
+                },
+            },
 
             j_akts_Cement = {
                 name = "Cement",
@@ -1064,6 +1092,7 @@ return {
             k_akts_RhineColumbia = "Rhine Lab/Columbia",
             k_akts_Siracusa = "Siracusa",
             k_akts_Higashi = "Higashi",
+            k_akts_Yan = "Yan",
             k_akts_RimBil = "Rim Billiton",
             k_akts_Victoria = "Victoria",
             k_akts_Tara = "Tara",
@@ -1105,6 +1134,7 @@ return {
 
             akts_silence_immortal = "Immortal!",
 
+            akts_leizi_chain = "Thunderclap!",
             akts_summon_greater = "Fused!",
 
             akts_plus_hook = "Hooked!",
