@@ -590,6 +590,113 @@ SMODS.Joker{
         aktsBadgeHelper(self,card,badges)
     end  
 }
+
+SMODS.Joker{
+    key = 'Civilight',
+    name = 'Civilight',
+    rarity = 3,
+    atlas = 'Jokers',
+	cost = 9,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    pos = {x = 9, y = 0},
+    config = {
+      extra = {
+        targetSeal = "Red",
+        sealAdds = 3,
+        rankBalance = 1,
+        ranks = {},
+        balancePercentage = 10,
+        tagClass = {"Supporter"},
+        tagFaction = {"Rhodes"}
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        info_queue[#info_queue+1] = {key = string.lower(center.ability.extra.targetSeal) ..'_seal', set = 'Other'}
+        return {vars = {center.ability.extra.sealAdds, center.ability.extra.rankBalance, center.ability.extra.balancePercentage}}
+    end,
+
+    add_to_deck = function(self, card, from_debuff)
+        for i = 1, 3, 1 do
+            local newCard = SMODS.add_card{set = 'Base', area = G.deck, no_edition = true, seal = card.ability.extra.targetSeal}
+            playing_card_joker_effects({newCard})
+        end
+    end,
+    calculate = function(self,card,context)
+        if context.cardarea == G.jokers and context.scoring_hand and context.before then
+            G.AKTS_Globals.CERanks = {}
+        end
+
+       if context.individual and not context.end_of_round and context.cardarea == G.play and not context.other_card.debuff and context.other_card.seal == card.ability.extra.targetSeal then
+        local avgRank = 0
+        local ranks = G.AKTS_Globals.CERanks
+        if #ranks == 0 then
+            for i = 1, #context.scoring_hand do
+                local id = context.scoring_hand[i]:get_id()
+                if id > 0 then
+                    table.insert(ranks, id)
+                    avgRank = avgRank + ranks[#ranks]
+                end
+            end
+        else
+            for i = 1, #ranks do
+                avgRank = avgRank + ranks[i]
+            end
+        end
+        avgRank = round_number(avgRank/#context.scoring_hand, 0)
+        local index = 0
+        for i = 1, #context.scoring_hand do
+            local id = context.scoring_hand[i]:get_id()
+            if id > 0 then
+                index = index + 1
+                if ranks[index] < avgRank then
+                    local change = math.min(avgRank - ranks[index], card.ability.extra.rankBalance)
+                    ranks[index] = ranks[index] + change
+                    G.E_MANAGER:add_event(Event({
+                        func = (function()
+                            SMODS.modify_rank(context.scoring_hand[i], change)
+                            context.scoring_hand[i]:juice_up()
+                            return true
+                        end)
+                    }))
+                elseif ranks[index] > avgRank then
+                    local change = -math.min(ranks[index] - avgRank, card.ability.extra.rankBalance)
+                    ranks[index] = ranks[index] + change
+                    G.E_MANAGER:add_event(Event({
+                        func = (function ()
+                            SMODS.modify_rank(context.scoring_hand[i], change)
+                            context.scoring_hand[i]:juice_up()
+                            return true
+                        end)
+                    }))
+                end
+            end
+        end
+
+        local avgScore = (hand_chips + mult) / 2
+        local handChipsBonus = (avgScore - hand_chips) * (0.01 * card.ability.extra.balancePercentage)
+        local handMultBonus = (avgScore - mult) * (0.01 * card.ability.extra.balancePercentage)
+        if hand_chips > mult then
+            hand_chips = mod_chips(hand_chips - handChipsBonus)
+            mult = mod_mult(mult + handMultBonus)
+        else
+            hand_chips = mod_chips(hand_chips + handChipsBonus)
+            mult = mod_mult(mult - handMultBonus)
+        end
+        return {
+            card = card,
+            message = localize("akts_CE_Balance"),
+            colour = G.C.PURPLE
+        }
+       end
+    end,
+    set_badges = function(self, card, badges)
+        aktsBadgeHelper(self,card,badges)
+    end
+}
 ----------------------------------------Base Rhodes end----------------------------------------
 SMODS.Joker{
     key = 'Logos',

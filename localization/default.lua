@@ -151,6 +151,24 @@ return {
                 },      
             },
 
+            j_akts_Civilight = {
+                name = "Civilight Eterna",
+                text = {
+                    {
+                        "Adds {C:attention}#1#{} unenhanced cards with",
+                        "{C:attention}Red Seal{} to deck when obtained.",
+                    },
+                    {
+                        "Balances out {C:attention}ranks{} of all scored cards",
+                        "by {C:attention}#2#{} when scoring a card with a {C:attention}Red Seal{}.",
+                    },
+                    {
+                        "Balance {C:chips}Chips{} and {C:mult}Mult{} by {C:attention}#3#%{} when",
+                        "scoring a card with a {C:attention}Red Seal{}."
+                    }
+                },
+            },
+
             j_akts_Logos = {
                 name = "Logos",
                 text = {
@@ -392,6 +410,22 @@ return {
                     {
                         "{C:inactive}Reverts into Mlynar{}",
                         "{C:inactive}in{} {C:attention}#4#{}{C:inactive} hand(s).",
+                    }
+                },
+            },
+
+            j_akts_Gravel = {
+                name = "Gravel",
+                text = {
+                    {
+                        "{X:attention,C:white,s:1.25}Fast Redeploy",
+                        "Each scored card gives {C:chips}+#1#{} chips",
+                        "if the {C:attention}combined{} ranks of all",
+                        "scored cards is {C:attention}#2# or less{}.",
+                    },
+                    {
+                        "{C:attention}+#3#{} hand size until {C:attention}first hand{} is",
+                        "played after obtaining this Joker.",
                     }
                 },
             },
@@ -742,7 +776,7 @@ return {
                 text = {
                     {
                         "{C:chips}+#1#{} Chips for each {C:attention}suit{} that scored ",
-                        "a {C:attention}Flush{} this blind.",
+                        "a {C:attention}Flush{} this round.",
                         "{C:inactive,s:0.8}(Currently{} {C:chips,s:0.8}+#2#{}{C:inactive,s:0.8} Chips.)",
                     }
                 },
@@ -1140,6 +1174,7 @@ return {
             akts_debt_payment = "Debt Payment!",
             akts_debt_free = "NO DEBT!",
             akts_gavial_win = "Soul of the Jungle!",
+            akts_CE_Balance = "Reconstructed!",
             akts_logos_win = "PERISH!",
             akts_red_active = "Chill.",
 

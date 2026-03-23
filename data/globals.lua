@@ -7,6 +7,7 @@ SMODS.current_mod.reset_game_globals = function(run_start)
     G.AKTS_Globals.blindBound = 0
     G.AKTS_Globals.jokerSoldThisRound = false
     G.AKTS_Globals.redMaxChips = 0
+    G.AKTS_Globals.CERanks = {}
     if run_start then
         G.AKTS_Globals.yatosSold = 0
         G.AKTS_Globals.cloneChips = 25

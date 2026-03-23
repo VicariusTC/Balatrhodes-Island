@@ -165,6 +165,79 @@ SMODS.Joker{
         aktsBadgeHelper(self,card,badges)
     end 
 }
+
+SMODS.Joker{
+    key = 'Gravel',
+    name = 'Gravel',
+    rarity = 1,
+    atlas = 'Jokers',
+	cost = 3,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    pos = {x = 3, y = 6},
+    config = {
+      extra = {
+        fastRedeployFlag = true,
+        isFirstHand = true,
+        bonusChips = 30,
+        bonusChipsRank = 10,
+        currentHandRank = 0,
+        handSizeBonus = 3,
+        handSizeBonusVisual = 3,
+        tagClass = {"Specialist"},
+        tagFaction = {"Kazimierz"}
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        info_queue[#info_queue+1] = {set = 'Other', key = "FastRedeploy"}
+        return {vars = {
+            center.ability.extra.bonusChips, center.ability.extra.bonusChipsRank, center.ability.extra.handSizeBonusVisual}}
+    end,
+    add_to_deck = function(self, card, from_debuff)
+        G.hand:change_size(card.ability.extra.handSizeBonus)
+    end,
+    remove_from_deck = function(self, card, from_debuff)
+        G.hand:change_size(-card.ability.extra.handSizeBonus)
+    end,
+    calculate = function(self,card,context)
+        if context.joker_main then
+            if card.ability.extra.isFirstHand then
+                G.hand:change_size(-card.ability.extra.handSizeBonus)
+                card.ability.extra.handSizeBonus = 0
+                card.ability.extra.isFirstHand = false
+            end
+            card.ability.extra.currentHandRank = 0
+        end
+
+        if context.individual and not context.end_of_round and context.cardarea == G.play and not context.other_card.debuff then
+            if card.ability.extra.currentHandRank == 0 then
+                for i = 1, #context.scoring_hand do
+                    local rank = context.scoring_hand[i]:get_id() % 14
+                    card.ability.extra.currentHandRank = card.ability.extra.currentHandRank + math.max(1, rank)
+                    if card.ability.extra.currentHandRank > 10 then
+                        break
+                    end
+                end
+            end
+            if card.ability.extra.currentHandRank <= 10 then
+                return {
+                    chips = card.ability.extra.bonusChips,
+					card = context.other_card
+                }
+            end
+        end
+
+        if context.selling_self and not context.blueprint then
+            PerformFastRedeploy("j_akts_Gravel", card)
+        end
+    end,
+    set_badges = function(self, card, badges)
+        aktsBadgeHelper(self,card,badges)
+    end
+}
 ----------------------------------------Base Kazimierz end----------------------------------------
 SMODS.Joker{
     key = 'Flametail', 
