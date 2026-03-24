@@ -124,8 +124,7 @@ SMODS.Joker{
                                 update_hand_text({sound = 'button', volume = 0.7, pitch = 1.1, delay = 0}, {mult = 0, chips = 0, handname = '', level = ''})
                                 --Activate Custom Sell Price Mode
                                 card.ability.extra.aktsSettingPrice = true
-                                local _card = create_card("Planet", G.consumeables)
-                                _card:set_edition({negative = true}, true)
+                                local _card = SMODS.create_card({set = "Planet", edition = {negative = true}})
                                 _card:add_to_deck()
                                 G.consumeables:emplace(_card)
                                 for i = 1, card.ability.extra.planetCopies - 1, 1 do
@@ -263,7 +262,7 @@ SMODS.Joker{
         emperorUsed = false,
         glassTargets = {},
         transformProgress = 0,
-        transformLink = "",
+        transformLink = "j_akts_ExecutorAlter",
         tagClass = {"Sniper"},
         tagFaction = {"Laterano"}
       }
@@ -272,7 +271,7 @@ SMODS.Joker{
         return {vars = {G.GAME.probabilities.normal or 1, center.ability.extra.doubleTriggerChance, center.ability.extra.transformProgress}}
     end,
     calculate = function(self,card,context)
-        if context.before and not context.blueprint and context.scoring_name == "Three of a Kind" then
+        if context.before and context.scoring_name == "Three of a Kind" then
             local doubleTrigger = math.random() <= G.GAME.probabilities.normal/card.ability.extra.doubleTriggerChance
             for i = 0, #context.scoring_hand - 1 do
                 local target = context.scoring_hand[#context.scoring_hand - i]
@@ -316,7 +315,7 @@ SMODS.Joker{
                                                 + (card.ability.extra.justiceUsed and 1 or 0) 
                                                 + (card.ability.extra.judgementUsed and 1 or 0)
             if card.ability.extra.emperorUsed and card.ability.extra.judgementUsed and card.ability.extra.justiceUsed then
-                G.GAME.pool_flags.akts_silence_transform = true
+                G.GAME.pool_flags.akts_executor_transform = true
                 card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("akts_transform"), G.C.ATTENTION})
                 jokerTransform(card, card.ability.extra.transformLink)
             end
@@ -325,4 +324,112 @@ SMODS.Joker{
     set_badges = function(self, card, badges)
         aktsBadgeHelper(self,card,badges)
     end 
+}
+
+--Include 4/5 of a kinds in his shit as well, probs not full/flush house tho.
+SMODS.Joker{
+    key = 'ExecutorAlter', 
+    name = 'ExecutorAlter',
+    rarity = 'akts_Transformed',
+    atlas = 'Jokers',
+	cost = 10,
+    unlocked = true,
+    discovered = false,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    pos = {x = 4, y = 11},
+    config = {
+      extra = {
+        ammoCount = 16,
+        shatterBonus = 2,
+        shatterCurrent = 0,
+        shatterUpgrade = 10,
+        doubleTriggerPercent = 10,
+        doubleTriggerIncrease = 3,
+        glassTargets = {},
+        tagClass = {"Guard", "Sniper"},
+        tagFaction = {"Laterano"}
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.ammoCount, center.ability.extra.shatterBonus, center.ability.extra.shatterUpgrade, center.ability.extra.doubleTriggerPercent, center.ability.extra.doubleTriggerIncrease}}
+    end,
+    add_to_deck = function(self, card, from_debuff)
+        G.GAME.pool_flags.akts_executor_transform = true
+    end,
+    remove_from_deck = function(self, card, from_debuff)
+        G.GAME.pool_flags.akts_executor_transform = false
+    end,
+    calculate = function(self,card,context)
+        if context.before then
+            card.ability.extra.shatterCurrent = 0
+            if context.scoring_name == "Three of a Kind" 
+            or context.scoring_name == "Four of a Kind" 
+            or context.scoring_name == "Five of a Kind"
+            or context.scoring_name == "Flush Five" then
+                local doubleTrigger = math.random() <= 0.01 * card.ability.extra.doubleTriggerPercent
+                if doubleTrigger then
+                    card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("akts_fedex_spec"), G.C.ATTENTION})
+                    delay(0.25)
+                end
+                for i = 0, #context.scoring_hand - 1 do
+                    local target = context.scoring_hand[#context.scoring_hand - i]
+                    if target and target.config.center == G.P_CENTERS.c_base then
+                        table.insert(card.ability.extra.glassTargets, target)
+                        target:set_ability(G.P_CENTERS.m_glass, nil, true)
+                        G.E_MANAGER:add_event(Event({
+                            func = function()
+                                target:juice_up()
+                                return true
+                            end,
+                        }))
+                        if not doubleTrigger then
+                            break
+                        end
+                    end
+                end
+            end
+        end
+
+        if context.after then
+            for index, value in ipairs(card.ability.extra.glassTargets) do
+                if value and value.config and value.config.center then
+                    value:set_ability(G.P_CENTERS.c_base, nil, true)
+                end
+            end
+            card.ability.extra.glassTargets = {}
+        end
+
+        if context.remove_playing_cards and context.scoring_hand then
+            local poppedGlassCount = 0
+            for k, v in ipairs(context.removed) do
+                if (SMODS.has_enhancement(v, 'm_glass') or v.glass_trigger) then
+                    poppedGlassCount = poppedGlassCount + 1
+                end
+            end
+            if poppedGlassCount > 0 then
+                card.ability.extra.shatterCurrent = card.ability.extra.shatterBonus
+                local ammoLoss = math.min(poppedGlassCount, card.ability.extra.ammoCount)
+                for i = 1, ammoLoss, 1 do
+                    for k, v in ipairs(context.scoring_hand) do
+                        v.ability.perma_mult = v.ability.perma_mult + card.ability.extra.shatterUpgrade
+                    end
+                end
+                card.ability.extra.doubleTriggerPercent = math.min(100, card.ability.extra.doubleTriggerPercent + (ammoLoss * card.ability.extra.doubleTriggerIncrease))
+                handleAmmo(card, -ammoLoss)
+            end
+        end
+
+        if context.joker_main and card.ability.extra.shatterCurrent ~= 0 then
+            return {
+                card = card,
+                xmult = card.ability.extra.shatterCurrent,
+                delay = 0.5,
+            }
+        end
+    end,
+    set_badges = function(self, card, badges)
+        aktsBadgeHelper(self,card,badges)
+    end
 }

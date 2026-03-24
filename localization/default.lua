@@ -602,6 +602,28 @@ return {
                 },
             },
 
+            j_akts_ExecutorAlter = {
+                name = "Executor the Ex Foedere",
+                text = {
+                    {
+                        "{C:attention}Ammo{} {C:inactive}[#1#]{}: When a {C:attention}Glass Card{} is",
+                        "destroyed while scoring, each",
+                        "other scoring card permanently",
+                        "gains {C:mult}+#3#{} Mult when scored."
+                    },
+                    {
+                        "Enhances rightmost unenhanced",
+                        "scored card to {C:attention}Glass Card{}",
+                        "until after scoring if poker hand",
+                        "is a {C:attention}Three/Four/Five of a Kind{}",
+                        "{C:green}#4#%{} chance for this effect",
+                        "to enhance {C:attention}all{} scored cards instead.",
+                        "{C:inactive,s:0.8}(Chance increases by {}{C:green,s:0.8}#5#%{} {C:inactive,s:0.8}each time",
+                        "{C:inactive,s:0.8} ammo is used.)"
+                    }
+                },
+            },
+
             j_akts_Surfer = {
                 name = "Surfer",
                 text = {
@@ -1118,6 +1140,7 @@ return {
             k_akts_Vanguard = "Vanguard",
             k_akts_Guard = "Guard",
             k_akts_GuardMedic = "Guard/Medic",
+            k_akts_GuardSniper = "Guard/Sniper",
             k_akts_Defender = "Defender",
             k_akts_Sniper = "Sniper",
             k_akts_Caster = "Caster",
@@ -1187,6 +1210,7 @@ return {
             akts_Dodged = "Dodged!",
 
             akts_double_trigger = "Double Trigger!",
+            akts_fedex_spec = "Damnatus!",
 
             akts_surfer_score = "DEF Down!",
 
