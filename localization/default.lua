@@ -894,6 +894,28 @@ return {
                 },
             },
 
+            j_akts_Saileach = {
+                name = "Saileach",
+                text = {
+                    {
+                        "Creates a {C:dark_edition}Negative{} {C:attention}Eternal{}",
+                        "{C:spectral}Banner{} when obtained.",
+                    },
+                    {
+                        "When playing hand with {C:attention}0{} discards",
+                        "remaining, {C:attention}debuffs{} leftmost undebuffed",
+                        "{C:spectral}Banner{} until End of Ante, then",
+                        "this Joker gives {C:money}$#1#{} and {C:chips}+#2#{} chips",
+                        "each time a Joker triggers or a card is",
+                        "scored this hand. {C:inactive}(except itself){}"
+                    },
+                    {
+                        "Removes 1 {C:dark_edition}Negative{} {C:attention}Eternal{} {C:spectral}Banner",
+                        "from Jokers when sold or destroyed."
+                    }
+                },
+            },
+
             j_akts_Necrass = {
                 name = "Necrass",
                 text = {
@@ -1215,6 +1237,8 @@ return {
             akts_surfer_score = "DEF Down!",
 
             akts_silence_immortal = "Immortal!",
+
+            akts_saileach_banner = "For Glory!",
 
             akts_summon_greater = "Fused!",
 

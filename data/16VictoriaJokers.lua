@@ -105,3 +105,83 @@ SMODS.Joker{
         aktsBadgeHelper(self,card,badges)
     end
 }
+
+SMODS.Joker{
+    key = 'Saileach',
+    name = 'Saileach',
+    rarity = 2,
+    atlas = 'Jokers',
+	cost = 5,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = true,
+    eternal_compat = true, 
+    perishable_compat = true,
+    pos = {x = 2, y = 9},
+    config = { 
+      extra = {
+        bannerActive = false,
+        bannerActiveTriggers = 0,
+        bannerActiveCap = 100,
+        triggerCash = 0.5,
+        triggerChips = 20,
+        tagClass = {"Vanguard"},
+        tagFaction = {"Victoria"}
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        info_queue[#info_queue+1] = G.P_CENTERS.j_banner
+        return {vars = {center.ability.extra.triggerCash, center.ability.extra.triggerChips}}
+    end,
+    add_to_deck = function(self, card, from_debuff)
+        SMODS.add_card({set ='Joker', key = 'j_banner', edition={negative = true}, stickers={"eternal"}, force_stickers=true})
+    end,
+    remove_from_deck = function(self, card, from_debuff)
+        local banners = SMODS.find_card('j_banner', true)
+        for _, joker in pairs(banners) do
+            if joker.edition.negative and joker.ability.eternal then
+                joker:set_eternal(false)
+                SMODS.destroy_cards(joker)
+                return
+            end
+        end
+    end,
+    calculate = function(self,card,context)
+        if context.cardarea == G.jokers and context.scoring_hand and context.before and G.GAME.current_round.discards_left == 0 then
+            local banners = SMODS.find_card('j_banner', false)
+            if banners and #banners > 0 and banners[1] ~= nil then
+                SMODS.debuff_card(banners[1], true, 'AKTS_Saileach_debuff')
+                banners[1]:juice_up()
+                card_eval_status_text(banners[1], 'extra', nil, nil, nil, {message = localize('akts_saileach_banner'), colour = G.C.RED})
+                card.ability.extra.bannerActive = true
+            end
+        end
+
+        if context.end_of_round and context.beat_boss then
+            local banners = SMODS.find_card('j_banner', true)
+            for _, joker in pairs(banners) do
+                SMODS.debuff_card(joker, false, 'AKTS_Saileach_debuff')
+            end
+        end
+
+        if not context.blueprint and card.ability.extra.bannerActive
+         and ((context.post_trigger and context.other_card ~= card)
+         or (context.cardarea == G.play and context.individual and not context.other_card.debuff)) 
+         and card.ability.extra.bannerActiveTriggers < card.ability.extra.bannerActiveCap then
+            card.ability.extra.bannerActiveTriggers = card.ability.extra.bannerActiveTriggers + 1
+            return {
+                chips = card.ability.extra.triggerChips,
+                dollars = card.ability.extra.triggerCash,
+                card = card
+            }
+        end
+
+        if context.after and card.ability.extra.bannerActive then
+            card.ability.extra.bannerActive = false
+            card.ability.extra.bannerActiveTriggers = 0
+        end
+    end,
+    set_badges = function(self, card, badges)
+        aktsBadgeHelper(self,card,badges)
+    end
+}

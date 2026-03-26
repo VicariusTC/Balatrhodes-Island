@@ -38,16 +38,18 @@ SMODS.Joker{
 			}
 		end
         
-        if context.end_of_round and context.cardarea == G.jokers and not card.ability.extra.factorApplied then
+        if context.end_of_round and context.cardarea == G.jokers then
             card.ability.extra.bonusChips = card.ability.extra.bonusChipsMax
-            if card.ability.extra.bonusChipFactorIncreaseTimer > 0 then
-                card.ability.extra.bonusChipFactorIncreaseTimer = card.ability.extra.bonusChipFactorIncreaseTimer - 1
-            else
-                card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex'), G.C.ATTENTION})
-                card.ability.extra.factorApplied = true
-                card.ability.extra.bonusChips = card.ability.extra.bonusChipFactor * card.ability.extra.bonusChips
-                card.ability.extra.bonusChipsMax = card.ability.extra.bonusChipFactor * card.ability.extra.bonusChipsMax
-                card.ability.extra.bonusChipLoss = card.ability.extra.bonusChipFactor * card.ability.extra.bonusChipLoss
+            if not card.ability.extra.factorApplied then
+                if card.ability.extra.bonusChipFactorIncreaseTimer > 0 then
+                    card.ability.extra.bonusChipFactorIncreaseTimer = card.ability.extra.bonusChipFactorIncreaseTimer - 1
+                else
+                    card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex'), G.C.ATTENTION})
+                    card.ability.extra.factorApplied = true
+                    card.ability.extra.bonusChips = card.ability.extra.bonusChipFactor * card.ability.extra.bonusChips
+                    card.ability.extra.bonusChipsMax = card.ability.extra.bonusChipFactor * card.ability.extra.bonusChipsMax
+                    card.ability.extra.bonusChipLoss = card.ability.extra.bonusChipFactor * card.ability.extra.bonusChipLoss
+                end
             end
         end
     end,

@@ -233,7 +233,7 @@ SMODS.Joker{
             }
         end
         if context.cardarea == G.jokers and context.scoring_hand then
-            if context.before then
+            if context.before and #context.full_hand == 5 then
                 local transformable = false
                 for i = 1, #context.full_hand do
                     if context.full_hand[i].config.center ~= G.P_CENTERS.m_wild then
