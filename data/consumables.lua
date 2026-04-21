@@ -108,7 +108,7 @@ SMODS.Consumable{
     end,
     calculate = function(self, card, context)
         if context.joker_main then
-            if G.GAME.dollars >= card.ability.extra.cashReq then
+            if G.GAME.dollars - card.ability.extra.cashReq >= G.GAME.bankrupt_at then
                 local TrueScored = false
                 for i = 1, #context.scoring_hand do
                     if context.scoring_hand[i].config.center == G.P_CENTERS.m_akts_True then

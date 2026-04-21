@@ -150,6 +150,13 @@ function Card:get_id()
     return cardGetId(self)
 end
 -------------------------------------------------------
+-----hook of Card:click() to add clicked context
+local card_click_ref = Card.click
+function Card:click()
+    card_click_ref(self)
+    SMODS.calculate_context({akts_clicked = true, card_clicked = self})
+end
+--------------------------------------------------------
 local gameStart = Game.start_run
 function Game:start_run(args)
     local ret = gameStart(self, args)
@@ -513,6 +520,13 @@ setGeekDebuff = function(card)
         card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('akts_hp_down'), colour = G.C.MULT})
         card.ability.extra.aktsSellValue = math.max(0, card.ability.extra.aktsSellValue - 1)
         card:set_cost()
+    end
+end
+
+handleMerchant = function (card)
+    if G.GAME.dollars < 0 then
+        card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('akts_merchant_bye'), G.C.ATTENTION})
+        SMODS.destroy_cards(card)
     end
 end
 

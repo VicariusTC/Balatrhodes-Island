@@ -15,7 +15,7 @@ return {
                         "another {C:red}Rhodes Island{}",
                         "Joker triggers.",
                         "(Up to {C:attention}#3#{} times a round)",
-                        "{C:inactive,s:0.8}Currently{} {C:red,s:0.8}+#2#{} {C:inactive,s:0.8}Mult.",
+                        "{C:inactive,s:0.8}(Currently{} {C:red,s:0.8}+#2#{} {C:inactive,s:0.8}Mult)",
                     }
                 },
             },
@@ -141,7 +141,7 @@ return {
                     {
                         "{C:attention}Stone Cards'{} rank is treated as",
                         "the {C:attention}most common rank{} held in hand.",
-                        "{C:inactive}(Currently {C:attention}#1#{}{C:inactive}.)",
+                        "{C:inactive}(Currently {C:attention}#1#{}{C:inactive})",
                     },
                     {
                         "Every {C:attention}#2#{} {C:inactive}[#3#]{} times cards are drawn,",
@@ -175,7 +175,7 @@ return {
                     {
                         "{C:mult}+#7#{} Mult for {C:attention}each unique rank",
                         "that was scored this round.",
-                        "{C:inactive}(Currently{} {C:mult}+#8#{} {C:inactive}Mult)"
+                        "{C:inactive,s:0.8}(Currently{} {C:mult,s:0.8}+#8#{} {C:inactive,s:0.8}Mult)"
                     },
                     {
                         "Immediately {C:attention}win the Blind",
@@ -324,7 +324,7 @@ return {
                         "{C:blue}+#2#{} Chips if less than",
                         "{C:attention}#3#%{} of blind requirement",
                         "is fulfilled.",
-                        "{C:inactive}Currently {}{C:blue}+#4# {C:inactive}Chips.{}",     
+                        "{C:inactive}Currently {}{C:blue}+#4# {C:inactive}Chips.{}",
                     }
                 },
             },
@@ -343,7 +343,7 @@ return {
                         "Gains {C:blue}+#3#{} Chips each",
                         "time a {C:attention}Steel{} or",
                         "{C:attention}Gold Card is scored.",
-                        "{C:inactive}(Currently {}{C:blue}+#4# {C:inactive}Chips.){}",
+                        "{C:inactive}(Currently {}{C:blue}+#4# {C:inactive}Chips){}",
                     },
                     --[[
                     {
@@ -537,7 +537,7 @@ return {
                         "Retriggers {C:attention}all scored cards{}.",
                         "Retriggers them {C:attention}an additional time{}",
                         "for each {C:green}Sniper{} Joker owned",
-                        "{C:inactive} (Currently{C:green} #1#{}{C:inactive} owned.)",
+                        "{C:inactive} (Currently{C:green} #1#{}{C:inactive} owned)",
                     },
                     {
                         "Played cards have a {C:green}#5# in #2#{} chance",
@@ -650,7 +650,7 @@ return {
                         "{C:attention}scored card{} has the {C:attention}same enhancement{},",
                         "then gains {C:mult}+#3#{} Mult if the {C:attention}third",
                         "{C:attention}scored card{} has the {C:attention}same enhancement{}.",
-                        "{C:inactive,s:0.8}(Currently {}{C:mult,s:0.8}+#4#{}{C:inactive,s:0.8} Mult.)"
+                        "{C:inactive,s:0.8}(Currently {}{C:mult,s:0.8}+#4#{}{C:inactive,s:0.8} Mult)"
                     },
                 },
             },
@@ -665,7 +665,7 @@ return {
                         "Gives {C:mult}Mult{} equal to double the amount",
                         "of Mult on all {C:planet}Planet{} cards",
                         "held in hand.",
-                        "{C:inactive}(Currently {}{C:red}+#2#{} {C:inactive}Mult.{})"
+                        "{C:inactive}(Currently {}{C:red}+#2#{} {C:inactive}Mult)"
                     },
                     {
                         "{C:attention}Heals{} all Jokers by {C:green}#1#",
@@ -788,7 +788,7 @@ return {
                     {
                         "{C:mult}+#2#{} Mult for each {C:money}${} of {C:attention}sell value",
                         "that is missing from all owned Jokers.",
-                        "{C:inactive,s:0.8}(Currently{} {C:mult,s:0.8}+#3#{}{C:inactive,s:0.8} Mult.)"
+                        "{C:inactive,s:0.8}(Currently{} {C:mult,s:0.8}+#3#{}{C:inactive,s:0.8} Mult)"
                     }
                 },
             },
@@ -799,7 +799,7 @@ return {
                     {
                         "{C:chips}+#1#{} Chips for each {C:attention}suit{} that scored ",
                         "a {C:attention}Flush{} this round.",
-                        "{C:inactive,s:0.8}(Currently{} {C:chips,s:0.8}+#2#{}{C:inactive,s:0.8} Chips.)",
+                        "{C:inactive,s:0.8}(Currently{} {C:chips,s:0.8}+#2#{}{C:inactive,s:0.8} Chips)",
                     }
                 },
             },
@@ -817,6 +817,25 @@ return {
                         "Transforms into",
                         "{C:spectral}Leizi the Thunderbringer{}",
                         "after this effect triggers {C:attention}#1#{} {C:inactive}[#2#]{} times.",
+                    }
+                },
+            },
+
+            j_akts_SwireAlter = {
+                name = "Swire the Elegant Wit",
+                text = {
+                    {
+                        "{X:money,C:white,s:1.25}Merchant",
+                        "Spends {C:money}$#1#{} and destroys {C:attention}1{} selected",
+                        "card when {C:attention}clicked{}. {C:inactive}(Doubles cost when",
+                        "{C:inactive}applied and resets at end of round)"
+                    },
+                    {
+                        "Gives {C:mult}Mult{} equal to the {C:attention}total{} amount",
+                        "this Joker's Rental Tag spent and",
+                        "the amount of {C:money}money{} this Joker's",
+                        "other ability spent {C:attention}this round{}.",
+                        "{C:inactive,s:0.8}(Currently{} {C:mult,s:0.8}+#2#{}{C:inactive,s:0.8} Mult)"
                     }
                 },
             },
@@ -1193,6 +1212,15 @@ return {
                     "have been sold this round.",
                 },
             },
+            Merchant = {
+                name = "Merchant",
+                text = {
+                    "Always spawns with a",
+                    "{C:attention}Rental Sticker",
+                    "{C:attention}Destroys{} self when entering",
+                    "shop while in {C:attention}debt{}."
+                },
+            },
             --------Packs---------------
             p_akts_redeploy_pack = {
                 name = "Fast Redeploy Pack",
@@ -1267,6 +1295,7 @@ return {
             akts_plus_Stored = "Stored!",
             akts_hp_down = "Health Down!",
             akts_no_hp = "No HP!",
+            akts_merchant_bye = "NO DP!",
             akts_stunned = "Stunned!",
             akts_bind_apply = "Bound!",
             akts_downgrade = "Downgrade!",
