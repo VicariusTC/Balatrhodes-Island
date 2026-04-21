@@ -71,7 +71,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.bonusChips, center.ability.extra.bonusMult, center.ability.extra.necrassDestructChipBonus, center.ability.extra.necrassDestructChipBonus * G.AKTS_Globals.necrassDestroyed, center.ability.extra.upgradeCount, center.ability.extra.upgrade2Cash}}
+        return {vars = {center.ability.extra.bonusChips, center.ability.extra.bonusMult, center.ability.extra.necrassDestructChipBonus, center.ability.extra.necrassDestructChipBonus * G.AKTS_Globals.necrassDestroyed, center.ability.extra.upgradeCount, center.ability.extra.upgrade2Cash, G.AKTS_Globals.lesserServantMaxLevel}}
     end,
     add_to_deck = function(self, card, from_debuff)
         card:set_eternal(true)

@@ -662,7 +662,7 @@ return {
                         "gain {C:dark_edition}Negative{}.",
                     },
                     {
-                        "Gives {C:mult}Mult{} equal to the amount",
+                        "Gives {C:mult}Mult{} equal to double the amount",
                         "of Mult on all {C:planet}Planet{} cards",
                         "held in hand.",
                         "{C:inactive}(Currently {}{C:red}+#2#{} {C:inactive}Mult.{})"
@@ -821,6 +821,20 @@ return {
                 },
             },
 
+            j_akts_Conviction = {
+                name = "Conviction",
+                text = {
+                    {
+                        "{C:mult}+#1#{} Mult",
+                        "{C:green}#2# in #4#{} chance to give {C:mult}+#5#{} Mult instead"
+                    },
+                    {
+                        "{C:green}#2# in #3#{} chance to be debuffed",
+                        "until {C:attention}end of round{} when {C:attention}Blind{} is selected",
+                    }
+                },
+            },
+
             j_akts_Cement = {
                 name = "Cement",
                 text = {
@@ -944,6 +958,11 @@ return {
                         "you dont own a {C:spectral}Necrass Joker{}.",
                     },
                     {
+                        "If you own another {C:spectral}Servant of Lamentation{}",
+                        "that has been upgraded {C:attention}#7# times",
+                        "{C:attention}fuses{} into a {C:spectral}Special Form{} with it.",
+                    },
+                    {
                         "{C:chips}+#1#{} Chips and {C:mult}+#2#{} Mult.",
                         "{X:attention,C:white}Upgrade 1:{} {C:chips}+#3#{} Chips for every",
                         "Joker destroyed by a {C:spectral}Necrass{}",
@@ -953,11 +972,6 @@ return {
                         "{X:attention,C:white}Upgrade 2:{} Earn {C:money}$#6#{} when",
                         "another Joker is {C:attention}destroyed{}.",
                     },
-                    {
-                        "{X:attention,C:white}Upgrade 3:{} If you own another",
-                        "fully upgraded {C:spectral}Servant of Lamentation{}",
-                        "{C:attention}fuses{} into a {C:spectral}Special Form{} with it.",
-                    }
                 },
             },
 
@@ -1056,7 +1070,54 @@ return {
                     "triggers {C:attention}#2#{} times."
                 },
             },
+            m_akts_BloodAmber = {
+                name = "Blood Amber",
+                text = {
+                    "{C:blue}#1#{} Chips",
+                    "no rank or suit",
+                    "{C:attention}Destroys{} self after being played."
+                }
+            },
         },  
+        Blind = {
+            bl_akts_renegade = {
+                name = "The Renegade",
+                text = {
+                    "{C:attention}Destroys{} all cards",
+                    "in winning hand."
+                },
+            },
+            bl_akts_singer = {
+                name = "The Singer",
+                text = {
+                    "All Jokers lose {C:attention}$#1#{} Sell Value",
+                    "each hand. Debuffs all Jokers with",
+                    "{C:attention}$0{} Sell Value"
+                },
+            },
+            bl_akts_patriot = {
+                name = "The Patriot",
+                text = {
+                    "{C:chips}-#1#{} Base Chips",
+                },
+            },
+            bl_akts_sanguinarch = {
+                name = "The Sanguinarch",
+                text = {
+                    "Adds {C:attention}20{} {C:red}Blood Ambers{} to",
+                    "Deck. Removes {C:attention}5{} {C:red}Blood Ambers{}",
+                    "from Deck for each remaining hand",
+                    "after Blind is {C:attention}defeated."
+                },
+            },
+            bl_akts_source_code = {
+                name = "The Source Code",
+                text = {
+                    "Every {C:attention}second{} Play/Discard",
+                    "is {C:red}out of your control.",
+                },
+            },
+        },
         Other = {
             ---info queue popups------
             ChipDebt = {
@@ -1193,6 +1254,7 @@ return {
             k_akts_Siracusa = "Siracusa",
             k_akts_Higashi = "Higashi",
             k_akts_Yan = "Yan",
+            k_akts_Minos = "Minos",
             k_akts_RimBil = "Rim Billiton",
             k_akts_Victoria = "Victoria",
             k_akts_Tara = "Tara",
@@ -1205,6 +1267,7 @@ return {
             akts_plus_Stored = "Stored!",
             akts_hp_down = "Health Down!",
             akts_no_hp = "No HP!",
+            akts_stunned = "Stunned!",
             akts_bind_apply = "Bound!",
             akts_downgrade = "Downgrade!",
             akts_crit = "Critical!",
@@ -1254,6 +1317,8 @@ return {
 
             k_akts_redeploy_pack = "Fast Redeploy Pack",
 
+            akts_blind_renegade = "BANG!",
+            akts_blind_patriot = " times current ante",
             akts_jokers_only_config = "Balatrhodes Jokers only?",
             akts_jokers_only_config_NoLegendaryNote = "*NOTE: This mod does not have a Legendary Joker,",
             akts_jokers_only_config_NoLegendaryNote2 = "so using a Soul with this setting will crash the game",

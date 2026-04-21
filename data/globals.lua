@@ -31,8 +31,10 @@ G.AKTS_Globals = {
     redMaxChips = 0,
     cloneChips = 25,
     necrassDestroyed = 0,
-    lesserServantMaxLevel = 3,
-    servantMaxCount = 2
+    lesserServantMaxLevel = 2,
+    servantMaxCount = 2,
+    CERanks = {},
+    customPriceSetter = nil,
 }
 
 G.AKTS_Colors = {

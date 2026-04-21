@@ -8,6 +8,15 @@ SMODS.Atlas({
     py = 34
 })
 
+SMODS.Atlas({
+    key = 'akts_blind',
+    path = 'AKBlinds.png',
+    px = 34,
+    py = 34,
+    atlas_table = 'ANIMATION_ATLAS',
+    frames = 42
+})
+
 SMODS.Rarity{
     key = "Transformed",
     default_weight = 0,
@@ -26,6 +35,8 @@ SMODS.load_file("data/jokerFunctions.lua")()
 SMODS.load_file("data/jokers.lua")()
 SMODS.load_file("data/consumables.lua")()
 SMODS.load_file("data/enhancements.lua")()
+SMODS.load_file("data/globals.lua")()
+SMODS.load_file("data/bossBlinds.lua")()
 SMODS.load_file("data/00RhodesJokers.lua")()
 SMODS.load_file("data/01AegirJokers.lua")()
 SMODS.load_file("data/02IberiaJokers.lua")()
@@ -38,6 +49,7 @@ SMODS.load_file("data/08RhineLabJokers.lua")()
 SMODS.load_file("data/10SiracusaJokers.lua")()
 SMODS.load_file("data/11HigashiJokers.lua")()
 SMODS.load_file("data/12YanJokers.lua")()
+SMODS.load_file("data/14MinosJokers.lua")()
 SMODS.load_file("data/15RimBillitonJokers.lua")()
 SMODS.load_file("data/16VictoriaJokers.lua")()
 SMODS.load_file("data/17TaraJokers.lua")()

@@ -70,7 +70,8 @@ function Card:set_cost()
     if self.ability and (self.ability.extra and type(self.ability.extra) == "table" and self.ability.extra.aktsSellValue) then
         self.sell_cost = self.ability.extra.aktsSellValue or 0
     end
-    if setCustomSellPrice() then self.sell_cost = setCustomSellPrice() end
+    --if setCustomSellPrice() then self.sell_cost = setCustomSellPrice() end
+    if G.AKTS_Globals.customPriceSetter then self.sell_cost = G.AKTS_Globals.customPriceSetter end
     if self.area and self.ability.couponed and (self.area == G.shop_jokers or self.area == G.shop_booster) then self.cost = 0 end
     self.sell_cost_label = self.facing == 'back' and '?' or self.sell_cost    
 end
@@ -510,7 +511,7 @@ setGeekDebuff = function(card)
         }))
     else
         card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('akts_hp_down'), colour = G.C.MULT})
-        card.ability.extra.aktsSellValue = card.ability.extra.aktsSellValue - 1
+        card.ability.extra.aktsSellValue = math.max(0, card.ability.extra.aktsSellValue - 1)
         card:set_cost()
     end
 end
@@ -665,15 +666,14 @@ HealJoker = function (healer, target)
         targetCost = math.min(targetCost, target.ability.extra.aktsCostValue)
     end
     if sellValue < math.max(math.floor(targetCost/2), 1) then
-        healer.ability.extra.aktsSettingPrice = true
-        healer.ability.extra.aktsNewSellPrice =  math.min(math.max(math.floor(targetCost/2), 1), sellValue + healer.ability.extra.healAmount)
+        
+        G.AKTS_Globals.customPriceSetter =  math.min(math.max(math.floor(targetCost/2), 1), sellValue + healer.ability.extra.healAmount)
         if target.ability.extra.aktsSellValue then
-            target.ability.extra.aktsSellValue = healer.ability.extra.aktsNewSellPrice
+            target.ability.extra.aktsSellValue = G.AKTS_Globals.customPriceSetter
         end
         target:set_cost()
         card_eval_status_text(target, 'extra', nil, nil, nil, {message = localize("akts_heal"), G.C.GREEN})
-        healer.ability.extra.aktsSettingPrice = false
-        healer.ability.extra.aktsNewSellPrice = 0
+        G.AKTS_Globals.customPriceSetter = nil
     end
 end
 

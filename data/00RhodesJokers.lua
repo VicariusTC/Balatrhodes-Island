@@ -37,7 +37,7 @@ SMODS.Joker{
                 Create_Joker(rhodesList, card, nil, nil, localize("akts_plus_summon"))
             end
         else
-            card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_no_space_ex"), G.C.INACTIVE})
+            card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_no_space_ex")})
         end
     end,
     calculate = function(self,card,context)

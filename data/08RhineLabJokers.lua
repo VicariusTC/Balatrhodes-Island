@@ -66,9 +66,8 @@ SMODS.Joker{
     config = { 
       extra = {
         healAmount = 1,
+        planetMultiplier = 2,
         planetEdition = {negative = true},
-        aktsSettingPrice = false,
-        aktsNewSellPrice = 0,
         tagClass = {"Defender"},
         tagFaction = {"Rhine", "Columbia"}
       }
@@ -76,7 +75,7 @@ SMODS.Joker{
     loc_vars = function(self,info_queue,center)
         info_queue[#info_queue+1] = {set = 'Other', key = "edition_negative_consumable"}
         info_queue[#info_queue+1] = {set = 'Other', key = "Heal"}
-        return {vars = {center.ability.extra.healAmount, CalcPlanetsMult()}}
+        return {vars = {center.ability.extra.healAmount, center.ability.extra.planetMultiplier * CalcPlanetsMult()}}
     end,
     add_to_deck = function(self, card, from_debuff)
         for k, consumables in pairs(G.consumeables.cards) do
@@ -112,7 +111,7 @@ SMODS.Joker{
 
         if context.joker_main then
             return {
-			    mult = CalcPlanetsMult(),
+			    mult = card.ability.extra.planetEdition * CalcPlanetsMult(),
                 card = card
 		    }
         end
@@ -143,8 +142,6 @@ SMODS.Joker{
         retriggerCount = 1,
         healAmount = 3,
         healApplied = false,
-        aktsSettingPrice = false,
-        aktsNewSellPrice = 0,
         transformCondCurrent = 0,
         transformCond = 15,
         transformLink = "j_akts_SilenceAlter",
@@ -220,8 +217,6 @@ SMODS.Joker{
         chipStorage = 0,
         undebuffCount = 1,
         enhanceChoice = {polychrome = true},
-        aktsSettingPrice = false,
-        aktsNewSellPrice = 0,
         tagClass = {"Supporter", "Medic"},
         tagFaction = {"Rhine", "Columbia"}
       }

@@ -151,3 +151,28 @@ SMODS.Enhancement {
         end
     end
 }
+
+SMODS.Enhancement {
+    key = "BloodAmber",
+    atlas = 'AKEnhancements',
+    pos = {
+        x = 3,
+        y = 0
+    },
+    order = 1,
+    no_rank = true,
+    no_suit = true,
+    always_scores = true,
+    replace_base_card = true,
+    weight = 0,
+    in_pool = function(self, args) return false end,
+    config = { bonus = -50 },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.bonus } }
+    end,
+    calculate = function(self, card, context)
+        if context.cardarea == G.play and context.main_scoring then
+            SMODS.destroy_cards(card, true, false, false)
+        end
+    end
+}

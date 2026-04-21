@@ -86,7 +86,6 @@ SMODS.Joker{
         planetCopies = 3,
         twiceRetriggerOrder = 8,
         thriceRetriggerOrder = 4,
-        aktsSettingPrice = false,
         aktsNewSellPrice = 0,
         tagClass = {"Sniper"},
         tagFaction = {"Laterano"}
@@ -123,7 +122,7 @@ SMODS.Joker{
                                 level_up_hand(card, context.scoring_name, nil, -newCurrentHandLevel +1)
                                 update_hand_text({sound = 'button', volume = 0.7, pitch = 1.1, delay = 0}, {mult = 0, chips = 0, handname = '', level = ''})
                                 --Activate Custom Sell Price Mode
-                                card.ability.extra.aktsSettingPrice = true
+                                G.AKTS_Globals.customPriceSetter = card.ability.extra.aktsNewSellPrice
                                 local _card = SMODS.create_card({set = "Planet", edition = {negative = true}})
                                 _card:add_to_deck()
                                 G.consumeables:emplace(_card)
@@ -133,7 +132,7 @@ SMODS.Joker{
                                     G.consumeables:emplace(copyCard)
                                 end
                                 --Disable Custom Sell Price Mode
-                                card.ability.extra.aktsSettingPrice = false
+                                G.AKTS_Globals.customPriceSetter = nil
                                 return true
                             end,
                             blocking = false
