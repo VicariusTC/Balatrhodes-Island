@@ -186,7 +186,6 @@ SMODS.Enhancement {
     },
     order = 1,
     any_suit = true,
-    always_scores = true,
     weight = 0,
     in_pool = function(self, args) return false end,
     config = { 

@@ -249,17 +249,16 @@ end
 
 ----------------------------------------------------------
 flip_cards = function(card)
-   card:flip()
-   delay(0.1)
-   G.E_MANAGER:add_event(
-      Event(
-         {trigger = 'after',delay = 0.15,func = function() 
-            card:flip();
-            card:juice_up(0.3, 0.3);
-            return true end
-         }  
-      )
-   )
+   G.E_MANAGER:add_event(Event({
+        trigger = 'after',
+        delay = 0.15,
+        func = function()
+            card:flip()
+            play_sound('card1', 1)
+            card:juice_up(0.3, 0.3)
+            return true
+        end
+    }))
 end
 ----------------------------------------
 --Added for instant destruction when scoring.

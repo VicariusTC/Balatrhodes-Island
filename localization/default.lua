@@ -1033,7 +1033,7 @@ return {
                     {
                         "{X:red,C:white}Overload:{} Enhances up to {C:attention}#2#{} random",
                         "unenhanced cards held in hand",
-                        "to {C:attention}Revenant Cards{},",
+                        "to undebuffable {C:attention}Revenant Cards{},",
                         "but enhances {C:attention}#3#{} less card to",
                         "{C:attention}Revenant Card{} next round"
                     }
