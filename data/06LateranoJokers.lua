@@ -7,8 +7,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = true, 
     blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true, 
     pos = {x = 0, y = 11},
     config = { 
       extra = {
@@ -73,8 +71,6 @@ SMODS.Joker{
     unlocked = true,
     discovered = true,
     blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true, 
     pos = {x = 1, y = 11},
     config = { 
       extra = {
@@ -167,8 +163,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = true, 
     blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true, 
     pos = {x = 2, y = 11},
     config = { 
       extra = {
@@ -249,8 +243,6 @@ SMODS.Joker{
     unlocked = true,
     discovered = true,
     blueprint_compat = true,
-    eternal_compat = true, 
-    perishable_compat = true,
     no_pool_flag = 'akts_executor_transform',
     pos = {x = 3, y = 11},
     config = {
@@ -325,7 +317,6 @@ SMODS.Joker{
     end 
 }
 
---Include 4/5 of a kinds in his shit as well, probs not full/flush house tho.
 SMODS.Joker{
     key = 'ExecutorAlter', 
     name = 'ExecutorAlter',
@@ -335,8 +326,6 @@ SMODS.Joker{
     unlocked = true,
     discovered = false,
     blueprint_compat = true,
-    eternal_compat = true,
-    perishable_compat = true,
     pos = {x = 4, y = 11},
     config = {
       extra = {

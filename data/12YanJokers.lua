@@ -7,8 +7,6 @@ SMODS.Joker{
     unlocked = true,
     discovered = true,
     blueprint_compat = true,
-    eternal_compat = true,
-    perishable_compat = true,
     no_pool_flag = 'akts_leizi_transform',
     pos = {x = 0, y = 16},
     config = {
@@ -85,6 +83,7 @@ SMODS.Joker{
         destroyCostMultiplier = 1,
         rentalMult = 0,
         destroyCostMult = 0,
+        aktsUseButton = {"akts_swire_destroy_card", "akts_swire_can_destroy", "b_use"},
         subClass = "Merchant",
         tagClass = {"Specialist"},
         tagFaction = {"Yan"}
@@ -95,16 +94,6 @@ SMODS.Joker{
         return {vars = {center.ability.extra.destroyCostMultiplier * center.ability.extra.baseDestroyCost, center.ability.extra.destroyCostMult + center.ability.extra.rentalMult}}
     end,
     calculate = function(self,card,context)
-        if context.akts_clicked and context.card_clicked == card then
-            if G.hand and #G.hand.highlighted == 1 and G.GAME.dollars - card.ability.extra.baseDestroyCost * card.ability.extra.destroyCostMultiplier >= G.GAME.bankrupt_at then
-                SMODS.destroy_cards(G.hand.highlighted)
-                local cost = card.ability.extra.baseDestroyCost * card.ability.extra.destroyCostMultiplier
-                ease_dollars(-cost)
-                card.ability.extra.destroyCostMult = card.ability.extra.destroyCostMult + cost
-                card.ability.extra.destroyCostMultiplier = card.ability.extra.destroyCostMultiplier * 2
-            end
-        end
-
         if context.end_of_round and context.cardarea == G.jokers then
             card.ability.extra.rentalMult = card.ability.extra.rentalMult + 3
             card.ability.extra.destroyCostMult = 0
@@ -129,3 +118,23 @@ SMODS.Joker{
         aktsBadgeHelper(self,card,badges)
     end
 }
+
+G.FUNCS.akts_swire_can_destroy = function(e)
+    local card = e.config.ref_table
+    if G.hand and #G.hand.highlighted == 1 and G.GAME.dollars - card.ability.extra.baseDestroyCost * card.ability.extra.destroyCostMultiplier >= G.GAME.bankrupt_at then
+        e.config.colour = G.C.MULT
+        e.config.button = "akts_swire_destroy_card"
+    else
+        e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+        e.config.button = nil
+    end
+end
+
+G.FUNCS.akts_swire_destroy_card = function(e)
+    local card = e.config.ref_table
+    SMODS.destroy_cards(G.hand.highlighted)
+    local cost = card.ability.extra.baseDestroyCost * card.ability.extra.destroyCostMultiplier
+    ease_dollars(-cost)
+    card.ability.extra.destroyCostMult = card.ability.extra.destroyCostMult + cost
+    card.ability.extra.destroyCostMultiplier = card.ability.extra.destroyCostMultiplier * 2
+end

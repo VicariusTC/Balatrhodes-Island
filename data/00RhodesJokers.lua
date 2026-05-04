@@ -7,8 +7,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = true, 
     blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true,
     pos = {x = 4, y = 0}, 
     config = { 
       extra = {
@@ -77,8 +75,6 @@ SMODS.Joker{
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
     pos = {x = 0, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
@@ -126,11 +122,9 @@ SMODS.Joker{
     rarity = 1,
     atlas = 'Jokers',
 	cost = 3,
+    blueprint_compat = true,
     unlocked = true, 
     discovered = true, 
-    blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true,
     pos = {x = 1, y = 0}, 
     config = { 
       extra = {
@@ -183,8 +177,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = true, 
     blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true,
     no_pool_flag = 'akts_gavial_transform',
     pos = {x = 2, y = 0}, 
     config = { 
@@ -264,8 +256,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = false, 
     blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true,
     pos = {x = 3, y = 0}, 
     config = { 
       extra = {
@@ -350,8 +340,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = true, 
     blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true,
     no_pool_flag = 'akts_yato_sold',
     pos = {x = 5, y = 0}, 
     config = { 
@@ -399,8 +387,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = false, 
     blueprint_compat = true, 
-    eternal_compat = false, 
-    perishable_compat = true,
     pos = {x = 6, y = 0}, 
     config = { 
       extra = {
@@ -451,8 +437,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = true, 
     blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true,
     pos = {x = 7, y = 0}, 
     config = { 
       extra = {
@@ -520,8 +504,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = true, 
     blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true,
     pos = {x = 8, y = 0}, 
     config = { 
       extra = {
@@ -600,8 +582,6 @@ SMODS.Joker{
     unlocked = true,
     discovered = true,
     blueprint_compat = true,
-    eternal_compat = true,
-    perishable_compat = true,
     pos = {x = 9, y = 0},
     config = {
       extra = {
@@ -676,15 +656,13 @@ SMODS.Joker{
             end
         end
 
-        local avgScore = (hand_chips + mult) / 2
-        local handChipsBonus = (avgScore - hand_chips) * (0.01 * card.ability.extra.balancePercentage)
-        local handMultBonus = (avgScore - mult) * (0.01 * card.ability.extra.balancePercentage)
+        local change = (math.abs(hand_chips - mult) / 2) * (0.01 * card.ability.extra.balancePercentage)
         if hand_chips > mult then
-            hand_chips = mod_chips(hand_chips - handChipsBonus)
-            mult = mod_mult(mult + handMultBonus)
+            hand_chips = mod_chips(hand_chips - change)
+            mult = mod_mult(mult + change)
         else
-            hand_chips = mod_chips(hand_chips + handChipsBonus)
-            mult = mod_mult(mult - handMultBonus)
+            hand_chips = mod_chips(hand_chips + change)
+            mult = mod_mult(mult - change)
         end
         return {
             card = card,
@@ -707,8 +685,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = true, 
     blueprint_compat = false, 
-    eternal_compat = true, 
-    perishable_compat = true,
     pos = {x = 0, y = 1}, 
     config = { 
       extra = {
@@ -805,8 +781,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = true, 
     blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true,
     no_pool_flag = 'akts_blaze_transform',
     pos = {x = 1, y = 1}, 
     config = { 
@@ -867,8 +841,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = false, 
     blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true,
     pos = {x = 2, y = 1}, 
     config = { 
       extra = {
@@ -985,8 +957,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = true, 
     blueprint_compat = false, 
-    eternal_compat = true, 
-    perishable_compat = true,
     pos = {x = 3, y = 1}, 
     config = { 
       extra = {

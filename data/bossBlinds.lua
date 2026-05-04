@@ -31,7 +31,7 @@ SMODS.Blind {
     atlas = 'akts_blind',
     discovered = true,
     pos = { y = 4 },
-    boss = { min = 1, showdown = false },
+    boss = { min = 4, showdown = false },
     boss_colour = HEX("5a559a"),
     config = {
         extra = {
@@ -247,6 +247,34 @@ SMODS.Blind {
                 end
             else
                 self.config.extra.currentPhase = self.config.extra.currentPhase + 1
+            end
+        end
+    end
+}
+
+SMODS.Blind {
+    key = "carnevale",
+    dollars = 5,
+    mult = 2,
+    atlas = 'akts_blind',
+    discovered = true,
+    pos = { y = 5 },
+    boss = { min = 3, showdown = false },
+    boss_colour = HEX("5c1ca7"),
+    config = {
+        extra = {
+            payout = 5
+        }
+    },
+    calculate = function(self, blind, context)
+        if context.setting_blind then
+            self.config.extra.payout = G.GAME.blind.dollars
+        end
+        if not blind.disabled and context.final_scoring_step then
+            if SMODS.last_hand_oneshot then
+                G.GAME.blind.dollars = 2 * self.config.extra.payout
+            else
+                G.GAME.blind.dollars = 0
             end
         end
     end

@@ -7,8 +7,6 @@ SMODS.Joker{
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = false, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = false, --can it be perishable
     no_pool_flag = 'akts_NearlAlter_transform',
     pos = {x = 0, y = 6}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
@@ -71,8 +69,6 @@ SMODS.Joker{
     unlocked = true,
     discovered = true,
     blueprint_compat = false,
-    eternal_compat = true,
-    perishable_compat = true,
     no_pool_flag = 'akts_mlynar_transform',
     pos = {x = 1, y = 6},
     config = { 
@@ -110,8 +106,6 @@ SMODS.Joker{
     unlocked = true,
     discovered = true,
     blueprint_compat = false,
-    eternal_compat = true,
-    perishable_compat = true,
     pos = {x = 2, y = 6},
     config = { 
       extra = {
@@ -175,8 +169,6 @@ SMODS.Joker{
     unlocked = true,
     discovered = true,
     blueprint_compat = true,
-    eternal_compat = true,
-    perishable_compat = true,
     pos = {x = 3, y = 6},
     config = {
       extra = {
@@ -248,8 +240,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = true, 
     blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true,
     pos = {x = 0, y = 7}, 
     config = { 
       extra = {
@@ -325,8 +315,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = true, 
     blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true,
     pos = {x = 1, y = 7}, 
     config = { 
       extra = {

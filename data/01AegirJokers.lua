@@ -9,8 +9,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = true, 
     blueprint_compat = false, 
-    eternal_compat = true, 
-    perishable_compat = true,
     pos = {x = 0, y = 2}, 
     config = { 
       extra = {
@@ -74,8 +72,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = true, 
     blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true,
     pos = {x = 1, y = 2}, 
     config = { 
       extra = {
@@ -125,8 +121,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = true, 
     blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true,
     no_pool_flag = 'akts_specter_transform',
     pos = {x = 2, y = 2}, 
     config = { 
@@ -181,8 +175,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = false, 
     blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true,
     pos = {x = 3, y = 2}, 
     config = { 
       extra = {
@@ -275,8 +267,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = true, 
     blueprint_compat = false, 
-    eternal_compat = true, 
-    perishable_compat = true,
     pos = {x = 4, y = 2}, 
     config = { 
       extra = {

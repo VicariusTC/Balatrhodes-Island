@@ -7,8 +7,6 @@ SMODS.Joker{
     unlocked = true,
     discovered = true,
     blueprint_compat = true,
-    eternal_compat = true,
-    perishable_compat = true,
     pos = {x = 0, y = 15},
     config = { 
       extra = {
@@ -57,8 +55,7 @@ SMODS.Joker{
     unlocked = true,
     no_collection = true,
     blueprint_compat = true,
-    eternal_compat = true,
-    perishable_compat = true,
+    perishable_compat = false,
     pos = {x = 1, y = 15},
     config = { 
       extra = {
@@ -114,7 +111,6 @@ SMODS.Joker{
     end,
 }
 
---needs slight tweak, so that if it is obtained when multiple jokers are destroyed and fusion happens, that a new lesser gets spawned before the greater is upgraded. Its minor, so low prio, but yea
 SMODS.Joker{
     key = 'ServantGreater',
     name = 'ServantGreater',
@@ -124,8 +120,7 @@ SMODS.Joker{
     unlocked = true,
     no_collection = true,
     blueprint_compat = true,
-    eternal_compat = true,
-    perishable_compat = true,
+    perishable_compat = false,
     pos = {x = 2, y = 15},
     config = { 
       extra = {

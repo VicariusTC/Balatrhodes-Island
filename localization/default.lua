@@ -826,9 +826,9 @@ return {
                 text = {
                     {
                         "{X:money,C:white,s:1.25}Merchant",
-                        "Spends {C:money}$#1#{} and destroys {C:attention}1{} selected",
-                        "card when {C:attention}clicked{}. {C:inactive}(Doubles cost when",
-                        "{C:inactive}applied and resets at end of round)"
+                        "Can spend {C:money}$#1#{} to destroy {C:attention}1{}",
+                        "selected card. {C:inactive}(Doubles cost when applied",
+                        "{C:inactive}and resets at end of round)"
                     },
                     {
                         "Gives {C:mult}Mult{} equal to the {C:attention}total{} amount",
@@ -1016,6 +1016,29 @@ return {
                     }
                 },
             },
+
+            j_akts_Walter = {
+                name = "Wis'adel",
+                text = {
+                    {
+                        "Enhances {C:attention}#1#{} random cards in",
+                        "Deck to {C:attention}Revenant Cards{} when",
+                        "Blind is selected.",
+                    },
+                    {
+                        "Applies {C:chips}Chips{} from hands played",
+                        "that contain {C:attention}Revenant Cards{} to each",
+                        "blind of the ante.",
+                    },
+                    {
+                        "{X:red,C:white}Overload:{} Enhances up to {C:attention}#2#{} random",
+                        "unenhanced cards held in hand",
+                        "to {C:attention}Revenant Cards{},",
+                        "but enhances {C:attention}#3#{} less card to",
+                        "{C:attention}Revenant Card{} next round"
+                    }
+                },
+            },
         },
         SummonConsumableType = {
             c_akts_Mon3tr = {
@@ -1097,6 +1120,14 @@ return {
                     "{C:attention}Destroys{} self after being played."
                 }
             },
+            m_akts_Revenant = {
+                name = "Revenant Card",
+                text = {
+                    "{X:mult,C:white} X#1# {} Mult",
+                    "Can be used as any suit.",
+                    "Reverts at end of round."
+                }
+            },
         },  
         Blind = {
             bl_akts_renegade = {
@@ -1134,6 +1165,13 @@ return {
                 text = {
                     "Every {C:attention}second{} Play/Discard",
                     "is {C:red}out of your control.",
+                },
+            },
+            bl_akts_carnevale = {
+                name = "The Carnevale",
+                text = {
+                    "{C:attention}Doubles{} Blind Payout if",
+                    "score catches fire. {C:money}$0{} otherwise",
                 },
             },
         },
@@ -1191,6 +1229,14 @@ return {
                     "is {C:attention}less than{} their default {C:attention}sell value{},",
                     "{C:attention}increases{} their sell value by the",
                     "specified amount.",
+                },
+            },
+
+            Overload = {
+                name = "Overload",
+                text = {
+                    "Can be used {C:attention}once per Ante{},",
+                    "during a {C:attention}Blind"
                 },
             },
             --------Joker Subclasses---------------
@@ -1333,6 +1379,8 @@ return {
             akts_saileach_banner = "For Glory!",
 
             akts_summon_greater = "Fused!",
+
+            akts_Walter_Bang = "BANG!",
 
             akts_plus_hook = "Hooked!",
 

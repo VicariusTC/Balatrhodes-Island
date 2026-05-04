@@ -7,8 +7,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = true, 
     blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true,
     pos = {x = 0, y = 9}, 
     config = { 
       extra = {
@@ -74,8 +72,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = true, 
     blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true,
     pos = {x = 1, y = 9}, 
     config = { 
       extra = {
@@ -115,8 +111,6 @@ SMODS.Joker{
     unlocked = true,
     discovered = true,
     blueprint_compat = true,
-    eternal_compat = true, 
-    perishable_compat = true,
     pos = {x = 2, y = 9},
     config = { 
       extra = {
@@ -157,7 +151,7 @@ SMODS.Joker{
             end
         end
 
-        if context.end_of_round and context.beat_boss then
+        if context.ante_end then
             local banners = SMODS.find_card('j_banner', true)
             for _, joker in pairs(banners) do
                 SMODS.debuff_card(joker, false, 'AKTS_Saileach_debuff')

@@ -176,3 +176,32 @@ SMODS.Enhancement {
         end
     end
 }
+
+SMODS.Enhancement {
+    key = "Revenant",
+    atlas = 'AKEnhancements',
+    pos = {
+        x = 4,
+        y = 0
+    },
+    order = 1,
+    any_suit = true,
+    always_scores = true,
+    weight = 0,
+    in_pool = function(self, args) return false end,
+    config = { 
+        Xmult = 3,
+        extra = {
+            previousEnhancement = G.P_CENTERS.c_base,
+            round = 0,
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.Xmult } }
+    end,
+    calculate = function(self, card, context)
+        if context.end_of_round or (context.hand_drawn and not (G.GAME.blind or G.GAME.round ~= card.ability.extra.round)) then
+            card:set_ability(card.ability.extra.previousEnhancement, nil, true)
+        end
+    end
+}

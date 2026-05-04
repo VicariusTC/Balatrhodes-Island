@@ -53,6 +53,7 @@ SMODS.load_file("data/14MinosJokers.lua")()
 SMODS.load_file("data/15RimBillitonJokers.lua")()
 SMODS.load_file("data/16VictoriaJokers.lua")()
 SMODS.load_file("data/17TaraJokers.lua")()
+SMODS.load_file("data/LegendaryJokers.lua")()
 
 SMODS.current_mod.config_tab = function()
 	return {n = G.UIT.ROOT, config = {
