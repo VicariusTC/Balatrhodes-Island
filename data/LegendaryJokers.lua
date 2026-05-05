@@ -42,7 +42,7 @@ SMODS.Joker{
             end
 
             for i = 0, enhanceds, 1 do
-                local chosenIndex = math.random(1, #deck)
+                local chosenIndex = pseudorandom(pseudoseed("akts_random_seed"), 1, #deck)
                 local previousEnhancement = deck[chosenIndex].config.center or G.P_CENTERS.c_base
                 deck[chosenIndex]:set_ability(G.P_CENTERS.m_akts_Revenant, nil, true)
                 deck[chosenIndex].ability.extra.round = G.GAME.round
@@ -156,7 +156,7 @@ G.FUNCS.akts_walter_overload = function(e)
         if #unenhanceds == 0 then
             break
          end
-        local index = math.random(1, #unenhanceds)
+        local index = pseudorandom(pseudoseed("akts_random_seed"), 1, #unenhanceds)
         local _card = unenhanceds[index]
         _card:flip()
         _card:set_ability(G.P_CENTERS.m_akts_Revenant, nil, true)

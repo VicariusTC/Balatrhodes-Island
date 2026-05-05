@@ -264,7 +264,7 @@ SMODS.Joker{
             if #CalcTaggedOwned(card.ability.extra.tagFaction[2], card) > 0 then
                 kaziFactor = 2
             end
-            if math.random() <= (kaziFactor * G.GAME.probabilities.normal)/card.ability.extra.editionReq then
+            if SMODS.pseudorandom_probability(card, 'akts_random_seed', kaziFactor, card.ability.extra.editionReq) then
                 G.E_MANAGER:add_event(Event({
                     trigger = "after", 
                     delay = 0.25,
@@ -279,7 +279,7 @@ SMODS.Joker{
     calculate = function(self,card,context)
         if context.discard and not card.ability.extra.discActivated then
             card.ability.extra.discActivated = true
-            if math.random() <= card.ability.extra.currentChance/card.ability.extra.chanceReq then
+            if SMODS.pseudorandom_probability(card, 'akts_random_seed', card.ability.extra.currentChance, card.ability.extra.chanceReq) then
                 --gain cash, disc, reset.
                 card.ability.extra.currentChanceAdd = 0
                 card.ability.extra.currentChance = G.GAME.probabilities.normal - 1

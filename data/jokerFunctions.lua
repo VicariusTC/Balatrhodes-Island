@@ -234,7 +234,7 @@ Create_Joker = function (itemList, card, edition, debuffed, msg)
     if msg then
         card_eval_status_text(card or G.jokers.cards[1], 'extra', nil, nil, nil, {message = msg, G.C.ATTENTION})
     end  
-    local pickedJoker = pseudorandom_element(itemList, pseudoseed(math.random(500)))
+    local pickedJoker = pseudorandom_element(itemList, pseudoseed("akts_random_seed"))
     local new_card = create_card('Joker', G.jokers, nil,nil,nil,nil,pickedJoker)
     if edition then
         new_card:set_edition(edition, true)

@@ -849,7 +849,8 @@ return {
                     },
                     {
                         "{C:green}#2# in #3#{} chance to be debuffed",
-                        "until {C:attention}end of round{} when {C:attention}Blind{} is selected",
+                        "until {C:attention}start of next round{} when",
+                        "{C:attention}Blind{} is selected"
                     }
                 },
             },

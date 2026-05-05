@@ -271,7 +271,7 @@ SMODS.Blind {
             self.config.extra.payout = G.GAME.blind.dollars
         end
         if not blind.disabled and context.final_scoring_step then
-            if SMODS.last_hand_oneshot then
+            if G.GAME.blind.chips < hand_chips * mult then
                 G.GAME.blind.dollars = 2 * self.config.extra.payout
             else
                 G.GAME.blind.dollars = 0

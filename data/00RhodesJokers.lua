@@ -151,10 +151,10 @@ SMODS.Joker{
         if context.selling_self and not context.blueprint then
             G.E_MANAGER:add_event(Event({
                 func = (function()
-                    local pickedTag = pseudorandom_element(card.ability.extra.tagList, pseudoseed(math.random(500)))
+                    local pickedTag = pseudorandom_element(card.ability.extra.tagList, pseudoseed("akts_random_seed"))
                     add_tag(Tag(pickedTag))
-                    play_sound('generic1', 0.9 + math.random()*0.1, 0.8)
-                    play_sound('holo1', 1.2 + math.random()*0.1, 0.4)
+                    play_sound('generic1', 0.9 + pseudorandom(pseudoseed("akts_random_seed"))*0.1, 0.8)
+                    play_sound('holo1', 1.2 + pseudorandom(pseudoseed("akts_random_seed"))*0.1, 0.4)
                     return true
                 end)
             }))
@@ -206,7 +206,7 @@ SMODS.Joker{
             end
         end
         if #unenhanced > 0 then
-            local pickedMed = pseudorandom_element(unenhanced, pseudoseed(math.random(500)))
+            local pickedMed = pseudorandom_element(unenhanced, pseudoseed("akts_random_seed"))
             pickedMed:set_edition(card.ability.extra.enhanceChoice, true)
             card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('akts_gavial_edition'), colour = G.C.PURPLE})
         end
@@ -215,9 +215,9 @@ SMODS.Joker{
         if context.cardarea == G.play and context.individual and not context.other_card.debuff and not context.end_of_round then
             local returnMult = 1
             if context.other_card.config.center == G.P_CENTERS.m_wild then
-                returnMult = math.random(100* card.ability.extra.wildLower, 100* card.ability.extra.wildUpper) /100
+                returnMult = card.ability.extra.wildLower + pseudorandom(pseudoseed("akts_random_seed")) * (card.ability.extra.wildUpper - card.ability.extra.wildLower)
             else
-                returnMult = math.random(100*card.ability.extra.scoredLower, 100*card.ability.extra.scoredUpper)/100
+                returnMult = card.ability.extra.scoredLower + pseudorandom(pseudoseed("akts_random_seed")) * (card.ability.extra.scoredUpper - card.ability.extra.scoredLower)
             end
             G.E_MANAGER:add_event(Event({func = (function() card:juice_up(); return true end)}))
             return {
@@ -288,9 +288,9 @@ SMODS.Joker{
         if context.cardarea == G.play and context.individual and not context.other_card.debuff and not context.end_of_round then
             local returnMult = 1
             if context.other_card.config.center == G.P_CENTERS.m_wild then
-                returnMult = math.random(100* card.ability.extra.wildLower, 100* card.ability.extra.wildUpper) /100
+                returnMult = card.ability.extra.wildLower + pseudorandom(pseudoseed("akts_random_seed")) * (card.ability.extra.wildUpper - card.ability.extra.wildLower)
             else
-                returnMult = math.random(100*card.ability.extra.scoredLower, 100*card.ability.extra.scoredUpper)/100
+                returnMult = card.ability.extra.scoredLower + pseudorandom(pseudoseed("akts_random_seed")) * (card.ability.extra.scoredUpper - card.ability.extra.scoredLower)
             end 
             G.E_MANAGER:add_event(Event({func = (function() card:juice_up(); return true end)}))
             return {
@@ -589,7 +589,7 @@ SMODS.Joker{
         sealAdds = 3,
         rankBalance = 1,
         ranks = {},
-        balancePercentage = 10,
+        balancePercentage = 15,
         tagClass = {"Supporter"},
         tagFaction = {"Rhodes"}
       }

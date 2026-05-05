@@ -263,7 +263,7 @@ SMODS.Joker{
     end,
     calculate = function(self,card,context)
         if context.before and context.scoring_name == "Three of a Kind" then
-            local doubleTrigger = math.random() <= G.GAME.probabilities.normal/card.ability.extra.doubleTriggerChance
+            local doubleTrigger = SMODS.pseudorandom_probability(card, 'akts_random_seed', 1, card.ability.extra.doubleTriggerChance)
             for i = 0, #context.scoring_hand - 1 do
                 local target = context.scoring_hand[#context.scoring_hand - i]
                 if target and target.config.center == G.P_CENTERS.c_base then
@@ -356,7 +356,7 @@ SMODS.Joker{
             or context.scoring_name == "Four of a Kind" 
             or context.scoring_name == "Five of a Kind"
             or context.scoring_name == "Flush Five" then
-                local doubleTrigger = math.random() <= 0.01 * card.ability.extra.doubleTriggerPercent
+                local doubleTrigger = pseudorandom(pseudoseed("akts_random_seed")) <= 0.01 * card.ability.extra.doubleTriggerPercent
                 if doubleTrigger then
                     card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("akts_fedex_spec"), G.C.ATTENTION})
                     delay(0.25)

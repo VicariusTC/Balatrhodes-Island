@@ -28,7 +28,7 @@ SMODS.Joker{
     calculate = function(self,card,context)
         if context.cardarea == G.jokers and context.scoring_hand then
             if context.before then
-                card.ability.extra.chosenEffect = math.random(card.ability.extra.chosenEffectOptions)
+                card.ability.extra.chosenEffect = pseudorandom(pseudoseed("akts_random_seed"), 1, 3)
                 if card.ability.extra.chosenEffect == 1 then --Upgrades Joker Return
                     card.ability.extra.plusChipsActive = card.ability.extra.plusChipsActive + card.ability.extra.plusChips
                     card.ability.extra.plusMultActive = card.ability.extra.plusMultActive + card.ability.extra.plusMult

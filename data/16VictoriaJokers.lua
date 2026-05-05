@@ -47,7 +47,7 @@ SMODS.Joker{
 
 
         if context.joker_main and card.ability.extra.isFirstHandOrClone then
-            local returnChips = math.random(100* card.ability.extra.bonusChipXMin, 100* card.ability.extra.bonusChipXMax) /100    
+            local returnChips = card.ability.extra.bonusChipXMin + pseudorandom(pseudoseed("akts_random_seed")) * (card.ability.extra.bonusChipXMax - card.ability.extra.bonusChipXMin)
             card.ability.extra.isFirstHandOrClone = false
             return {
                 xchips = returnChips
@@ -87,7 +87,7 @@ SMODS.Joker{
     calculate = function(self,card,context)
         if context.cardarea == G.hand and context.individual and not context.other_card.debuff and not context.end_of_round then
             local returnChips = math.max(context.other_card:get_id(), 0)
-            if math.random() <= G.GAME.probabilities.normal/card.ability.extra.explosionChance and returnChips > 0 then
+            if SMODS.pseudorandom_probability(card, 'akts_random_seed', 1, card.ability.extra.explosionChance) and returnChips > 0 then
                 SMODS.destroy_cards(context.other_card)
                 returnChips = card.ability.extra.explosionMultiplier * returnChips
             end

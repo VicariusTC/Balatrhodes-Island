@@ -22,13 +22,14 @@ SMODS.Joker{
         return {vars = {center.ability.extra.regularMult, G.GAME.probabilities.normal, center.ability.extra.debuffChance, center.ability.extra.critChance, center.ability.extra.critMult}}
     end,
     calculate = function(self,card,context)
-        if context.setting_blind and context.main_eval and math.random() <= G.GAME.probabilities.normal/card.ability.extra.debuffChance then
+        if context.setting_blind and context.main_eval and SMODS.pseudorandom_probability(card, 'akts_random_seed', 1, card.ability.extra.debuffChance) then
             card:juice_up()
             card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('akts_stunned'), colour = G.C.MULT})
+            local round = G.GAME.round
             SMODS.debuff_card(card, true, "ConvictionDebuff")
             G.E_MANAGER:add_event(Event({
                 func = function() 
-                    if not G.STATE_COMPLETE or G.GAME.current_round.hands_played == 0 then
+                    if G.GAME.round == round then
                         return false
                     end
                     G.E_MANAGER:add_event(Event({
@@ -45,7 +46,7 @@ SMODS.Joker{
 
         if context.joker_main then
             local returnMult = card.ability.extra.regularMult
-            if math.random() <= G.GAME.probabilities.normal/card.ability.extra.critChance then
+            if SMODS.pseudorandom_probability(card, 'akts_random_seed', 1, card.ability.extra.critChance) then
                 card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('akts_crit')})
                 returnMult = card.ability.extra.critMult
             end

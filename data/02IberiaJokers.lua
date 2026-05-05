@@ -109,7 +109,7 @@ SMODS.Joker{
     calculate = function(self,card,context)
         if context.cardarea == G.hand and context.individual and not context.other_card.debuff and context.end_of_round
         and (context.other_card.config.center == G.P_CENTERS.m_akts_TempSteel or context.other_card.config.center == G.P_CENTERS.m_steel or context.other_card.config.center == G.P_CENTERS.m_gold) then
-            local performUnenhance = math.random() <= G.GAME.probabilities.normal/card.ability.extra.unenhanceChance
+            local performUnenhance = SMODS.pseudorandom_probability(card, 'akts_random_seed', 1, card.ability.extra.unenhanceChance)
             if performUnenhance then
                 context.other_card:set_ability(G.P_CENTERS.c_base, nil, true)
                 card.ability.extra.xMultStorage = card.ability.extra.xMultStorage + card.ability.extra.unenhanceBonusMult
