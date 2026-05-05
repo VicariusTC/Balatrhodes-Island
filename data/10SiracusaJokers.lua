@@ -91,7 +91,14 @@ SMODS.Joker{
           return
         end
         if card.ability.extra.nextScoredCount == 1 then
-          card.ability.extra.nextScoredCount = card.ability.extra.scoredCountDefault
+          if not context.blueprint then
+            G.E_MANAGER:add_event(Event({func = (
+              function()
+                card.ability.extra.nextScoredCount = card.ability.extra.scoredCountDefault
+                return true
+              end),
+            }))
+          end
           card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_reset')})
           return {
             card = card,
@@ -100,7 +107,14 @@ SMODS.Joker{
             dollars = card.ability.extra.bonusCash
           }
         end
-        card.ability.extra.nextScoredCount = card.ability.extra.nextScoredCount - 1
+        if not context.blueprint then
+          G.E_MANAGER:add_event(Event({func = (
+            function() 
+              card.ability.extra.nextScoredCount = card.ability.extra.nextScoredCount - 1
+              return true
+            end),
+          }))
+        end
         return {
             card = card,
             chips = card.ability.extra.bonusChips,

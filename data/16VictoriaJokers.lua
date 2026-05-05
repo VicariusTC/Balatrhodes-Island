@@ -48,7 +48,9 @@ SMODS.Joker{
 
         if context.joker_main and card.ability.extra.isFirstHandOrClone then
             local returnChips = card.ability.extra.bonusChipXMin + pseudorandom(pseudoseed("akts_random_seed")) * (card.ability.extra.bonusChipXMax - card.ability.extra.bonusChipXMin)
-            card.ability.extra.isFirstHandOrClone = false
+            if not context.blueprint then
+                card.ability.extra.isFirstHandOrClone = false
+            end
             return {
                 xchips = returnChips
             }
@@ -110,7 +112,7 @@ SMODS.Joker{
 	cost = 5,
     unlocked = true,
     discovered = true,
-    blueprint_compat = true,
+    blueprint_compat = false,
     pos = {x = 2, y = 9},
     config = { 
       extra = {

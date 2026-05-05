@@ -22,7 +22,7 @@ SMODS.Joker{
         return {vars = {center.ability.extra.regularMult, G.GAME.probabilities.normal, center.ability.extra.debuffChance, center.ability.extra.critChance, center.ability.extra.critMult}}
     end,
     calculate = function(self,card,context)
-        if context.setting_blind and context.main_eval and SMODS.pseudorandom_probability(card, 'akts_random_seed', 1, card.ability.extra.debuffChance) then
+        if not context.blueprint and context.setting_blind and context.main_eval and SMODS.pseudorandom_probability(card, 'akts_random_seed', 1, card.ability.extra.debuffChance) then
             card:juice_up()
             card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('akts_stunned'), colour = G.C.MULT})
             local round = G.GAME.round

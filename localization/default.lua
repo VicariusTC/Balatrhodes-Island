@@ -1398,8 +1398,6 @@ return {
             akts_blind_renegade = "BANG!",
             akts_blind_patriot = " times current ante",
             akts_jokers_only_config = "Balatrhodes Jokers only?",
-            akts_jokers_only_config_NoLegendaryNote = "*NOTE: This mod does not have a Legendary Joker,",
-            akts_jokers_only_config_NoLegendaryNote2 = "so using a Soul with this setting will crash the game",
         },
         labels = {
             k_akts_transformed = "Awoken",

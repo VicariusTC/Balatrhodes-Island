@@ -298,11 +298,11 @@ SMODS.Joker{
             }
         end
 
-        if context.hand_drawn then
+        if not context.blueprint and context.hand_drawn then
             G.GAME.chips = gavialAlterDebtPayment(card, G.GAME.chips, 'tax')
         end
 
-        if context.end_of_round and context.cardarea == G.jokers then
+        if not context.blueprint and context.end_of_round and context.cardarea == G.jokers then
             local cardExtra = card.ability.extra
             local fullyDebted = (G.GAME.chips - (cardExtra.debtPayment * cardExtra.fulldebt)) /G.GAME.blind.chips < cardExtra.minReqScore / 100
             if fullyDebted then
@@ -357,7 +357,9 @@ SMODS.Joker{
     end,
     calculate = function(self,card,context)
         if context.joker_main and (G.GAME.current_round.hands_played == 0 or card.ability.extra.isFirstHand) then
-            card.ability.extra.isFirstHand = false
+            if not context.blueprint then
+                card.ability.extra.isFirstHand = false
+            end
             return {
 					chips = card.ability.extra.bonusChips,
 					card = card
@@ -408,7 +410,9 @@ SMODS.Joker{
             local bonusChips = card.ability.extra.bonusChips
             local bonusMult = card.ability.extra.bonusMult
             if card.ability.extra.isFirstHand then
-                card.ability.extra.isFirstHand = false
+                if not context.blueprint then
+                    card.ability.extra.isFirstHand = false
+                end
                 bonusChips = bonusChips * card.ability.extra.firstHandMultiplier
                 bonusMult = bonusMult * card.ability.extra.firstHandMultiplier
             end
@@ -436,7 +440,7 @@ SMODS.Joker{
 	cost = 4,
     unlocked = true, 
     discovered = true, 
-    blueprint_compat = true, 
+    blueprint_compat = false, 
     pos = {x = 7, y = 0}, 
     config = { 
       extra = {
@@ -503,7 +507,7 @@ SMODS.Joker{
 	cost = 10,
     unlocked = true, 
     discovered = true, 
-    blueprint_compat = true, 
+    blueprint_compat = false, 
     pos = {x = 8, y = 0}, 
     config = { 
       extra = {
@@ -581,7 +585,7 @@ SMODS.Joker{
 	cost = 9,
     unlocked = true,
     discovered = true,
-    blueprint_compat = true,
+    blueprint_compat = false,
     pos = {x = 9, y = 0},
     config = {
       extra = {
@@ -684,7 +688,7 @@ SMODS.Joker{
 	cost = 7,
     unlocked = true, 
     discovered = true, 
-    blueprint_compat = false, 
+    blueprint_compat = true, 
     pos = {x = 0, y = 1}, 
     config = { 
       extra = {
@@ -712,7 +716,7 @@ SMODS.Joker{
         G.hand:change_size(-card.ability.extra.curHandSize)
     end,
     calculate = function(self,card,context)
-        if context.cardarea == G.jokers and context.scoring_hand then
+        if not context.blueprint and context.cardarea == G.jokers and context.scoring_hand then
             if context.before then
                 card.ability.extra.perishFlagA = false
                 card.ability.extra.akts_save = false
@@ -731,12 +735,12 @@ SMODS.Joker{
                 end
             end
         end
-        if context.hand_drawn then
+        if not context.blueprint and context.hand_drawn then
             if card.ability.extra.playedRankPlus == #card.ability.extra.playedRank and G.GAME.chips/G.GAME.blind.chips < 1 and leftmostActivatedTrue("perishFlagA", getJokerSlot(card)) then
                 end_round()
             end
         end
-        if context.end_of_round then
+        if not context.blueprint and context.end_of_round then
             card.ability.extra.perishFlagA = false
             if G.GAME.chips/G.GAME.blind.chips < 1 and card.ability.extra.akts_save and leftmostActivatedTrue("akts_save", getJokerSlot(card)) then
                 card.ability.extra.akts_save = false
@@ -806,13 +810,13 @@ SMODS.Joker{
             local returnMult = card.ability.extra.bonusMult
             if not context.blueprint then
                 card.ability.extra.extraCardsPlayed = card.ability.extra.extraCardsPlayed + 1
-            end
-            if card.ability.extra.extraCardsPlayed % card.ability.extra.extraCardsReq == 0 then
-                card.ability.extra.extraCardsPlayed = 0
-                returnMult = card.ability.extra.critBonusMult
-                if card.ability.extra.aktsSellValue > 0 and not context.blueprint then
-                    card.ability.extra.aktsSellValue = card.ability.extra.aktsSellValue - 1
-                    card:set_cost()
+                if card.ability.extra.extraCardsPlayed % card.ability.extra.extraCardsReq == 0 then
+                    card.ability.extra.extraCardsPlayed = 0
+                    returnMult = card.ability.extra.critBonusMult
+                    if card.ability.extra.aktsSellValue > 0 then
+                        card.ability.extra.aktsSellValue = card.ability.extra.aktsSellValue - 1
+                        card:set_cost()
+                    end
                 end
             end
             return {
@@ -870,7 +874,7 @@ SMODS.Joker{
     end,
     calculate = function(self,card,context)
         --Find AoE Targets and set them up.
-        if context.cardarea == G.jokers and context.scoring_hand then
+        if not context.blueprint and context.cardarea == G.jokers and context.scoring_hand then
             if context.before then                
                 card.ability.extra.aoEMain = {{nil,nil,nil,nil,nil},{0,0,0,0,0},{0,0,0,0,0}, {'Burn'}}
                 for i, v in pairs(context.full_hand) do

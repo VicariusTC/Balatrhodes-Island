@@ -7,6 +7,7 @@ The Goal of this mod is to faithfully recreate many Arknights Operators and tran
 - 40+ New Jokers
 - New Rarity: Awoken. Awoken Jokers cannot be obtained through normal means and tend to be obtained through other Jokers
 - Summon Cards: New consumables from this mod, typically obtained through Jokers
+- Several new Boss Blinds
 - Much more is planned, so stay tuned for that!
 
 # Requirements

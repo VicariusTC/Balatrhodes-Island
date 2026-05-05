@@ -24,7 +24,7 @@ SMODS.Joker{
         return {vars = {center.ability.extra.bonusChips, center.ability.extra.bonusChipLoss, center.ability.extra.bonusChipFactorIncreaseTimer}}
     end,
     calculate = function(self,card,context)
-        if context.cardarea == G.play and context.individual and not context.other_card.debuff and not context.end_of_round and card.ability.extra.bonusChips > 0 then
+        if not context.blueprint and context.cardarea == G.play and context.individual and not context.other_card.debuff and not context.end_of_round and card.ability.extra.bonusChips > 0 then
             card.ability.extra.bonusChips = card.ability.extra.bonusChips - card.ability.extra.bonusChipLoss
             card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('akts_downgrade'), G.C.ATTENTION})
         end
@@ -36,7 +36,7 @@ SMODS.Joker{
 			}
 		end
         
-        if context.end_of_round and context.cardarea == G.jokers then
+        if not context.blueprint and context.end_of_round and context.cardarea == G.jokers then
             card.ability.extra.bonusChips = card.ability.extra.bonusChipsMax
             if not card.ability.extra.factorApplied then
                 if card.ability.extra.bonusChipFactorIncreaseTimer > 0 then

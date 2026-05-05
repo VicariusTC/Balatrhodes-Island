@@ -83,6 +83,7 @@ SMODS.Joker{
         twiceRetriggerOrder = 8,
         thriceRetriggerOrder = 4,
         aktsNewSellPrice = 0,
+        activateCount = 0,
         tagClass = {"Sniper"},
         tagFaction = {"Laterano"}
       }
@@ -102,9 +103,11 @@ SMODS.Joker{
                     elseif currentHand.order <= card.ability.extra.twiceRetriggerOrder then
                         retriggerFactor = 2
                     end
-                    card.ability.extra.numRetriggers = currentHandLevel * retriggerFactor
-                    if context.scoring_name then
+                    card.ability.extra.activateCount = card.ability.extra.activateCount + 1
+                    card.ability.extra.numRetriggers = card.ability.extra.activateCount * currentHandLevel * retriggerFactor
+                    if not context.blueprint and context.scoring_name then
                         --level down hand after hand finishes
+                        local activationCount = card.ability.extra.activateCount
                         local curChip = G.GAME.chips
                         G.E_MANAGER:add_event(Event({
                             func = function() 
@@ -122,7 +125,7 @@ SMODS.Joker{
                                 local _card = SMODS.create_card({set = "Planet", edition = {negative = true}})
                                 _card:add_to_deck()
                                 G.consumeables:emplace(_card)
-                                for i = 1, card.ability.extra.planetCopies - 1, 1 do
+                                for i = 0,  activationCount * (card.ability.extra.planetCopies - 1), 1 do
                                     local copyCard = copy_card(_card, nil)
                                     copyCard:add_to_deck()
                                     G.consumeables:emplace(copyCard)
@@ -142,6 +145,7 @@ SMODS.Joker{
         if context.cardarea == G.play and context.repetition and card.ability.extra.numRetriggers > 0 and (context.other_card == context.scoring_hand[card.ability.extra.retriggerTarget]) then
             local requiredRetriggers = card.ability.extra.numRetriggers
             card.ability.extra.numRetriggers = 0
+            card.ability.extra.activateCount = 0
             return {
                 message = localize('k_again_ex'),
                 repetitions = requiredRetriggers,
@@ -294,7 +298,7 @@ SMODS.Joker{
             card.ability.extra.glassTargets = {}
         end
 
-        if context.using_consumeable then
+        if not context.blueprint and context.using_consumeable then
             if context.consumeable.ability.name == 'The Emperor' then
                 card.ability.extra.emperorUsed = true
             elseif context.consumeable.ability.name == 'Justice' then
@@ -389,7 +393,7 @@ SMODS.Joker{
             card.ability.extra.glassTargets = {}
         end
 
-        if context.remove_playing_cards and context.scoring_hand then
+        if not context.blueprint and context.remove_playing_cards and context.scoring_hand then
             local poppedGlassCount = 0
             for k, v in ipairs(context.removed) do
                 if (SMODS.has_enhancement(v, 'm_glass') or v.glass_trigger) then
@@ -407,14 +411,6 @@ SMODS.Joker{
                 card.ability.extra.doubleTriggerPercent = math.min(100, card.ability.extra.doubleTriggerPercent + (ammoLoss * card.ability.extra.doubleTriggerIncrease))
                 handleAmmo(card, -ammoLoss)
             end
-        end
-
-        if context.joker_main and card.ability.extra.shatterCurrent ~= 0 then
-            return {
-                card = card,
-                xmult = card.ability.extra.shatterCurrent,
-                delay = 0.5,
-            }
         end
     end,
     set_badges = function(self, card, badges)

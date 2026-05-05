@@ -26,7 +26,7 @@ SMODS.Joker{
         return {vars = {center.ability.extra.plusChipsActive, center.ability.extra.plusMultActive, center.ability.extra.plusChips, center.ability.extra.plusMult, center.ability.extra.permaBuff}}
     end,
     calculate = function(self,card,context)
-        if context.cardarea == G.jokers and context.scoring_hand then
+        if not context.blueprint and context.cardarea == G.jokers and context.scoring_hand then
             if context.before then
                 card.ability.extra.chosenEffect = pseudorandom(pseudoseed("akts_random_seed"), 1, 3)
                 if card.ability.extra.chosenEffect == 1 then --Upgrades Joker Return
@@ -48,7 +48,7 @@ SMODS.Joker{
                 end
             end
         end
-        if context.cardarea == G.play and context.individual and not context.other_card.debuff and not context.end_of_round and card.ability.extra.chosenEffect == 3 then
+        if not context.blueprint and context.cardarea == G.play and context.individual and not context.other_card.debuff and not context.end_of_round and card.ability.extra.chosenEffect == 3 then
             --Effect 3, upgrade individual
             context.other_card.ability.perma_bonus = context.other_card.ability.perma_bonus + card.ability.extra.permaBuff
             G.E_MANAGER:add_event(Event({func = (function() card:juice_up(); return true end)}))
@@ -84,7 +84,7 @@ SMODS.Joker{
 	cost = 7,
     unlocked = true, 
     discovered = true, 
-    blueprint_compat = true, 
+    blueprint_compat = false,
     pos = {x = 1, y = 10},
     config = { 
       extra = {

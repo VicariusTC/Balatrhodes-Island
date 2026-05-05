@@ -6,7 +6,7 @@ SMODS.Joker{
 	cost = 5,
     unlocked = true,
     discovered = true,
-    blueprint_compat = true,
+    blueprint_compat = false,
     no_pool_flag = 'akts_leizi_transform',
     pos = {x = 0, y = 16},
     config = {
@@ -94,7 +94,7 @@ SMODS.Joker{
         return {vars = {center.ability.extra.destroyCostMultiplier * center.ability.extra.baseDestroyCost, center.ability.extra.destroyCostMult + center.ability.extra.rentalMult}}
     end,
     calculate = function(self,card,context)
-        if context.end_of_round and context.cardarea == G.jokers then
+        if not context.blueprint and context.end_of_round and context.cardarea == G.jokers then
             card.ability.extra.rentalMult = card.ability.extra.rentalMult + 3
             card.ability.extra.destroyCostMult = 0
             card.ability.extra.destroyCostMultiplier = 1

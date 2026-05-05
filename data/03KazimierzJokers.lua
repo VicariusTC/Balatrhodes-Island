@@ -105,7 +105,7 @@ SMODS.Joker{
 	cost = 7,
     unlocked = true,
     discovered = true,
-    blueprint_compat = false,
+    blueprint_compat = true,
     pos = {x = 2, y = 6},
     config = { 
       extra = {
@@ -239,7 +239,7 @@ SMODS.Joker{
 	cost = 4,
     unlocked = true, 
     discovered = true, 
-    blueprint_compat = true, 
+    blueprint_compat = false, 
     pos = {x = 0, y = 7}, 
     config = { 
       extra = {

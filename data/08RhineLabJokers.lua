@@ -22,7 +22,7 @@ SMODS.Joker{
         return {vars = {center.ability.extra.multScaleFirst, center.ability.extra.multScaleSecond, center.ability.extra.multScaleThird, center.ability.extra.multStorage}}
     end,
     calculate = function(self,card,context)
-        if context.cardarea == G.jokers and context.scoring_hand then
+        if not context.blueprint and context.cardarea == G.jokers and context.scoring_hand then
             if context.before and #context.scoring_hand > 0 and context.scoring_hand[1].config.center ~= G.P_CENTERS.c_base then
                 card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex'), G.C.MULT})
                 local foundEnhancement = context.scoring_hand[1].config.center
@@ -107,7 +107,7 @@ SMODS.Joker{
 
         if context.joker_main then
             return {
-			    mult = card.ability.extra.planetEdition * CalcPlanetsMult(),
+			    mult = card.ability.extra.planetMultiplier * CalcPlanetsMult(),
                 card = card
 		    }
         end
@@ -197,7 +197,7 @@ SMODS.Joker{
 	cost = 8,
     unlocked = true,
     discovered = false,
-    blueprint_compat = true,
+    blueprint_compat = false,
     pos = {x = 3, y = 14},
     config = { 
       extra = {

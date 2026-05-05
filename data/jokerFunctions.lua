@@ -161,7 +161,7 @@ end
 local G_UIDEF_use_and_sell_buttons_ref = G.UIDEF.use_and_sell_buttons
 function G.UIDEF.use_and_sell_buttons(card)
     local uiButtons =  G_UIDEF_use_and_sell_buttons_ref(card)
-    if (card.area == G.jokers) and card.ability and card.ability.extra and card.ability.extra.aktsUseButton then
+    if (card.area == G.jokers) and card.ability and card.ability.extra and type(card.ability.extra) == "table" and card.ability.extra.aktsUseButton then
         local sell = nil
         local use = nil
         local jokerUse = nil
