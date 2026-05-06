@@ -25,10 +25,11 @@ SMODS.Joker{
         if not context.blueprint and context.setting_blind and context.main_eval and SMODS.pseudorandom_probability(card, 'akts_random_seed', 1, card.ability.extra.debuffChance) then
             card:juice_up()
             card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('akts_stunned'), colour = G.C.MULT})
+            local round = G.GAME.round
             SMODS.debuff_card(card, true, "ConvictionDebuff")
             G.E_MANAGER:add_event(Event({
                 func = function() 
-                    if not G.STATE == G.STATES.SHOP then
+                    if G.GAME.round == round then
                         return false
                     end
                     G.E_MANAGER:add_event(Event({

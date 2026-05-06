@@ -320,17 +320,12 @@ return {
                 name = "Andreana",
                 text = {
                     {
-                        "Earns {C:money}$#1#{} if less than",
-                        "{C:attention}#4#%{} of blind requirement",
-                        "is fulfilled.",
-                    },
-                    {
-                        "Gains {C:blue}+#2#{} Chips if less than",
+                        "Earns {C:money}$#1#{} and gains",
+                        "{C:blue}+#2#{} Chips if less than",
                         "{C:attention}#3#%{} of blind requirement",
                         "is fulfilled.",
-                        "{C:inactive}(Currently {}{C:blue}+#5# {C:inactive}Chips){}",
+                        "{C:inactive}(Currently {}{C:blue}+#4# {C:inactive}Chips){}",
                     }
-                        
                 },
             },
 
@@ -955,6 +950,28 @@ return {
                 },
             },
 
+            j_akts_Rockrock = {
+                name = "Rockrock",
+                text = {
+                    {
+                        "Each card in your {C:attention}most played",
+                        "{C:attention}hand{} gives {C:red}+#2#{} Mult when scored.",
+                        ""
+                    },
+                    {
+                        "{X:red,C:white}Overload:{} Until the end of this",
+                        "round or until this ability is cancelled,",
+                        "each card in your {C:attention}most played",
+                        "{C:attention} hand{} gives {C:red}Mult{} equal to the number",
+                        "of times that {C:attention}poker hand{} has",
+                        "been played this run.",
+                        "This Joker is {C:attention}disabled{} for 1 hand for",
+                        "every hand played while {X:red,C:white}Overload{} was",
+                        "active afterwards {C:inactive}[#1#]{}",
+                    },
+                },
+            },
+
             j_akts_Necrass = {
                 name = "Necrass",
                 text = {
@@ -1397,6 +1414,7 @@ return {
             akts_injury = "Elemental Injury", 
             akts_burst_active = "Burst is Active!",
             akts_burst_trigger = "Burst Activated!",
+            akts_cancel = "Cancel",
 
             k_akts_redeploy_pack = "Fast Redeploy Pack",
 

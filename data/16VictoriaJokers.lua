@@ -181,3 +181,111 @@ SMODS.Joker{
         aktsBadgeHelper(self,card,badges)
     end
 }
+
+SMODS.Joker{
+    key = 'Rockrock',
+    name = 'Rockrock',
+    rarity = 1,
+    atlas = 'Jokers',
+	cost = 5,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = true,
+    pos = {x = 3, y = 9},
+    config = { 
+      extra = {
+        aktsUseButton = {"akts_rockrock_overload", "akts_rockrock_can_overload", "b_use"},
+        overload = false,
+        overloadUsed = false,
+        overloadDuration = 0,
+        mostPlayedMult = 5,
+        tagClass = {"Caster"},
+        tagFaction = {"Victoria"}
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        info_queue[#info_queue+1] = {set = 'Other', key = "Overload"}
+        return {vars = {center.ability.extra.overloadDuration, center.ability.extra.mostPlayedMult}}
+    end,
+    calculate = function(self,card,context)
+        if context.cardarea == G.play and context.individual and not context.other_card.debuff and not context.end_of_round then
+            if not card.ability.extra.overload and card.ability.extra.overloadDuration > 0 then
+                card.ability.extra.overloadDuration = card.ability.extra.overloadDuration - 1
+                card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('akts_stunned'), colour = G.C.MULT})
+                SMODS.debuff_card(card, true, "aktsRockrock")
+                G.E_MANAGER:add_event(Event({
+                    func = function() 
+                        if not G.STATES.DRAW_TO_HAND and not G.STATE_COMPLETE then
+                            return false
+                        end
+                        G.E_MANAGER:add_event(Event({
+                            func = function() 
+                                SMODS.debuff_card(card, false, "aktsRockrock")
+                                return true
+                            end,
+                        }))
+                        return true
+                    end,
+                    blocking = false
+                }))
+                return
+            end
+            local play_more_than = (G.GAME.hands[context.scoring_name].played or 0)
+            for handname, values in pairs(G.GAME.hands) do
+                if handname ~= context.scoring_name and values.played > play_more_than and SMODS.is_poker_hand_visible(handname) then
+                    return
+                end
+            end
+            local returnMult = card.ability.extra.mostPlayedMult
+            if card.ability.extra.overload then
+                returnMult = returnMult + G.GAME.hands[context.scoring_name].played
+            end
+            return {
+                mult = returnMult
+            }
+        end
+
+        if context.joker_main and card.ability.extra.overload then
+            card.ability.extra.overloadDuration = card.ability.extra.overloadDuration + 1
+        end
+
+        if context.end_of_round and context.cardarea == G.jokers then
+            card.ability.extra.overload = false
+            card.ability.extra.aktsUseButton[3] = "b_use"
+        end
+
+        if context.ante_end then
+            card.ability.extra.overloadUsed = false
+        end
+    end,
+    set_badges = function(self, card, badges)
+        aktsBadgeHelper(self,card,badges)
+    end
+}
+
+G.FUNCS.akts_rockrock_can_overload = function(e)
+    local card = e.config.ref_table
+    if card.ability.extra.overloadUsed and not card.ability.extra.overload or not (G.GAME.blind and G.GAME.chips < G.GAME.blind.chips) then
+        e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+        e.config.button = nil
+        return
+    end
+    if not card.debuff then
+        e.config.colour = G.C.MULT
+        e.config.button = "akts_rockrock_overload"
+    end
+end
+
+G.FUNCS.akts_rockrock_overload = function(e)
+    local card = e.config.ref_table
+    if not card.ability.extra.overloadUsed then
+        card:juice_up()
+        card.ability.extra.overloadUsed = true
+        card.ability.extra.overload = true
+        card.ability.extra.aktsUseButton[3] = "akts_cancel"
+    else
+        card.ability.extra.overload = false
+        card.ability.extra.aktsUseButton[3] = "b_use"
+    end
+    card:highlight(false)
+end

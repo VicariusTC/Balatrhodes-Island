@@ -137,4 +137,5 @@ G.FUNCS.akts_swire_destroy_card = function(e)
     ease_dollars(-cost)
     card.ability.extra.destroyCostMult = card.ability.extra.destroyCostMult + cost
     card.ability.extra.destroyCostMultiplier = card.ability.extra.destroyCostMultiplier * 2
+    card:highlight(false)
 end
