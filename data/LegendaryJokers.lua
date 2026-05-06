@@ -43,10 +43,11 @@ SMODS.Joker{
 
             for i = 0, enhanceds, 1 do
                 local chosenIndex = pseudorandom(pseudoseed("akts_random_seed"), 1, #deck)
-                local previousEnhancement = deck[chosenIndex].config.center or G.P_CENTERS.c_base
-                deck[chosenIndex]:set_ability(G.P_CENTERS.m_akts_Revenant, nil, true)
-                deck[chosenIndex].ability.extra.round = G.GAME.round
-                deck[chosenIndex].ability.extra.previousEnhancement = previousEnhancement
+                local _card = deck[chosenIndex]
+                local previousEnhancement = _card.config.center.key
+                _card:set_ability(G.P_CENTERS.m_akts_Revenant, nil, true)
+                _card.ability.extra.round = G.GAME.rounds
+                _card.ability.extra.previousEnhancement = previousEnhancement
                 table.remove(deck, chosenIndex)
             end
 
@@ -74,20 +75,20 @@ SMODS.Joker{
         if context.cardarea == G.jokers and context.scoring_hand and context.final_scoring_step then
             local revenantScore = false
             for i, v in ipairs(context.scoring_hand) do
-                if v.config.center == G.P_CENTERS.m_akts_Revenant then
+                if SMODS.has_enhancement(v, "m_akts_Revenant") then
                     revenantScore = true
                     break
                 end
             end
             if revenantScore then
-                card.ability.extra.revenantScore = card.ability.extra.revenantScore + (hand_chips * mult)
+                card.ability.extra.revenantScore = card.ability.extra.revenantScore + SMODS.calculate_round_score()
             end
         end
 
         if context.end_of_round and context.cardarea == G.jokers then
             for i, v in ipairs(G.playing_cards) do
-                if v.config and v.config.center == G.P_CENTERS.m_akts_Revenant then
-                    v:set_ability(v.ability.extra.previousEnhancement or G.P_CENTERS.c_base, nil, true)
+                if SMODS.has_enhancement(v, "m_akts_Revenant")  then
+                    v:set_ability(v.ability.extra.previousEnhancement)
                 end
             end
             G.P_CENTERS.j_akts_Walter.pos.x = 0
@@ -113,7 +114,7 @@ G.FUNCS.akts_walter_can_overload = function(e)
     if G.hand and not card.debuff then
         local unenhanceds = {}
         for i, v in ipairs(G.hand.cards) do
-            if v.config.center == G.P_CENTERS.c_base then
+            if not next(SMODS.get_enhancements(v)) then
                 table.insert(unenhanceds, v)
             end
         end
@@ -131,7 +132,7 @@ G.FUNCS.akts_walter_overload = function(e)
     local card = e.config.ref_table
     local unenhanceds = {}
     for i, v in ipairs(G.hand.cards) do
-        if v.config.center == G.P_CENTERS.c_base then
+        if not next(SMODS.get_enhancements(v)) then
             table.insert(unenhanceds, v)
         end
     end
@@ -160,9 +161,9 @@ G.FUNCS.akts_walter_overload = function(e)
         local _card = unenhanceds[index]
         _card:flip()
         _card:set_ability(G.P_CENTERS.m_akts_Revenant, nil, true)
-        _card.ability.extra.round = G.GAME.round
-        _card.ability.extra.previousEnhancement = G.P_CENTERS.c_base
         _card.ability.extra.undebuffable = true
+        _card.ability.extra.round = G.GAME.rounds
+        _card.ability.extra.previousEnhancement = "c_base"
         table.remove(unenhanceds, index)
         flip_cards(_card)
     end

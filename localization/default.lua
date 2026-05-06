@@ -188,7 +188,7 @@ return {
                         "{C:attention}-#2#{} hand size for",
                         "every {C:attention}#3#{} {C:inactive}[#4#]{} times this",
                         "Joker's effect wins a blind.",
-                        "{C:inactive}Currently{} {C:attention}#5#{} {C:inactive}hand size.{}"
+                        "{C:inactive}(Currently{} {C:attention}#5#{} {C:inactive}hand size){}"
                     },
                 },
             },
@@ -257,7 +257,7 @@ return {
                         "Creates an unowned {C:red}Aegir{}",
                         "Joker every {C:attention}#1# Flushes{} played",
                         "{C:inactive,s:0.8}(Must have room)",
-                        "{C:inactive,s:0.8}Currently{} {C:green,s:0.8}#2#{} {C:inactive,s:0.8}out of{} {C:green,s:0.8}#1#{} {C:inactive,s:0.8}played."                  
+                        "{C:inactive,s:0.8}(Currently{} {C:green,s:0.8}#2#{} {C:inactive,s:0.8}out of{} {C:green,s:0.8}#1#{} {C:inactive,s:0.8}played)"
                     },
                     {
                         "Scoring {C:attention}#3#s{} in {C:attention}Flushes{} are.",
@@ -272,7 +272,7 @@ return {
                         "{C:attention}+#1#{} hand size per",
                         "{C:red}Abyssal Hunter{} Joker",
                         "owned.",
-                        "{C:inactive,s:0.8}Currently{} {C:attention,s:0.8}+#2#{} {C:inactive,s:0.8}hand size.",               
+                        "{C:inactive,s:0.8}(Currently{} {C:attention,s:0.8}+#2#{} {C:inactive,s:0.8}hand size)",
                     },
                     {
                         "Gains {X:mult,C:white}X#3#{} Mult per",
@@ -280,7 +280,7 @@ return {
                         "owned and an additional",
                         "{X:mult,C:white}X#4#{} Mult if you own {C:attention}#5#+",
                         "{C:red}Abyssal Hunter{} Jokers.",
-                        "{C:inactive,s:0.8}Currently{} {X:mult,C:white,s:0.8}X#6#{} {C:inactive,s:0.8}Mult.",     
+                        "{C:inactive,s:0.8}(Currently{} {X:mult,C:white,s:0.8}X#6#{} {C:inactive,s:0.8}Mult)",
                     }
                 },
             },
@@ -320,12 +320,17 @@ return {
                 name = "Andreana",
                 text = {
                     {
-                        "Earns {C:money}$#1#{} and gains",
-                        "{C:blue}+#2#{} Chips if less than",
+                        "Earns {C:money}$#1#{} if less than",
+                        "{C:attention}#4#%{} of blind requirement",
+                        "is fulfilled.",
+                    },
+                    {
+                        "Gains {C:blue}+#2#{} Chips if less than",
                         "{C:attention}#3#%{} of blind requirement",
                         "is fulfilled.",
-                        "{C:inactive}Currently {}{C:blue}+#4# {C:inactive}Chips.{}",
+                        "{C:inactive}(Currently {}{C:blue}+#5# {C:inactive}Chips){}",
                     }
+                        
                 },
             },
 
@@ -478,7 +483,7 @@ return {
                         "blind requirement has not",
                         "been met, otherwise",
                         "{C:attention}stores{} that Mult. {C:inactive}(Max. #2# times){}",
-                        "{C:inactive}Currently{} {C:green}#3#{} {C:inactive}stored.{}",
+                        "{C:inactive}(Currently{} {C:green}#3#{} {C:inactive}stored){}",
                     },
                     {
                         "During {C:attention}Small Blind{} or",

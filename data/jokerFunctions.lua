@@ -157,6 +157,14 @@ function Card:click()
     SMODS.calculate_context({akts_clicked = true, card_clicked = self})
 end
 --------------------------------------------------------
+--- save hook for reverting card
+local save_ref = Card.save
+function Card:save()
+    local ref_return = save_ref(self)
+    ref_return.card = self
+    return ref_return
+end
+--------------------------------------------------------
 -----hook for uiElements, table[1] = func, table[2] canUse, table[3] = name
 local G_UIDEF_use_and_sell_buttons_ref = G.UIDEF.use_and_sell_buttons
 function G.UIDEF.use_and_sell_buttons(card)
@@ -376,8 +384,6 @@ end
 jokerTransform = function(card, newJoker)
     local new_card = G.P_CENTERS[newJoker]
     if card.config.center == new_card then return end
-
-    local old_key = card.config.center.keyd
     card.children.center = Sprite(card.T.x, card.T.y, card.T.w, card.T.h, G.ASSET_ATLAS[new_card.atlas], new_card.pos)
     card.children.center.states.hover = card.states.hover
     card.children.center.states.click = card.states.click
@@ -701,7 +707,7 @@ end
 BindHand = function (duration, card)
     if G.AKTS_Globals.blindBound == 0 then
         card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("akts_bind_apply"), G.C.ATTENTION})
-        G.AKTS_Globals.bindHandScore = Round((hand_chips * mult), 2)
+        G.AKTS_Globals.bindHandScore = Round(SMODS.calculate_round_score(), 2)
         G.AKTS_Globals.blindBound = duration
     end 
 end

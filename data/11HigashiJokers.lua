@@ -73,7 +73,7 @@ SMODS.Joker{
             if context.before and next(context.poker_hands['Flush']) then
                 local flushType = nil
                 for i = 1, #context.scoring_hand do
-                    if context.scoring_hand[i].config.center ~= G.P_CENTERS.m_wild then 
+                    if not SMODS.has_any_suit(context.scoring_hand[i]) then 
                         flushType = context.scoring_hand[i].base.suit
                         break
                     end

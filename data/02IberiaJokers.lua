@@ -63,7 +63,7 @@ SMODS.Joker{
             }
         end
         if not context.blueprint and context.cardarea == G.play and context.individual and not context.other_card.debuff and not context.end_of_round and 
-        (context.other_card.config.center == G.P_CENTERS.m_akts_TempSteel or context.other_card.config.center == G.P_CENTERS.m_gold or context.other_card.config.center == G.P_CENTERS.m_steel) then
+        (SMODS.has_enhancement(context.other_card, "m_akts_TempSteel")  or SMODS.has_enhancement(context.other_card, "m_gold") or SMODS.has_enhancement(context.other_card, "m_steel")) then
             card.ability.extra.chipStorage = card.ability.extra.chipStorage + card.ability.extra.chipIncrement
             return {
                 extra = {focus = card, message = localize('k_upgrade_ex')},
@@ -104,7 +104,7 @@ SMODS.Joker{
     end,
     calculate = function(self,card,context)
         if not context.blueprint and context.cardarea == G.hand and context.individual and not context.other_card.debuff and context.end_of_round
-        and (context.other_card.config.center == G.P_CENTERS.m_akts_TempSteel or context.other_card.config.center == G.P_CENTERS.m_steel or context.other_card.config.center == G.P_CENTERS.m_gold) then
+        and (SMODS.has_enhancement(context.other_card, "m_akts_TempSteel")  or SMODS.has_enhancement(context.other_card, "m_gold") or SMODS.has_enhancement(context.other_card, "m_steel")) then
             local performUnenhance = SMODS.pseudorandom_probability(card, 'akts_random_seed', 1, card.ability.extra.unenhanceChance)
             if performUnenhance then
                 context.other_card:set_ability(G.P_CENTERS.c_base, nil, true)

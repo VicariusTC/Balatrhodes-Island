@@ -136,7 +136,7 @@ SMODS.Joker{
                 totalCut = totalCut + card.ability.extra.finalCut * #context.scoring_hand
             end
             for i = 1, #context.scoring_hand do
-                if context.scoring_hand[i].config.center == G.P_CENTERS.m_akts_True then 
+                if SMODS.has_enhancement(context.scoring_hand[i], "m_akts_True") then 
                     totalCut = totalCut + card.ability.extra.trueCut
                 end
             end

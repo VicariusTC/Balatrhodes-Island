@@ -181,7 +181,7 @@ SMODS.Blind {
                 if removals == 0 then
                     break
                 end
-                if playing_card.config.center == G.P_CENTERS.m_akts_BloodAmber then 
+                if SMODS.has_enhancement(playing_card, "m_akts_BloodAmber") then 
                     SMODS.destroy_cards(playing_card, true, false, false)
                     removals = removals - 1
                 end
@@ -271,7 +271,7 @@ SMODS.Blind {
             self.config.extra.payout = G.GAME.blind.dollars
         end
         if not blind.disabled and context.final_scoring_step then
-            if G.GAME.blind.chips < hand_chips * mult then
+            if G.GAME.blind.chips < SMODS.calculate_round_score() then
                 G.GAME.blind.dollars = 2 * self.config.extra.payout
             else
                 G.GAME.blind.dollars = 0

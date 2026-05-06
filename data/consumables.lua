@@ -58,7 +58,7 @@ SMODS.Consumable{
             --for every card in hand highlighted
             local conv_card = G.hand.highlighted[i]
             conv_card:flip()
-            if conv_card.config.center == G.P_CENTERS.m_akts_True then
+            if SMODS.has_enhancement(conv_card, "m_akts_True") then
                 conv_card.ability.extra.chips = conv_card.ability.extra.chips + card.ability.extra.cardBonus
             else
                 conv_card:set_ability(G.P_CENTERS.m_akts_True, nil, true)

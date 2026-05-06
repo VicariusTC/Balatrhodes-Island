@@ -274,25 +274,34 @@ SMODS.Joker{
         chipIncrement = 10,
         moneyGain = 2,
         curerentMoneyGain = 0,
-        blindReq = 50,
+        blindCashReq = 25,
+        blindChipReq = 50,
         tagClass = {"Sniper"},
         tagFaction = {"Abyssal", "Aegir"}
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.moneyGain, center.ability.extra.chipIncrement, center.ability.extra.blindReq, center.ability.extra.chipStorage}}
+        return {vars = {center.ability.extra.moneyGain, center.ability.extra.chipIncrement, center.ability.extra.blindChipReq, center.ability.extra.blindCashReq, center.ability.extra.chipStorage}}
     end,
     calculate = function(self,card,context)
         if context.cardarea == G.jokers and context.joker_main and G.GAME.blind then
-            if ((hand_chips * mult) + G.GAME.chips + card.ability.extra.chipStorage)/G.GAME.blind.chips <= 0.01 * card.ability.extra.blindReq then
+            local chipCount = SMODS.calculate_round_score() + G.GAME.chips + card.ability.extra.chipStorage
+            if chipCount/G.GAME.blind.chips <= 0.01 * card.ability.extra.blindChipReq then
                 if not context.blueprint then
                     card.ability.extra.chipStorage = card.ability.extra.chipStorage + card.ability.extra.chipIncrement
                 end
-                return {
-                    card = card,
-                    chips = card.ability.extra.chipStorage,
-                    dollars =  card.ability.extra.moneyGain
-                }
+                if chipCount/G.GAME.blind.chips <= 0.01 * card.ability.extra.blindCashReq then
+                    return {
+                        card = card,
+                        chips = card.ability.extra.chipStorage,
+                        dollars =  card.ability.extra.moneyGain
+                    }
+                else
+                    return {
+                        card = card,
+                        chips = card.ability.extra.chipStorage,
+                    }
+                end
             end
             return {
                 card = card,

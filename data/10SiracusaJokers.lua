@@ -27,7 +27,7 @@ SMODS.Joker{
     calculate = function(self,card,context)
       if context.cardarea == G.jokers and context.joker_main then
         if G.GAME.blind then
-          local currentChips =  ((hand_chips * mult) + G.GAME.chips)/G.GAME.blind.chips
+          local currentChips =  (SMODS.calculate_round_score() + G.GAME.chips)/G.GAME.blind.chips
           local snipersOwned = CalcTaggedOwned(card.ability.extra.bonusChanceConditionTypes[1])
           local siracusaOwned = CalcTaggedOwned(card.ability.extra.bonusChanceConditionTypes[2], snipersOwned)
           local bonusChips = math.floor(currentChips / (0.01 * card.ability.extra.bonusChipsInterval)) * card.ability.extra.bonusChips

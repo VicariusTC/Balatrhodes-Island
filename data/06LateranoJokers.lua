@@ -270,7 +270,7 @@ SMODS.Joker{
             local doubleTrigger = SMODS.pseudorandom_probability(card, 'akts_random_seed', 1, card.ability.extra.doubleTriggerChance)
             for i = 0, #context.scoring_hand - 1 do
                 local target = context.scoring_hand[#context.scoring_hand - i]
-                if target and target.config.center == G.P_CENTERS.c_base then
+                if target and not next(SMODS.get_enhancements(target)) then
                     table.insert(card.ability.extra.glassTargets, target)
                     target:set_ability(G.P_CENTERS.m_glass, nil, true)
                     G.E_MANAGER:add_event(Event({
@@ -367,7 +367,7 @@ SMODS.Joker{
                 end
                 for i = 0, #context.scoring_hand - 1 do
                     local target = context.scoring_hand[#context.scoring_hand - i]
-                    if target and target.config.center == G.P_CENTERS.c_base then
+                    if target and not next(SMODS.get_enhancements(target)) then
                         table.insert(card.ability.extra.glassTargets, target)
                         target:set_ability(G.P_CENTERS.m_glass, nil, true)
                         G.E_MANAGER:add_event(Event({

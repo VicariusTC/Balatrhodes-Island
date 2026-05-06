@@ -96,7 +96,7 @@ SMODS.Joker{
         end
     end,
     calculate = function(self,card,context)
-        if context.cardarea == G.play and context.individual and not context.other_card.debuff and not context.end_of_round and context.other_card.config.center == G.P_CENTERS.m_akts_True then
+        if context.cardarea == G.play and context.individual and not context.other_card.debuff and not context.end_of_round and SMODS.has_enhancement(context.other_card, "m_akts_True") then
             return {
                 dollars = card.ability.extra.cash
             }
@@ -214,7 +214,7 @@ SMODS.Joker{
     calculate = function(self,card,context)
         if context.cardarea == G.play and context.individual and not context.other_card.debuff and not context.end_of_round then
             local returnMult = 1
-            if context.other_card.config.center == G.P_CENTERS.m_wild then
+            if SMODS.has_enhancement(context.other_card, "m_wild") then
                 returnMult = card.ability.extra.wildLower + pseudorandom(pseudoseed("akts_random_seed")) * (card.ability.extra.wildUpper - card.ability.extra.wildLower)
             else
                 returnMult = card.ability.extra.scoredLower + pseudorandom(pseudoseed("akts_random_seed")) * (card.ability.extra.scoredUpper - card.ability.extra.scoredLower)
@@ -228,7 +228,7 @@ SMODS.Joker{
             if context.before and #context.full_hand == 5 then
                 local transformable = false
                 for i = 1, #context.full_hand do
-                    if context.full_hand[i].config.center ~= G.P_CENTERS.m_wild then
+                    if not SMODS.has_enhancement(context.full_hand[i], "m_wild")  then
                         transformable = false 
                         break
                     end
@@ -287,7 +287,7 @@ SMODS.Joker{
     calculate = function(self,card,context)
         if context.cardarea == G.play and context.individual and not context.other_card.debuff and not context.end_of_round then
             local returnMult = 1
-            if context.other_card.config.center == G.P_CENTERS.m_wild then
+            if SMODS.has_enhancement(context.other_card, "m_wild")  then
                 returnMult = card.ability.extra.wildLower + pseudorandom(pseudoseed("akts_random_seed")) * (card.ability.extra.wildUpper - card.ability.extra.wildLower)
             else
                 returnMult = card.ability.extra.scoredLower + pseudorandom(pseudoseed("akts_random_seed")) * (card.ability.extra.scoredUpper - card.ability.extra.scoredLower)
@@ -478,7 +478,7 @@ SMODS.Joker{
                 returnChips = (1/math.max(abExtra.firstHandDivisorLimit, abExtra.targetHands - abExtra.handDivisorMinus)) * G.GAME.blind.chips
             end
             abExtra.isFirstHand = false
-            if returnChips > (mult * hand_chips) and returnChips > G.AKTS_Globals.redMaxChips then
+            if returnChips > SMODS.calculate_round_score() and returnChips > G.AKTS_Globals.redMaxChips then
                 card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("akts_red_active"), G.C.ATTENTION})
                 mult = mod_mult(0)
                 hand_chips = mod_chips(0)
@@ -552,7 +552,7 @@ SMODS.Joker{
             local ranks = {}
             for i, cards in pairs(G.hand.cards) do
                 local rank = cards:get_id()
-                if rank > 0 and cards.config.center ~= G.P_CENTERS.m_stone then
+                if rank > 0 and not SMODS.has_enhancement(cards, "m_stone")  then
                     ranks[rank] = (ranks[rank] or 0) + 1
                 end   
             end

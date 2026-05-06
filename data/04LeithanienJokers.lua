@@ -40,7 +40,7 @@ SMODS.Joker{
                     return
                 end
             end
-            if ((hand_chips * mult) + G.GAME.chips)/G.GAME.blind.chips >= 1 then
+            if (SMODS.calculate_round_score() + G.GAME.chips)/G.GAME.blind.chips >= 1 then
                 if not context.blueprint then
                     card.ability.extra.storedAttack = math.min(card.ability.extra.storedAttack + 1, card.ability.extra.maxStored)
                     card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("akts_plus_Stored"), G.C.ATTENTION})
@@ -48,7 +48,7 @@ SMODS.Joker{
             else
                 local effectiveMult =  card.ability.extra.Xmultbonus + card.ability.extra.storedAttack * card.ability.extra.addedStored
                 if context.blueprint then
-                    if ((hand_chips * mult * effectiveMult) + G.GAME.chips)/G.GAME.blind.chips >= 1 then
+                    if ((SMODS.calculate_round_score() * effectiveMult) + G.GAME.chips)/G.GAME.blind.chips >= 1 then
                         card.ability.extra.storedAttack = 0
                     end
                 else

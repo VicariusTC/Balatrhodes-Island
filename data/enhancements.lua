@@ -191,7 +191,7 @@ SMODS.Enhancement {
     config = { 
         Xmult = 3,
         extra = {
-            previousEnhancement = G.P_CENTERS.c_base,
+            previousEnhancement = "c_base",
             round = 0,
         }
     },
@@ -200,7 +200,7 @@ SMODS.Enhancement {
     end,
     calculate = function(self, card, context)
         if context.end_of_round or (context.hand_drawn and not (G.GAME.blind or G.GAME.round ~= card.ability.extra.round)) then
-            card:set_ability(card.ability.extra.previousEnhancement, nil, true)
+            card:set_ability(card.ability.extra.previousEnhancement)
         end
     end
 }

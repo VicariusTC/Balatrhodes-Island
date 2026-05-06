@@ -23,7 +23,7 @@ SMODS.Joker{
         return {vars = {center.ability.extra.transformReq, center.ability.extra.transformCount}}
     end,
     calculate = function(self,card,context)
-      if context.cardarea == G.play and context.individual and not context.other_card.debuff and not context.end_of_round and card.ability.extra.transformThisHand < 2 and context.other_card.config.center ~= G.P_CENTERS.c_base then
+      if context.cardarea == G.play and context.individual and not context.other_card.debuff and not context.end_of_round and card.ability.extra.transformThisHand < 2 and not next(SMODS.get_enhancements(context.other_card)) then
         local thisPos = 0
         for i = 1, #context.full_hand do
             if context.scoring_hand[i] == context.other_card then

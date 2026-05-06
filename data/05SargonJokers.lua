@@ -39,7 +39,7 @@ SMODS.Joker{
                     }
                 elseif card.ability.extra.chosenEffect == 2 then --Enhance to Wild
                     for i = 1, #context.full_hand do
-                        if context.full_hand[i].config.center == G.P_CENTERS.c_base then 
+                        if not next(SMODS.get_enhancements(context.full_hand[i])) then 
                             context.full_hand[i]:set_ability(G.P_CENTERS.m_wild, nil, true)
                             context.full_hand[i]:juice_up()
                             break
@@ -110,7 +110,7 @@ SMODS.Joker{
             card.ability.extra.aoEMain = {}
             card.ability.extra.aoEUndebuffable = false
             local centerPlayed = G.hand.highlighted[math.floor((#G.hand.highlighted/2) +0.5)]
-            if centerPlayed.config.center ~= G.P_CENTERS.c_base then
+            if next(SMODS.get_enhancements(centerPlayed)) then
                 if not card.ability.extra.lastRoundAoE then
                     card.ability.extra.aoEMain = aoEEnhancement(card, centerPlayed, G.hand.highlighted, card.ability.extra.baseAoE, card.ability.extra.aoEEfficacy)
                     card.ability.extra.lastRoundAoE = true
