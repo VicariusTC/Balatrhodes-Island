@@ -106,7 +106,7 @@ SMODS.Joker{
 
 G.FUNCS.akts_walter_can_overload = function(e)
     local card = e.config.ref_table
-    if card.ability.extra.overloadUsed or not (G.GAME.blind and G.hand.cards and #G.hand.cards > 0 and G.GAME.chips < G.GAME.blind.chips)then
+    if card.ability.extra.overloadUsed or not (G.GAME.blind and G.hand.cards and #G.hand.cards > 0 and G.GAME.chips < G.GAME.blind.chips and G.STATE == G.STATES.SELECTING_HAND) then
         e.config.colour = G.C.UI.BACKGROUND_INACTIVE
         e.config.button = nil
         return

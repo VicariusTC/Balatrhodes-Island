@@ -169,6 +169,27 @@ return {
                 },
             },
 
+            j_akts_Pozemka = {
+                name = "Pozemka",
+                text = {
+                    {
+                        "Gains {X:mult,C:white}X#2#{} Mult during this hand",
+                        "for each {C:attention}#5#{} card in scored hand.",
+                    },
+                    {
+                        "Gains {X:mult,C:white}X#1#{} Mult during this hand",
+                        "for each {C:attention}#4#{} in scored hand.",
+                    },
+                    {
+                        "Gains the Mult {C:attention}permanently{} for each",
+                        "{C:attention}#4#{} of {C:attention}#5#{} in scored hand.",
+                        "suit and rank changes every round",
+                        "{C:inactive,s:0.8}(Currently{} {X:mult,C:white,s:0.8}X#3#{} {C:inactive,s:0.8}Mult)",
+
+                    }
+                },
+            },
+
             j_akts_Logos = {
                 name = "Logos",
                 text = {

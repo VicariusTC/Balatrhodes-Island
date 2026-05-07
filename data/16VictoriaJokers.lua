@@ -245,7 +245,7 @@ SMODS.Joker{
             }
         end
 
-        if context.joker_main and card.ability.extra.overload then
+        if not context.blueprint and context.joker_main and card.ability.extra.overload then
             card.ability.extra.overloadDuration = card.ability.extra.overloadDuration + 1
         end
 
@@ -265,7 +265,8 @@ SMODS.Joker{
 
 G.FUNCS.akts_rockrock_can_overload = function(e)
     local card = e.config.ref_table
-    if card.ability.extra.overloadUsed and not card.ability.extra.overload or not (G.GAME.blind and G.GAME.chips < G.GAME.blind.chips) then
+    if card.ability.extra.overloadUsed and not card.ability.extra.overload or not (G.GAME.blind and G.GAME.chips < G.GAME.blind.chips and G.STATE == G.STATES.SELECTING_HAND)
+    or (not card.ability.extra.overloadUsed and card.ability.extra.overloadDuration ~= 0) then
         e.config.colour = G.C.UI.BACKGROUND_INACTIVE
         e.config.button = nil
         return

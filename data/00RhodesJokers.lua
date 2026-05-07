@@ -582,7 +582,7 @@ SMODS.Joker{
     name = 'Civilight',
     rarity = 3,
     atlas = 'Jokers',
-	cost = 9,
+	cost = 8,
     unlocked = true,
     discovered = true,
     blueprint_compat = false,
@@ -679,6 +679,85 @@ SMODS.Joker{
         aktsBadgeHelper(self,card,badges)
     end
 }
+
+SMODS.Joker{
+    key = 'Pozemka',
+    name = 'Pozemka',
+    rarity = 2,
+    atlas = 'Jokers',
+	cost = 7,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = true,
+    pos = {x = 9, y = 1},
+    config = {
+      extra = {
+        rankMult = 0.15,
+        suitMult = 0.15,
+        persistentMult = 1,
+        tagClass = {"Sniper"},
+        tagFaction = {"Rhodes"}
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.rankMult, center.ability.extra.suitMult, center.ability.extra.persistentMult, 
+                        localize((G.AKTS_Globals.pozemkaCards or {}).rank or 'Ace', 'ranks'), localize((G.AKTS_Globals.pozemkaCards or {}).suit or 'Spades', 'suits_plural')}}
+    end,
+    calculate = function(self,card,context)
+        if context.joker_main and context.scoring_hand then
+            local totalTempMult = 0
+            for i, _card in ipairs(context.scoring_hand) do
+                if not _card.debuff then
+                    local tempMult = 0
+                    if _card:is_suit(G.AKTS_Globals.pozemkaCards.suit) then
+                        tempMult = tempMult + card.ability.extra.suitMult
+                    end
+                    if _card:get_id() == G.AKTS_Globals.pozemkaCards.id then
+                        tempMult = tempMult + card.ability.extra.rankMult
+                    end
+
+                    if tempMult == card.ability.extra.rankMult + card.ability.extra.suitMult and not context.blueprint then
+                        card.ability.extra.persistentMult = card.ability.extra.persistentMult + tempMult
+                        card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex'), G.C.ATTENTION})
+                    else
+                        totalTempMult = totalTempMult + tempMult
+                    end
+                end
+            end
+            if card.ability.extra.persistentMult + totalTempMult > 1 then
+                return {
+                    xmult = card.ability.extra.persistentMult + totalTempMult,
+                }
+            end
+        end
+    end,
+    set_badges = function(self, card, badges)
+        aktsBadgeHelper(self,card,badges)
+    end
+}
+
+function reset_PozemkaRankSuit()
+    G.AKTS_Globals.pozemkaCards = { rank = 'Ace', suit = 'Spades' }
+    local valid_suits = {}
+    local valid_ranks = {}
+    for _, playing_card in ipairs(G.playing_cards) do
+        if not SMODS.has_no_suit(playing_card) then
+            valid_suits[#valid_suits + 1] = playing_card
+        end
+        if not SMODS.has_no_rank(playing_card) then
+            valid_ranks[#valid_ranks+1] = playing_card
+        end
+    end
+    local targetSuit = pseudorandom_element(valid_suits, pseudoseed('akts_Pozy'))
+    local targetRank = pseudorandom_element(valid_ranks, pseudoseed('akts_Pozy'))
+    if targetSuit then
+        G.AKTS_Globals.pozemkaCards.suit = targetSuit.base.suit
+    end
+    if targetRank then
+        G.AKTS_Globals.pozemkaCards.rank = targetRank.base.value
+        G.AKTS_Globals.pozemkaCards.id = targetRank.base.id
+    end
+end
 ----------------------------------------Base Rhodes end----------------------------------------
 SMODS.Joker{
     key = 'Logos',

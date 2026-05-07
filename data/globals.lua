@@ -8,6 +8,7 @@ SMODS.current_mod.reset_game_globals = function(run_start)
     G.AKTS_Globals.jokerSoldThisRound = false
     G.AKTS_Globals.redMaxChips = 0
     G.AKTS_Globals.CERanks = {}
+    reset_PozemkaRankSuit()
     if run_start then
         G.AKTS_Globals.yatosSold = 0
         G.AKTS_Globals.cloneChips = 25
@@ -35,6 +36,7 @@ G.AKTS_Globals = {
     servantMaxCount = 2,
     CERanks = {},
     customPriceSetter = nil,
+    pozemkaCards = { rank = 'Ace', suit = 'Spades' }
 }
 
 G.AKTS_Colors = {
