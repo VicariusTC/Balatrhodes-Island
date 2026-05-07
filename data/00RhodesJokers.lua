@@ -738,24 +738,17 @@ SMODS.Joker{
 
 function reset_PozemkaRankSuit()
     G.AKTS_Globals.pozemkaCards = { rank = 'Ace', suit = 'Spades' }
-    local valid_suits = {}
-    local valid_ranks = {}
+    local valid_cards = {}
     for _, playing_card in ipairs(G.playing_cards) do
-        if not SMODS.has_no_suit(playing_card) then
-            valid_suits[#valid_suits + 1] = playing_card
-        end
-        if not SMODS.has_no_rank(playing_card) then
-            valid_ranks[#valid_ranks+1] = playing_card
+        if not SMODS.has_no_suit(playing_card) and not SMODS.has_no_rank(playing_card) then
+            valid_cards[#valid_cards + 1] = playing_card
         end
     end
-    local targetSuit = pseudorandom_element(valid_suits, pseudoseed('akts_Pozy'))
-    local targetRank = pseudorandom_element(valid_ranks, pseudoseed('akts_Pozy'))
-    if targetSuit then
-        G.AKTS_Globals.pozemkaCards.suit = targetSuit.base.suit
-    end
-    if targetRank then
-        G.AKTS_Globals.pozemkaCards.rank = targetRank.base.value
-        G.AKTS_Globals.pozemkaCards.id = targetRank.base.id
+    local target = pseudorandom_element(valid_cards, pseudoseed('akts_Pozy'))
+    if target then
+        G.AKTS_Globals.pozemkaCards.suit = target.base.suit
+        G.AKTS_Globals.pozemkaCards.rank = target.base.value
+        G.AKTS_Globals.pozemkaCards.id = target.base.id
     end
 end
 ----------------------------------------Base Rhodes end----------------------------------------

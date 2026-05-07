@@ -13,7 +13,6 @@ SMODS.Joker{
         Xmultbonus = 1.5,
         maxStored = 4,
         storedAttack = 0,
-        addedStored = 0.5,
         tagClass = {"Caster"},
         tagFaction = {"Leithanien"}
       }
@@ -46,7 +45,10 @@ SMODS.Joker{
                     card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("akts_plus_Stored"), G.C.ATTENTION})
                 end
             else
-                local effectiveMult =  card.ability.extra.Xmultbonus + card.ability.extra.storedAttack * card.ability.extra.addedStored
+                local effectiveMult =  card.ability.extra.Xmultbonus
+                for i = 1, card.ability.extra.storedAttack, 1 do
+                    effectiveMult = effectiveMult * card.ability.extra.Xmultbonus
+                end
                 if context.blueprint then
                     if ((SMODS.calculate_round_score() * effectiveMult) + G.GAME.chips)/G.GAME.blind.chips >= 1 then
                         card.ability.extra.storedAttack = 0
@@ -58,7 +60,7 @@ SMODS.Joker{
                     card = card,
                     xmult = effectiveMult,
                 }
-            end  
+            end
         end
     end,
     set_badges = function(self, card, badges)
