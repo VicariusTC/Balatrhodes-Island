@@ -842,6 +842,25 @@ return {
                 },
             },
 
+            j_akts_LeiziAlter = {
+                name = "Leizi the Thunderbringer",
+                text = {
+                    {
+                        "If the card to the {C:attention}right{} of a {C:attention}scored",
+                        "{C:attention}enhanced card{} is unenhanced, {C:attention}move{}",
+                        "that enhancement to card to the right",
+                        "and gives {C:mult}+#1#{} Mult for {C:attention}each time{} this",
+                        "Joker moved an enhancement {C:attention}this hand{}"
+                    },
+                    {
+                        "Gives {C:attention}rightmost {}scoring unenhanced card",
+                        "{C:dark_edition}Thunderstruck{} when {C:attention}moving{} an {C:enhanced}Enhancement{}",
+                        "to it and this Joker {C:attention}moved{} at least",
+                        "{C:attention}#2#{} {C:enhanced}Enhancements{} this hand."
+                    }
+                },
+            },
+
             j_akts_SwireAlter = {
                 name = "Swire the Elegant Wit",
                 text = {
@@ -1173,6 +1192,19 @@ return {
                 }
             },
         },  
+        Edition = {
+            e_akts_thunderstruck = {
+				name = "Thunderstruck",
+				text = {
+					"{C:attention}Destroyed {}when scored, then {C:attention}moves {}",
+                    "{C:enhanced}Enhancement{} and {C:dark_edition}Edition{} of this",
+                    "card to the left until there is an",
+                    "{C:enhanced}Enhanced{} card and gives {X:red,C:white}X#1#{} Mult",
+                    "for each time the {C:enhanced}Enhancement{} moved.",
+                    "Loses {C:enhanced}Thunderstruck {}when discarded."
+				},
+			},
+        },
         Blind = {
             bl_akts_renegade = {
                 name = "The Renegade",
@@ -1342,6 +1374,7 @@ return {
             k_akts_Guard = "Guard",
             k_akts_GuardMedic = "Guard/Medic",
             k_akts_GuardSniper = "Guard/Sniper",
+            k_akts_GuardCaster = "Guard/Caster",
             k_akts_Defender = "Defender",
             k_akts_Sniper = "Sniper",
             k_akts_Caster = "Caster",
@@ -1445,6 +1478,7 @@ return {
         },
         labels = {
             k_akts_transformed = "Awoken",
+            akts_thunderstruck = "Thunderstruck"
         }
     }
     

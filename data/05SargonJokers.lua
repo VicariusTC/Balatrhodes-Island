@@ -39,7 +39,7 @@ SMODS.Joker{
                     }
                 elseif card.ability.extra.chosenEffect == 2 then --Enhance to Wild
                     for i = 1, #context.full_hand do
-                        if not next(SMODS.get_enhancements(context.full_hand[i])) then 
+                        if context.full_hand[i].config.center == G.P_CENTERS.c_base then 
                             context.full_hand[i]:set_ability(G.P_CENTERS.m_wild, nil, true)
                             context.full_hand[i]:juice_up()
                             break

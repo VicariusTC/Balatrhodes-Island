@@ -104,7 +104,17 @@ SMODS.Joker{
                         retriggerFactor = 2
                     end
                     card.ability.extra.activateCount = card.ability.extra.activateCount + 1
-                    card.ability.extra.numRetriggers = card.ability.extra.activateCount * currentHandLevel * retriggerFactor
+                    card.ability.extra.numRetriggers = currentHandLevel * retriggerFactor
+                    G.E_MANAGER:add_event(Event({
+                        blocking = false,
+                        func = function()
+                            if G.STATE == G.STATES.SELECTING_HAND then
+                                card.ability.extra.numRetriggers = 0
+                                card.ability.extra.activateCount = 0
+                                return true
+                            end
+                        end
+                    }))
                     if not context.blueprint and context.scoring_name then
                         --level down hand after hand finishes
                         local activationCount = card.ability.extra.activateCount
@@ -125,7 +135,7 @@ SMODS.Joker{
                                 local _card = SMODS.create_card({set = "Planet", edition = {negative = true}})
                                 _card:add_to_deck()
                                 G.consumeables:emplace(_card)
-                                for i = 0,  activationCount * (card.ability.extra.planetCopies - 1), 1 do
+                                for i = 1,  (activationCount * card.ability.extra.planetCopies) - 1, 1 do
                                     local copyCard = copy_card(_card, nil)
                                     copyCard:add_to_deck()
                                     G.consumeables:emplace(copyCard)
@@ -144,8 +154,6 @@ SMODS.Joker{
         
         if context.cardarea == G.play and context.repetition and card.ability.extra.numRetriggers > 0 and (context.other_card == context.scoring_hand[card.ability.extra.retriggerTarget]) then
             local requiredRetriggers = card.ability.extra.numRetriggers
-            card.ability.extra.numRetriggers = 0
-            card.ability.extra.activateCount = 0
             return {
                 message = localize('k_again_ex'),
                 repetitions = requiredRetriggers,
@@ -270,7 +278,7 @@ SMODS.Joker{
             local doubleTrigger = SMODS.pseudorandom_probability(card, 'akts_random_seed', 1, card.ability.extra.doubleTriggerChance)
             for i = 0, #context.scoring_hand - 1 do
                 local target = context.scoring_hand[#context.scoring_hand - i]
-                if target and not next(SMODS.get_enhancements(target)) then
+                if target and target.config.center == G.P_CENTERS.c_base then
                     table.insert(card.ability.extra.glassTargets, target)
                     target:set_ability(G.P_CENTERS.m_glass, nil, true)
                     G.E_MANAGER:add_event(Event({
@@ -367,7 +375,7 @@ SMODS.Joker{
                 end
                 for i = 0, #context.scoring_hand - 1 do
                     local target = context.scoring_hand[#context.scoring_hand - i]
-                    if target and not next(SMODS.get_enhancements(target)) then
+                    if target and target.config.center == G.P_CENTERS.c_base then
                         table.insert(card.ability.extra.glassTargets, target)
                         target:set_ability(G.P_CENTERS.m_glass, nil, true)
                         G.E_MANAGER:add_event(Event({

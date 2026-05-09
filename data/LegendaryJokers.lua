@@ -114,7 +114,7 @@ G.FUNCS.akts_walter_can_overload = function(e)
     if G.hand and not card.debuff then
         local unenhanceds = {}
         for i, v in ipairs(G.hand.cards) do
-            if not next(SMODS.get_enhancements(v)) then
+            if v.config.center == G.P_CENTERS.c_base then
                 table.insert(unenhanceds, v)
             end
         end
@@ -132,7 +132,7 @@ G.FUNCS.akts_walter_overload = function(e)
     local card = e.config.ref_table
     local unenhanceds = {}
     for i, v in ipairs(G.hand.cards) do
-        if not next(SMODS.get_enhancements(v)) then
+        if v.config.center == G.P_CENTERS.c_base then
             table.insert(unenhanceds, v)
         end
     end

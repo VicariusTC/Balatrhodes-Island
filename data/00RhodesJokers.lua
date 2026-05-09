@@ -177,6 +177,7 @@ SMODS.Joker{
     unlocked = true, 
     discovered = true, 
     blueprint_compat = true, 
+    perishable_compat = false,
     no_pool_flag = 'akts_gavial_transform',
     pos = {x = 2, y = 0}, 
     config = { 
@@ -255,6 +256,7 @@ SMODS.Joker{
 	cost = 5,
     unlocked = true, 
     discovered = false, 
+    perishable_compat = false,
     blueprint_compat = true, 
     pos = {x = 3, y = 0}, 
     config = { 
@@ -269,6 +271,7 @@ SMODS.Joker{
         wildLower = 1.25,
         wildUpper = 2,
         akts_save = true,
+        wasEternal = false,
         tagClass = {"Guard", "Medic"},
         tagFaction = {"Rhodes", "Sargon"}
       }
@@ -311,6 +314,7 @@ SMODS.Joker{
             if G.GAME.chips/G.GAME.blind.chips < 1 and not fullyDebted and cardExtra.akts_save and leftmostActivatedTrue("akts_save", getJokerSlot(card)) then
                 cardExtra.currentdebt = cardExtra.currentdebt + (G.GAME.blind.chips - G.GAME.chips)
                 cardExtra.fulldebt = cardExtra.fulldebt + (G.GAME.blind.chips - G.GAME.chips)
+                card.ability.extra.wasEternal = SMODS.is_eternal(card)
                 card:set_eternal(true)
                 G.GAME.chips = G.GAME.blind.chips
                 G.STATE = G.STATES.HAND_PLAYED

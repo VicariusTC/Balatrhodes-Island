@@ -351,7 +351,9 @@ gavialAlterDebtPayment = function(card, chipPool, mode)
     end
     
     if cardExtra.currentdebt == 0 then
-        card:set_eternal(false)
+        if not cardExtra.wasEternal then
+            card:set_eternal(false)
+        end
         cardExtra.fulldebt = 0
     end
     return chipPool

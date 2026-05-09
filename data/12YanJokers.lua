@@ -3,7 +3,7 @@ SMODS.Joker{
     name = 'Leizi',
     rarity = 2,
     atlas = 'Jokers',
-	cost = 5,
+	cost = 6,
     unlocked = true,
     discovered = true,
     blueprint_compat = false,
@@ -11,10 +11,10 @@ SMODS.Joker{
     pos = {x = 0, y = 16},
     config = {
       extra = {
-        transformReq = 8,
+        transformReq = 10,
         transformCount = 0,
         transformThisHand = 0,
-        transformLink = "",
+        transformLink = "j_akts_LeiziAlter",
         tagClass = {"Caster"},
         tagFaction = {"Yan"}
       }
@@ -25,7 +25,13 @@ SMODS.Joker{
     calculate = function(self,card,context)
       if context.cardarea == G.play and context.individual and not context.other_card.debuff and not context.end_of_round and card.ability.extra.transformThisHand < 2 and next(SMODS.get_enhancements(context.other_card)) then
         local thisPos = 0
-        for i = 1, #context.full_hand do
+        for index, value in ipairs(context.scoring_hand) do
+            if value == card then
+                thisPos = index
+                break
+            end
+        end
+        for i = 1, #context.scoring_hand do
             if context.scoring_hand[i] == context.other_card then
                 thisPos = i
                 break
@@ -36,7 +42,7 @@ SMODS.Joker{
         if nextCard and nextCard.config.center == G.P_CENTERS.c_base then
             card.ability.extra.transformCount = card.ability.extra.transformCount + 1
             card.ability.extra.transformThisHand = card.ability.extra.transformThisHand + 1
-            nextCard:set_ability(context.scoring_hand[thisPos].config.center, nil, true)
+            nextCard:set_ability(thisCard.config.center, nil, true)
             thisCard:set_ability(G.P_CENTERS.c_base, nil, true)
             G.E_MANAGER:add_event(Event({
                     trigger = "after", 
@@ -48,11 +54,102 @@ SMODS.Joker{
                         return true
                     end
                 }))
-            --[[if card.ability.extra.transformCount >= card.ability.extra.transformReq then
-                G.GAME.pool_flags.akts_leizi_transform = true
-                card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("akts_transform"), G.C.ATTENTION})
-                jokerTransform(card, card.ability.extra.transformLink)
-            end]]
+        end
+    end
+
+    if context.after and card.ability.extra.transformCount >= card.ability.extra.transformReq then
+        G.GAME.pool_flags.akts_leizi_transform = true
+        card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("akts_transform"), G.C.ATTENTION})
+        jokerTransform(card, card.ability.extra.transformLink)
+    end
+
+    if context.end_of_round or context.hand_drawn then
+        card.ability.extra.transformThisHand = 0
+    end
+  end,
+    set_badges = function(self, card, badges)
+        aktsBadgeHelper(self,card,badges)
+    end  
+}
+
+SMODS.Joker{
+    key = 'LeiziAlter',
+    name = 'LeiziAlter',
+    rarity = 'akts_Transformed',
+    atlas = 'Jokers',
+	cost = 6,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = false,
+    pos = {x = 1, y = 16},
+    config = {
+      extra = {
+        transformMult = 5,
+        transformThisHand = 0,
+        thunderReq = 3,
+        transformLink = "",
+        tagClass = {"Guard", "Caster"},
+        tagFaction = {"Yan"}
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        info_queue[#info_queue+1] = G.P_CENTERS.e_akts_thunderstruck
+        return {vars = {center.ability.extra.transformMult, center.ability.extra.thunderReq}}
+    end,
+    add_to_deck = function(self, card, from_debuff)
+        G.GAME.pool_flags.akts_leizi_transform = true
+    end, 
+    remove_from_deck = function(self, card, from_debuff)
+        G.GAME.pool_flags.akts_leizi_transform = false
+    end,
+    calculate = function(self,card,context)
+      if context.cardarea == G.play and context.individual and not context.other_card.debuff and not context.end_of_round and next(SMODS.get_enhancements(context.other_card)) then
+        local thisPos = 0
+        local isRightMostUnenhanced = true
+        for index, value in ipairs(context.scoring_hand) do
+            if value == context.other_card then
+                thisPos = index
+            end
+            if thisPos ~= 0 and index > thisPos + 1 then
+                if value.config.center == G.P_CENTERS.c_base then
+                    isRightMostUnenhanced = false
+                end
+            end
+        end
+        local thisCard = context.scoring_hand[thisPos]
+        local nextCard = context.scoring_hand[thisPos + 1]
+        if nextCard and nextCard.config.center == G.P_CENTERS.c_base then
+            card.ability.extra.transformThisHand = card.ability.extra.transformThisHand + 1
+            if card.ability.extra.transformThisHand >= card.ability.extra.thunderReq and isRightMostUnenhanced then
+                nextCard:set_edition("e_akts_thunderstruck", true, true)
+				nextCard.edition.akts_thunderstruck = false
+				G.E_MANAGER:add_event(Event({
+					trigger = "after",
+					delay = 1.0,
+					blocking = false,
+					func = function()
+						nextCard:juice_up(1, 0.5)
+						play_sound('polychrome1', 1.2, 0.7)
+                        nextCard:set_edition("e_akts_thunderstruck", true, true)
+						nextCard.edition.akts_thunderstruck = true
+						return true
+					end
+				}))
+            end
+            nextCard:set_ability(thisCard.config.center, nil, true)
+            thisCard:set_ability(G.P_CENTERS.c_base, nil, true)
+            G.E_MANAGER:add_event(Event({
+                    trigger = "after", 
+                    delay = 0.1,
+                    func = function() 
+                        nextCard:juice_up()
+                        return true
+                    end
+                }))
+            return {
+                mult = card.ability.extra.transformThisHand * card.ability.extra.transformMult,
+                card = card
+            }
         end
     end
 
