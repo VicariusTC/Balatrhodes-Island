@@ -69,7 +69,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
-        info_queue[#info_queue+1] = {set = 'Other', key = "edition_negative_consumable"}
+        info_queue[#info_queue + 1] = { key = 'e_negative_consumable', set = 'Edition', config = { extra = 1 } }
         info_queue[#info_queue+1] = {set = 'Other', key = "Heal"}
         return {vars = {center.ability.extra.healAmount, center.ability.extra.planetMultiplier * CalcPlanetsMult()}}
     end,

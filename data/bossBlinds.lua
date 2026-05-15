@@ -267,8 +267,12 @@ SMODS.Blind {
         }
     },
     calculate = function(self, blind, context)
-        if context.setting_blind then
+        if blind.disabled then
+            G.GAME.blind.dollars = self.config.extra.payout or 5
+        end
+        if not blind.disabled and context.setting_blind then
             self.config.extra.payout = G.GAME.blind.dollars
+            G.GAME.blind.dollars = 0
         end
         if not blind.disabled and context.final_scoring_step then
             if G.GAME.blind.chips < SMODS.calculate_round_score() then
@@ -276,6 +280,51 @@ SMODS.Blind {
             else
                 G.GAME.blind.dollars = 0
             end
+        end
+    end
+}
+
+SMODS.Blind {
+    key = "seaborn",
+    dollars = 5,
+    mult = 2,
+    atlas = 'akts_blind',
+    discovered = true,
+    pos = { y = 6 },
+    boss = { min = 1, showdown = false },
+    boss_colour = HEX("0a3478"),
+    calculate = function(self, blind, context)
+        if not blind.disabled and context.post_trigger then
+            if context.other_card and type(context.other_card) == "table" then
+                context.other_card.aktsSeabornStun = true
+                G.E_MANAGER:add_event(Event({
+                    delay = 0.15,
+                    func = function() 
+                        context.other_card:juice_up()
+                        context.other_card.aktsSeabornStun = nil
+                        return true
+                    end,
+                    blocking = false
+                }))
+            end
+            SMODS.debuff_card(context.other_card, true, "seaborn_debuff")
+            
+            local handsPlayed = G.GAME.current_round.hands_played
+            G.E_MANAGER:add_event(Event({
+                func = function() 
+                    if G.GAME.blind and handsPlayed == G.GAME.current_round.hands_played then
+                        return false
+                    end
+                    G.E_MANAGER:add_event(Event({
+                        func = function() 
+                            SMODS.debuff_card(context.other_card, false, "seaborn_debuff")
+                            return true
+                        end,
+                    }))
+                    return true
+                end,
+                blocking = false
+            }))
         end
     end
 }

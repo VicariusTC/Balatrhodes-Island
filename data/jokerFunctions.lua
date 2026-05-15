@@ -214,6 +214,19 @@ function G.UIDEF.use_and_sell_buttons(card)
     return uiButtons
 end
 --------------------------------------------------
+---hook debuff drawstep
+
+local debuffRef = SMODS.DrawSteps.debuff.func
+function SMODS.DrawSteps.debuff.func(self)
+    if self.aktsSeabornStun then
+        SMODS.DrawSteps.front.func(self)
+        return
+    end
+    debuffRef(self)
+
+end
+
+---------------------------------------------------
 local gameStart = Game.start_run
 function Game:start_run(args)
     local ret = gameStart(self, args)
@@ -888,4 +901,34 @@ end
 
 IdOf = function(card) 
     return "j_akts_" .. card.ability.name
+end
+
+GetGitanoBuff = function (card)
+    if #card.ability.extra.missingBuffs == 0 then
+        return
+    end
+    local buff = pseudorandom_element(card.ability.extra.missingBuffs, pseudoseed("akts_random_seed"))
+    for i, v in ipairs(card.ability.extra.missingBuffs) do
+        if v == buff then
+            table.remove(card.ability.extra.missingBuffs, i)
+            break
+        end
+    end
+    card:juice_up()
+    if buff == "handSize" then
+        card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('akts_gitano_buff_hand')})
+        card.ability.extra.colours[1] = G.C.GREEN
+        card.ability.extra.appliedBuffs.handSize = card.ability.extra.handSizeBonus
+        G.hand:change_size(card.ability.extra.appliedBuffs.handSize)
+    elseif buff == "discard" then
+        card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('akts_gitano_buff_discard')})
+        card.ability.extra.colours[2] = G.C.GREEN
+        card.ability.extra.appliedBuffs.discards = card.ability.extra.discardBonus
+        G.GAME.round_resets.discards = G.GAME.round_resets.discards + card.ability.extra.appliedBuffs.discards
+        ease_discard(card.ability.extra.appliedBuffs.discards)
+    else
+        card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('akts_gitano_buff_mult')})
+        card.ability.extra.colours[3] = G.C.GREEN
+        card.ability.extra.appliedBuffs.mult = card.ability.extra.multBonus
+    end
 end

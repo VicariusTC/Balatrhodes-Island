@@ -8,6 +8,7 @@
 	"priority": 0,
 	"badge_colour": "6B2980",
 	"badge_text_colour": "FFFFFF",
+	"icon_path": "modicon.png",
   "display_name": "Balatrhodes",
 	"version": "1.0.1",
 	"dependencies": [

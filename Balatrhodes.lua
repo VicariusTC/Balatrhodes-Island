@@ -1,13 +1,5 @@
 ----------------------------------------------
 ------------MOD CODE -------------------------
-
-SMODS.Atlas({
-    key = 'modicon',
-    path = 'modicon.png',
-    px = 34,
-    py = 34
-})
-
 SMODS.Atlas({
     key = 'akts_blind',
     path = 'AKBlinds.png',
@@ -50,6 +42,7 @@ SMODS.load_file("data/08RhineLabJokers.lua")()
 SMODS.load_file("data/10SiracusaJokers.lua")()
 SMODS.load_file("data/11HigashiJokers.lua")()
 SMODS.load_file("data/12YanJokers.lua")()
+SMODS.load_file("data/13SamiJokers.lua")()
 SMODS.load_file("data/14MinosJokers.lua")()
 SMODS.load_file("data/15RimBillitonJokers.lua")()
 SMODS.load_file("data/16VictoriaJokers.lua")()

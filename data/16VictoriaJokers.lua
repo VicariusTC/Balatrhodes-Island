@@ -1,7 +1,7 @@
 SMODS.Joker{
     key = 'Phantom',
     name = 'Phantom',
-    rarity = 2,
+    rarity = 1,
     atlas = 'Jokers',
 	cost = 3,
     unlocked = true, 

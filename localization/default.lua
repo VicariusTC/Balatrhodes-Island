@@ -880,6 +880,23 @@ return {
                 },
             },
 
+            j_akts_Gitano = {
+                name = "Gitano",
+                text = {
+                    {
+                        "Gains {C:attention}1{} of these effects",
+                        "{C:attention}permanently{} when bought or when",
+                        "using {C:attention}High Priestess{} {C:tarot}Tarot{} card",
+                        "{C:inactive}(Max. 1 each){}",
+                    },
+                    {
+                        "{B:1,C:white}1{} : {C:attention}+1{} hand size{C:white}aaaaaaaaa{}",
+                        "{B:2,C:white}2{} : {C:red}+1{} discards per round",
+                        "{B:3,C:white}3{} : {C:hearts}+8{} Mult{C:white}aaaaaaaaaaaaaa{}",
+                    }
+                },
+            },
+
             j_akts_Conviction = {
                 name = "Conviction",
                 text = {
@@ -940,7 +957,7 @@ return {
                         "{X:attention,C:white,s:1.25}Fast Redeploy",
                         "Creates a {C:spectral}Clone{} Summon",
                         "when obtained or when",
-                        "{C:tarot}Death Tarot Card{} is used. {C:inactive}(Max. #1#){}",
+                        "using {C:attention}Death{} {C:tarot}Tarot{} card {C:inactive}(Max. #1#){}",
                         "{C:inactive,s:0.8}(Must have room)",
                     },
                     {
@@ -1250,6 +1267,14 @@ return {
                     "score catches fire. {C:money}$0{} otherwise",
                 },
             },
+            bl_akts_seaborn = {
+                name = "The Seaborn",
+                text = {
+                    "Jokers that trigger are",
+                    "{C:attention}debuffed{} until {C:attention}next hand",
+                    "is played"
+                },
+            },
         },
         Other = {
             ---info queue popups------
@@ -1351,13 +1376,6 @@ return {
                     "{C:attention}#2#{} {X:attention,C:white}Fast Redeploy{} Jokers",
                 },
             },
-            --------Other---------------
-            edition_negative_consumable = {
-                name = "Negative",
-                text = {
-                    "{C:dark_edition}+1{} consumable slot",
-                },
-            },
         },
         Tag = {
             tag_akts_redeploy_tag = {
@@ -1405,6 +1423,7 @@ return {
             k_akts_Siracusa = "Siracusa",
             k_akts_Higashi = "Higashi",
             k_akts_Yan = "Yan",
+            k_akts_Sami = "Sami",
             k_akts_Minos = "Minos",
             k_akts_RimBil = "Rim Billiton",
             k_akts_Victoria = "Victoria",
@@ -1453,6 +1472,9 @@ return {
 
             akts_silence_immortal = "Immortal!",
 
+            akts_gitano_buff_hand = "+ hand size",
+            akts_gitano_buff_discard = "+ discard",
+            akts_gitano_buff_mult = "+ Mult",
             akts_saileach_banner = "For Glory!",
 
             akts_summon_greater = "Fused!",
