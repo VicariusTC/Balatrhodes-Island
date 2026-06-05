@@ -26,22 +26,22 @@ SMODS.Joker{
         return {vars = {center.ability.extra.maxClonesOwned, center.ability.extra.bonusChipXMin, center.ability.extra.bonusChipXMax}}
     end,
     add_to_deck = function(self, card, from_debuff)
-        if not from_debuff and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit and #CalcNamedConsumableOwned(card.ability.extra.summonTarget) < 1 then
-            local _card = create_card('SummonConsumableType', G.consumeables, nil, nil, nil, nil, card.ability.extra.summonTarget)
+        if not from_debuff and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit and CalcNamedConsumableOwned(card.ability.extra.summonTarget) < 1 then
+            local _card = SMODS.create_card({set = 'SummonConsumableType', area = G.consumeables, key = card.ability.extra.summonTarget})
             _card:add_to_deck()
             G.consumeables:emplace(_card)
             card_eval_status_text(_card, 'extra', nil, nil, nil, {message = localize('akts_plus_summon'), colour = G.C.PURPLE})
         end
     end,
     calculate = function(self,card,context)
-        if context.using_consumeable and context.consumeable.ability.name == 'Death' and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit and #CalcNamedConsumableOwned(card.ability.extra.summonTarget) < 1 then
-            local _card = create_card('SummonConsumableType', G.consumeables, nil, nil, nil, nil, card.ability.extra.summonTarget)
+        if context.using_consumeable and context.consumeable.ability.name == 'Death' and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit and CalcNamedConsumableOwned(card.ability.extra.summonTarget) < 1 then
+            local _card = SMODS.create_card({set = 'SummonConsumableType', area = G.consumeables, key = card.ability.extra.summonTarget})
             _card:add_to_deck()
             G.consumeables:emplace(_card)
             card_eval_status_text(_card, 'extra', nil, nil, nil, {message = localize('akts_plus_summon'), colour = G.C.PURPLE})
         end
 
-        if context.using_consumeable and context.consumeable.ability.name == card.ability.extra.summonTarget then
+        if context.using_consumeable and context.consumeable.config.center.key == card.ability.extra.summonTarget then
             card.ability.extra.isFirstHandOrClone = true
         end
 

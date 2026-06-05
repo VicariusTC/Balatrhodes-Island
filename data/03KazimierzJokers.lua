@@ -7,11 +7,12 @@ SMODS.Joker{
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = false, --can it be blueprinted/brainstormed/other
+    eternal_compat = false,
     no_pool_flag = 'akts_NearlAlter_transform',
     pos = {x = 0, y = 6}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
-        aktsSellValue = 0,
+        aktsUseButton = {"akts_nearl_retreat", "akts_nearl_can_retreat", "b_use"},
         tagClass = {"Guard"},
         tagFaction = {"Kazimierz"}
       }
@@ -24,7 +25,7 @@ SMODS.Joker{
     end,
     calculate = function(self,card,context)
         if context.selling_self and not context.blueprint and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-            local _card = create_card("SummonConsumableType", G.consumeables, nil, nil, nil, nil, 'c_akts_NearlTheRadiant')
+            local _card = SMODS.create_card({set = 'SummonConsumableType', area = G.consumeables, key = 'c_akts_NearlTheRadiant'})
             _card:add_to_deck()
             G.consumeables:emplace(_card)
             card_eval_status_text(_card, 'extra', nil, nil, nil, {message = localize("akts_plus_summon"), G.C.ATTENTION})
@@ -59,6 +60,25 @@ SMODS.Joker{
         aktsBadgeHelper(self,card,badges)
     end 
 }
+
+G.FUNCS.akts_nearl_can_retreat = function(e)
+    if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+        e.config.colour = G.C.MULT
+        e.config.button = "akts_nearl_retreat"
+        return
+    end
+    e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+    e.config.button = nil
+end
+
+G.FUNCS.akts_nearl_retreat = function(e)
+    e.config.ref_table:remove()
+    local _card = SMODS.create_card({set = 'SummonConsumableType', area = G.consumeables, key = 'c_akts_NearlTheRadiant'})
+     _card:add_to_deck()
+    G.consumeables:emplace(_card)
+    card_eval_status_text(_card, 'extra', nil, nil, nil, {message = localize("akts_plus_summon"), G.C.ATTENTION})
+    
+end
 
 SMODS.Joker{
     key = 'Mlynar',
@@ -361,7 +381,7 @@ SMODS.Joker{
                     end
                 end
                 if not duplicate then
-                    local _card = create_card("Tarot", G.consumeables, nil, nil, nil, nil, nil)
+                    local _card = SMODS.create_card({set = "Tarot", area = G.consumeables})
                     _card:add_to_deck()
                     G.consumeables:emplace(_card)
                     card_eval_status_text(_card, 'extra', nil, nil, nil, {message = localize("k_plus_tarot"), G.C.PURPLE})

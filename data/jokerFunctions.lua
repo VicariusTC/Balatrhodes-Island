@@ -149,21 +149,6 @@ function Card:get_id()
     end
     return cardGetId(self)
 end
--------------------------------------------------------
------hook of Card:click() to add clicked context
-local card_click_ref = Card.click
-function Card:click()
-    card_click_ref(self)
-    SMODS.calculate_context({akts_clicked = true, card_clicked = self})
-end
---------------------------------------------------------
---- save hook for reverting card
-local save_ref = Card.save
-function Card:save()
-    local ref_return = save_ref(self)
-    ref_return.card = self
-    return ref_return
-end
 --------------------------------------------------------
 -----hook for uiElements, table[1] = func, table[2] canUse, table[3] = name
 local G_UIDEF_use_and_sell_buttons_ref = G.UIDEF.use_and_sell_buttons
@@ -676,7 +661,7 @@ elemBurstChangeText = function(added)
 end
 
 --returns index position of card in table or 0 if not found.
-isInTable = function(card, table)
+indexOfTable = function(card, table)
     for j,w in pairs(table) do
         if w == card then
             return j
@@ -717,29 +702,6 @@ end
 Round = function(num, numDecimalPlaces)
     local multiplier = 10^(numDecimalPlaces or 0)
     return math.floor(num * multiplier + 0.5) / multiplier
-end
-
-BindHand = function (duration, card)
-    if G.AKTS_Globals.blindBound == 0 then
-        card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("akts_bind_apply"), G.C.ATTENTION})
-        G.AKTS_Globals.bindHandScore = Round(SMODS.calculate_round_score(), 2)
-        G.AKTS_Globals.blindBound = duration
-    end 
-end
-
-ApplyBoundHand = function (card, context)
-    if context.joker_main and leftmostActivatedTrue("akts_bind", getJokerSlot(card)) and G.AKTS_Globals.blindBound > 0 then
-        G.AKTS_Globals.blindBound = G.AKTS_Globals.blindBound - 1
-        return G.AKTS_Globals.bindHandScoreMultiplier * G.AKTS_Globals.bindHandScore
-    end
-    return 0
-end
-
-GetBindText = function ()
-    if G.AKTS_Globals.blindBound == 0 then
-        return ""
-    end
-    return G.AKTS_Globals.bindHandScore .. " Chips are bound to Blind for "..G.AKTS_Globals.blindBound .. " hands."
 end
 
 HealJoker = function (healer, target)
@@ -900,7 +862,7 @@ IsServantFusion = function (card, target, servantCount, maxUpgradeLevel)
 end
 
 IdOf = function(card) 
-    return "j_akts_" .. card.ability.name
+    return card.config.center.key
 end
 
 GetGitanoBuff = function (card)
@@ -908,12 +870,7 @@ GetGitanoBuff = function (card)
         return
     end
     local buff = pseudorandom_element(card.ability.extra.missingBuffs, pseudoseed("akts_random_seed"))
-    for i, v in ipairs(card.ability.extra.missingBuffs) do
-        if v == buff then
-            table.remove(card.ability.extra.missingBuffs, i)
-            break
-        end
-    end
+    table.remove(card.ability.extra.missingBuffs, indexOfTable(buff, card.ability.extra.missingBuffs))
     card:juice_up()
     if buff == "handSize" then
         card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('akts_gitano_buff_hand')})

@@ -20,7 +20,7 @@ SMODS.Edition {
         return { vars = { 1 + card.edition.extra.moveXmult } }
     end,
     get_weight = function(self)
-        return G.GAME.edition_rate * self.weight
+        return 0
     end,
     calculate = function(self, card, context)
         if context.main_scoring and context.cardarea == G.play then
@@ -51,7 +51,6 @@ SMODS.Edition {
                     if leftMost then
                         leftMost:set_edition("e_akts_thunderstruck", true, true)
 				        leftMost.edition.akts_thunderstruck = false
-                        local ability = card.config.center.key
 				        G.E_MANAGER:add_event(Event({
 					        trigger = "after",
 					        delay = 1.0,
@@ -76,6 +75,34 @@ SMODS.Edition {
 
         if context.discard and context.other_card == card then
             card:set_edition()
+        end
+    end
+}
+
+SMODS.Shader({ key = 'corrupted', path = 'Corrupted.fs' })
+SMODS.Sound({ key = 'akts_corrupt', path = 'e_akts_corrupt.ogg'})
+
+SMODS.Edition {
+    key = 'corrupt',
+    shader = 'corrupted',
+    config = { x_mult = 0.8 },
+    discovered = true,
+    unlocked = true,
+    in_shop = false,
+    weight = 0,
+    extra_cost = 5,
+    sound = { sound = "akts_corrupt", per = 1, vol = 0.7 },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.edition.x_mult } }
+    end,
+    get_weight = function(self)
+        return 0
+    end,
+    calculate = function(self, card, context)
+        if context.post_joker or (context.main_scoring and context.cardarea == G.play) then
+            return {
+                x_mult = card.edition.x_mult
+            }
         end
     end
 }

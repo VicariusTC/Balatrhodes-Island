@@ -1,4 +1,3 @@
--- needs debuff handling
 SMODS.Joker{
     key = 'Gitano',
     name = 'Gitano',

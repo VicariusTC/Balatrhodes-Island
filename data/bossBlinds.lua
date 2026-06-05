@@ -192,7 +192,7 @@ SMODS.Blind {
 
 SMODS.Blind {
     key = "source_code",
-    dollars = 5,
+    dollars = 8,
     mult = 2,
     atlas = 'akts_blind',
     discovered = true,
@@ -291,8 +291,8 @@ SMODS.Blind {
     atlas = 'akts_blind',
     discovered = true,
     pos = { y = 6 },
-    boss = { min = 1, showdown = false },
-    boss_colour = HEX("0a3478"),
+    boss = { min = 2, showdown = false },
+    boss_colour = HEX("0a2654"),
     calculate = function(self, blind, context)
         if not blind.disabled and context.post_trigger then
             if context.other_card and type(context.other_card) == "table" then
@@ -325,6 +325,90 @@ SMODS.Blind {
                 end,
                 blocking = false
             }))
+        end
+    end
+}
+
+SMODS.Blind {
+    key = "corrupt",
+    dollars = 8,
+    mult = 2,
+    atlas = 'akts_blind',
+    discovered = true,
+    pos = { y = 7 },
+    boss = { min = 8, showdown = true },
+    boss_colour = HEX("0a3478"),
+    config = {
+        extra = {
+            weakenCount = 2,
+            editionOrder = {"e_akts_corrupt", nil, "e_foil", "e_holo", "e_polychrome"}
+        }
+    },
+    loc_vars = function(self)
+        return { vars = { self.config.extra.weakenCount } }
+    end,
+    collection_loc_vars = function(self)
+        return { vars = { self.config.extra.weakenCount } }
+    end,
+    calculate = function(self, blind, context)
+        if not blind.disabled and context.press_play then
+            local downgradeEdition = function (card)
+                if not card or (card.edition and card.edition.key == self.config.extra.editionOrder[1]) then
+                    return
+                end
+                for i = 3, #self.config.extra.editionOrder, 1 do
+                    if not card.edition then
+                        card:set_edition(self.config.extra.editionOrder[1])
+                        return
+                    end
+                    if card.edition.key == self.config.extra.editionOrder[i] then
+                        card:set_edition(self.config.extra.editionOrder[i-1])
+                        return
+                    end
+                end
+                card:set_edition()
+            end
+
+            local findAdjacentJoker = function (index, goingLeft)
+                local direction = 1
+                local endPoint = #G.jokers.cards
+                if goingLeft then
+                    direction = -1
+                    endPoint = 1
+                end
+                for i = index + direction, endPoint, direction do
+                    local card = G.jokers.cards[i]
+                    if not card.edition or not (card.edition.key == "e_negative" or card.edition.key == self.config.extra.editionOrder[1]) then
+                        return card
+                    end
+                end
+                return nil
+            end
+            local targets = {}
+            local corruptTargets = {}
+            
+            for index, joker in ipairs(G.jokers.cards) do
+               if not (joker.edition and joker.edition.key == "e_negative") then
+                if joker.edition and joker.edition.key == self.config.extra.editionOrder[1] then
+                    table.insert(corruptTargets, findAdjacentJoker(index, true))
+                    table.insert(corruptTargets, findAdjacentJoker(index))
+                end
+                table.insert(targets, joker)
+               end
+            end
+
+            if #corruptTargets > 0 then
+                for index, value in ipairs(corruptTargets) do
+                    downgradeEdition(value)
+                end
+                return
+            end
+            for i = 1, self.config.extra.weakenCount, 1 do
+                local target = pseudorandom_element(targets, pseudoseed("akts_random_seed"))
+                table.remove(targets, indexOfTable(target, targets))
+                downgradeEdition(target)
+            end
+
         end
     end
 }

@@ -106,10 +106,13 @@ SMODS.Joker{
         end
 
         if context.joker_main then
-            return {
-			    mult = card.ability.extra.planetMultiplier * CalcPlanetsMult(),
-                card = card
-		    }
+            local returnMult = card.ability.extra.planetMultiplier * CalcPlanetsMult()
+            if returnMult > 0 then
+                return {
+			        mult = card.ability.extra.planetMultiplier * CalcPlanetsMult(),
+                    card = card
+		        }
+            end
         end
     end,
     set_badges = function(self, card, badges)
@@ -158,7 +161,7 @@ SMODS.Joker{
             local targetList = MergeLists(CalcTaggedOwned(card.ability.extra.targetGroup[1]), CalcTaggedOwned(card.ability.extra.targetGroup[2]))
             for index, joker in pairs(targetList) do
                 local ability = context.other_card.ability
-                if ability and ability.extra and type(ability.extra) == "table" and "j_akts_" .. ability.name == joker then
+                if ability and ability.extra and type(ability.extra) == "table" and context.other_card.config.center.key == joker then
                     card.ability.extra.targetRetriggered = true
                     return {
                         message = localize('k_again_ex'),
@@ -307,7 +310,7 @@ SMODS.Joker{
             local targetList = MergeLists(CalcTaggedOwned(card.ability.extra.targetGroup[3]), MergeLists(CalcTaggedOwned(card.ability.extra.targetGroup[1]), CalcTaggedOwned(card.ability.extra.targetGroup[2])))
             for index, joker in pairs(targetList) do
                 local ability = context.other_card.ability
-                if ability and ability.extra and type(ability.extra) == "table" and "j_akts_" .. ability.name == joker then
+                if ability and ability.extra and type(ability.extra) == "table" and context.other_card.config.center.key == joker then
                     card.ability.extra.targetRetriggered = true
                     return {
                         message = localize('k_again_ex'),
@@ -384,6 +387,62 @@ SMODS.Joker{
                     card = context.other_card
                 }
             end
+        end
+    end,
+    set_badges = function(self, card, badges)
+        aktsBadgeHelper(self,card,badges)
+    end
+}
+
+SMODS.Joker{
+    key = 'Nasti',
+    name = 'Nasti',
+    rarity = 3,
+    atlas = 'Jokers',
+	cost = 4,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = false,
+    pos = {x = 5, y = 14},
+    config = { 
+      extra = {
+        moneySpent = 0,
+        moneyThreshold = 15,
+        chipBonus = 0,
+        tagClass = {"Supporter"},
+        tagFaction = {"Rhine", "Columbia"}
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        info_queue[#info_queue+1] = G.P_CENTERS.c_akts_NastiDevice
+        return {vars = {center.ability.extra.moneyThreshold, center.ability.extra.moneySpent, center.ability.extra.chipBonus}}
+    end,
+    add_to_deck = function(self, card, from_debuff)
+        if not from_debuff then
+            local _card = SMODS.create_card({set = 'SummonConsumableType', area = G.consumables, edition = {negative = true}, key = "c_akts_NastiDevice"})
+            _card:add_to_deck()
+            G.consumeables:emplace(_card)
+        end
+    end,
+    calculate = function(self,card,context)
+        if context.money_altered and context.amount < 0 then
+            card.ability.extra.moneySpent = card.ability.extra.moneySpent - context.amount
+            if card.ability.extra.moneySpent >= card.ability.extra.moneySpent then
+                local copies = math.floor(card.ability.extra.moneySpent / card.ability.extra.moneyThreshold)
+                card.ability.extra.moneySpent = card.ability.extra.moneySpent % card.ability.extra.moneyThreshold
+                for i = 1, copies, 1 do
+                    local _card = SMODS.create_card({set = 'SummonConsumableType', area = G.consumables, edition = {negative = true}, key = "c_akts_NastiDevice"})
+                    _card:add_to_deck()
+                    G.consumeables:emplace(_card)
+                end
+            end
+        end
+
+        if context.joker_main and card.ability.extra.chipBonus > 0 then
+            return {
+                chips = card.ability.extra.chipBonus,
+                card = card
+            }
         end
     end,
     set_badges = function(self, card, badges)

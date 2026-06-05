@@ -3,8 +3,6 @@ SMODS.current_mod.reset_game_globals = function(run_start)
     G.AKTS_Globals.burnBurstApplied = false
     G.AKTS_Globals.necrosisElementalInjury = 0
     G.AKTS_Globals.necrosisBurstApplied = false
-    G.AKTS_Globals.bindHandScore = 0
-    G.AKTS_Globals.blindBound = 0
     G.AKTS_Globals.jokerSoldThisRound = false
     G.AKTS_Globals.redMaxChips = 0
     G.AKTS_Globals.CERanks = {}
@@ -14,6 +12,7 @@ SMODS.current_mod.reset_game_globals = function(run_start)
         G.AKTS_Globals.cloneChips = 25
         G.AKTS_Globals.burnBurstFactor = 1
         G.AKTS_Globals.necrassDestroyed = 0
+        G.AKTS_Globals.nastiAntimatterCount = 1
     end
 end
 
@@ -24,9 +23,6 @@ G.AKTS_Globals = {
     burnBurstFactor = 1,
     necrosisElementalInjury = 0,
     necrosisBurstApplied = false,
-    bindHandScoreMultiplier = 0.25,
-    blindBound = 0,
-    bindHandScore = 0,
     yatosSold = 0,
     yatosSoldCondition = 2,
     redMaxChips = 0,
@@ -36,7 +32,8 @@ G.AKTS_Globals = {
     servantMaxCount = 2,
     CERanks = {},
     customPriceSetter = nil,
-    pozemkaCards = { rank = 'Ace', suit = 'Spades' }
+    pozemkaCards = { rank = 'Ace', suit = 'Spades' },
+    nastiAntimatterCount = 1
 }
 
 G.AKTS_Colors = {

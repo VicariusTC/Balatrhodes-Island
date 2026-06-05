@@ -48,7 +48,7 @@ SMODS.Joker{
         --Check for Rhodes Trigger
         if not context.blueprint and (context.post_trigger) and card.ability.extra.maxMultScaleCurrent < card.ability.extra.maxMultScaleRound then --and calcTaggedOwned(card.ability.extra.tagFaction[1])[context.other_joker.name]
             local ownedRhodes = CalcTaggedOwned(card.ability.extra.tagFaction[1])
-            if isInTable('j_akts_' .. context.other_card.ability.name, ownedRhodes) ~= 0 and context.other_card ~= card then
+            if indexOfTable(context.other_card.config.center.key, ownedRhodes) ~= 0 and context.other_card ~= card then
                 card.ability.extra.maxMultScaleCurrent = card.ability.extra.maxMultScaleCurrent + 1
                 card.ability.extra.multStore = card.ability.extra.multStore + card.ability.extra.multScale
                 card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex'), G.C.ATTENTION})
@@ -89,7 +89,7 @@ SMODS.Joker{
     end,
     add_to_deck = function(self, card, from_debuff)
         if not from_debuff and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-            local _card = create_card('SummonConsumableType', G.consumeables, nil, nil, nil, nil, 'c_akts_Mon3tr')
+            local _card = SMODS.create_card({set = 'SummonConsumableType', area = G.consumeables, key = 'c_akts_Mon3tr'})
             _card:add_to_deck()
             G.consumeables:emplace(_card)
             card_eval_status_text(_card, 'extra', nil, nil, nil, {message = localize('akts_plus_Mon3tr'), colour = G.C.PURPLE})
@@ -104,7 +104,7 @@ SMODS.Joker{
 
         if context.setting_blind and context.main_eval and G.GAME.blind and (G.GAME.blind.boss) then
             if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-                local _card = create_card("SummonConsumableType", G.consumeables, nil, nil, nil, nil, 'c_akts_Mon3tr')
+                local _card = SMODS.create_card({set = 'SummonConsumableType', area = G.consumeables, key = 'c_akts_Mon3tr'})
                 _card:add_to_deck()
                 G.consumeables:emplace(_card)
                 card_eval_status_text(_card, 'extra', nil, nil, nil, {message = localize("akts_plus_Mon3tr"), G.C.PURPLE})

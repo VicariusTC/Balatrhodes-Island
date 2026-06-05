@@ -10,7 +10,7 @@
 	"badge_text_colour": "FFFFFF",
 	"icon_path": "modicon.png",
   "display_name": "Balatrhodes",
-	"version": "1.0.1",
+	"version": "1.1.0",
 	"dependencies": [
 			"Steamodded (>=1.0.0~BETA-0711a)",
       "Lovely (>=0.6)"

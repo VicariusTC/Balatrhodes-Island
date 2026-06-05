@@ -399,8 +399,11 @@ return {
                         "to {C:attention}True{} card if poker hand",
                         "contains both a {C:attention}Straight{}",
                         "and a {C:attention}King{}.",
-                        "Creates a {C:spectral}Nearl the Radiant Knight{}",
-                        "Summon when sold.",
+                    },
+                    {
+                        "Can be {C:attention}used{} to create",
+                        "a {C:spectral}Nearl the Radiant Knight{}",
+                        "Summon and {C:attention}remove{} this Joker",
                         "{C:inactive,s:0.8}(Must have room)"
                     }
                 },
@@ -524,11 +527,11 @@ return {
                     {
                         "Randomly applies {C:attention}1{} of the",
                         "following when {C:attention}hand is played{}:",
-                        "{X:attention,C:white}1{} : Enhances leftmost unenhanced ",
+                        "{X:attention,C:white}1:{} Enhances leftmost unenhanced ",
                         "card in played hand to {C:attention}Wild Card{}.",
-                        "{X:attention,C:white}2{} : This Joker's other effect    ",
+                        "{X:attention,C:white}2:{} This Joker's other effect    ",
                         "gains {C:blue}+#3#{} Chips and {C:red}+#4#{} Mult.",
-                        "{X:attention,C:white}3{} : Every played card permanently",
+                        "{X:attention,C:white}3:{} Every played card permanently",
                         "gains {C:blue}+#5#{} Chips when scored."
                     }
                 },
@@ -763,6 +766,17 @@ return {
                 },
             },
 
+            j_akts_Nasti = {
+                name = "Nasti",
+                text = {
+                    {
+                        "Creates 1 {C:dark_edition}Negative Support Device{}",
+                        "when {C:attention}bought {}or after {C:gold}$#1#{} are spent {C:inactive}[$#2#]{}",
+                        "{C:inactive,s:0.8}(Currently{} {C:chips,s:0.8}+#3#{}{C:inactive,s:0.8} Chips)",
+                    },
+                },
+            },
+
             j_akts_Provence = {
                 name = "Provence",
                 text = {
@@ -890,9 +904,9 @@ return {
                         "{C:inactive}(Max. 1 each){}",
                     },
                     {
-                        "{B:1,C:white}1{} : {C:attention}+1{} hand size{C:white}aaaaaaaaa{}",
-                        "{B:2,C:white}2{} : {C:red}+1{} discards per round",
-                        "{B:3,C:white}3{} : {C:hearts}+8{} Mult{C:white}aaaaaaaaaaaaaa{}",
+                        "{B:1,C:white}1:{} {C:attention}+1{} hand size{C:white}aaaaaaaaa{}",
+                        "{B:2,C:white}2:{} {C:red}+1{} discards per round",
+                        "{B:3,C:white}3:{} {C:hearts}+8{} Mult{C:white}aaaaaaaaaaaaaa{}",
                     }
                 },
             },
@@ -1161,6 +1175,22 @@ return {
                     },
                 },
             },
+            c_akts_NastiDevice = {
+                name = "Support Device (Nasti)",
+                text = { 
+                    {
+                        "When used, consumes {C:attention}as many{}",
+                        "{C:dark_edition}Support Devices{} as possible and applies",
+                        "the effect based on the {C:attention}number used{}:",
+                        "{X:attention,C:white}1:{} All owned {C:dark_edition}Nasti{} Jokers permanently give {C:blue}+#1#{} Chips.{C:white}aa{}",
+                        "{X:attention,C:white}2:{} Draw your entire Deck.{C:white}aaaaaaaaaaaaaaaaaaaaaaaaaaa{}",
+                        "Shuffle all cards back into the deck after playing a hand",
+                        "{X:attention,C:white}3:{} Upgrades {C:dark_edition}Edition{} of leftmost owned {C:red}Rhine Lab{} Joker",
+                        "{X:attention,C:white}5:{} {C:attention}+1{} Joker Slot {C:inactive}(once only; {}{C:attention}#2#{}{C:inactive} left){}{C:white}saaaaaaaaaaaaaaaaa{}"
+                    },
+                },
+            },
+
         },
         Enhanced = {
             m_akts_True = {
@@ -1221,6 +1251,12 @@ return {
                     "Loses {C:enhanced}Thunderstruck {}when discarded."
 				},
 			},
+            e_akts_corrupt = {
+				name = "Corrupted",
+				text = {
+					"{X:mult,C:white}X#1#{} Mult",
+                },
+			},
         },
         Blind = {
             bl_akts_renegade = {
@@ -1273,6 +1309,17 @@ return {
                     "Jokers that trigger are",
                     "{C:attention}debuffed{} until {C:attention}next hand",
                     "is played"
+                },
+            },
+            bl_akts_corrupt = {
+                name = "The Corrupting Heart",
+                text = {
+                    "{C:attention}Downgrades {}{C:dark_edition}Edition{} of {C:attention}all{}",
+                    "Jokers {C:attention}adjacent {}to {C:dark_edition}Corrupted{}",
+                    "{C:dark_edition}Edition{} Jokers each hand.",
+                    "If you have none, {C:attention}downgrades{}",
+                    "{C:dark_edition}Edition{} of {C:attention}#1#{} random Jokers.",
+                    "{C:inactive}(Ignores Negative {}{C:dark_edition}Editions{}{C:inactive}){}"
                 },
             },
         },
@@ -1439,7 +1486,6 @@ return {
             akts_no_hp = "No HP!",
             akts_merchant_bye = "NO DP!",
             akts_stunned = "Stunned!",
-            akts_bind_apply = "Bound!",
             akts_downgrade = "Downgrade!",
             akts_crit = "Critical!",
             akts_heal = "Healed!",
@@ -1472,8 +1518,8 @@ return {
 
             akts_silence_immortal = "Immortal!",
 
-            akts_gitano_buff_hand = "+ hand size",
-            akts_gitano_buff_discard = "+ discard",
+            akts_gitano_buff_hand = "+ Hand Size",
+            akts_gitano_buff_discard = "+ Discard",
             akts_gitano_buff_mult = "+ Mult",
             akts_saileach_banner = "For Glory!",
 
@@ -1500,8 +1546,8 @@ return {
         },
         labels = {
             k_akts_transformed = "Awoken",
-            akts_thunderstruck = "Thunderstruck"
+            akts_thunderstruck = "Thunderstruck",
+            akts_corrupt = "Corrupted"
         }
     }
-    
 }

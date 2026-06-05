@@ -192,7 +192,9 @@ SMODS.Joker{
     end,
     calculate = function(self,card,context)
         if not context.blueprint and context.end_of_round and context.cardarea == G.jokers then
-            card.ability.extra.rentalMult = card.ability.extra.rentalMult + 3
+            if card.ability['rental'] then
+                card.ability.extra.rentalMult = card.ability.extra.rentalMult + 3
+            end
             card.ability.extra.destroyCostMult = 0
             card.ability.extra.destroyCostMultiplier = 1
         end
