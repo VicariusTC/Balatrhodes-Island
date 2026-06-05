@@ -8,16 +8,6 @@ local isExcluded = function(card, exclusions)
     return false
 end
 
-local isExcludedCenter = function(card, exclusions)
-    if not exclusions or #exclusions == 0 then return false end
-    for _, ex in ipairs(exclusions) do
-        if ex == card or (card.config and card.config.extra and ex == card.config.extra.transformLink) then
-            return true
-        end
-    end
-    return false
-end
-
 CalcTaggedListHelper = function(Tag, abilityExtra)
     if not abilityExtra.tagFaction then
         return false
@@ -49,7 +39,7 @@ CalcTaggedOwned = function(tag, exclusions)
         local ability = card.ability
         if ability and ability.extra and type(ability.extra) == "table" and CalcTaggedListHelper(tag, ability.extra) then
             if not isExcluded(card, exclusions) then
-                table.insert(found, "j_akts_" .. ability.name)
+                table.insert(found, card.config.center.key)
             end
         end
     end
@@ -91,7 +81,7 @@ CalcTaggedOwnedPos = function(Tag, exclusions)
         local ability = card.ability
         if ability and (ability.extra and type(ability.extra) == "table" and CalcTaggedListHelper(Tag, ability.extra)) then
             if not isExcluded(card, exclusions) then
-                table.insert(found, {"j_akts_" .. card.ability.name, _})
+                table.insert(found, {card.config.center.key, _})
             end
         end
     end
@@ -131,13 +121,6 @@ CalcTagged = function(Tag,exclusions)
     end
 
     return pool
-end    
-
-local calcTaggedTitleHelper = function(card, Tag)
-    if card.config and (card.config.extra and type(card.config.extra) == "table" and card.config.extra[Tag]) then
-        return true
-    end
-    return false
 end    
 
 local calcTaggedTitleHelper = function(card, Tag)
@@ -187,17 +170,17 @@ CalcTaggedRarity = function(Rarity)
     return pool
 end
 
-CalcNamedConsumableOwned = function (name)
-    local pool = {}
+CalcNamedConsumableOwned = function (key)
+    local count = 0
     if not G.consumeables or not G.consumeables.cards then
-        return pool
+        return count
     end
     for k, consumables in pairs(G.consumeables.cards) do
-        if consumables.ability.name == name then
-            table.insert(pool, k)
+        if consumables.ability.name == key then
+            count = count + 1
         end
     end
-    return pool
+    return count
 end
 
 CalcOwnedMissingSellValue = function ()

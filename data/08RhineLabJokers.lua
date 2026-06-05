@@ -7,8 +7,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = true, 
     blueprint_compat = true,
-    eternal_compat = true,
-    perishable_compat = true,
     pos = {x = 0, y = 14}, 
     config = { 
       extra = {
@@ -24,7 +22,7 @@ SMODS.Joker{
         return {vars = {center.ability.extra.multScaleFirst, center.ability.extra.multScaleSecond, center.ability.extra.multScaleThird, center.ability.extra.multStorage}}
     end,
     calculate = function(self,card,context)
-        if context.cardarea == G.jokers and context.scoring_hand then
+        if not context.blueprint and context.cardarea == G.jokers and context.scoring_hand then
             if context.before and #context.scoring_hand > 0 and context.scoring_hand[1].config.center ~= G.P_CENTERS.c_base then
                 card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex'), G.C.MULT})
                 local foundEnhancement = context.scoring_hand[1].config.center
@@ -60,23 +58,20 @@ SMODS.Joker{
     unlocked = true, 
     discovered = true, 
     blueprint_compat = true,
-    eternal_compat = true,
-    perishable_compat = true,
     pos = {x = 1, y = 14}, 
     config = { 
       extra = {
         healAmount = 1,
+        planetMultiplier = 2,
         planetEdition = {negative = true},
-        aktsSettingPrice = false,
-        aktsNewSellPrice = 0,
         tagClass = {"Defender"},
         tagFaction = {"Rhine", "Columbia"}
       }
     },
     loc_vars = function(self,info_queue,center)
-        info_queue[#info_queue+1] = {set = 'Other', key = "edition_negative_consumable"}
+        info_queue[#info_queue + 1] = { key = 'e_negative_consumable', set = 'Edition', config = { extra = 1 } }
         info_queue[#info_queue+1] = {set = 'Other', key = "Heal"}
-        return {vars = {center.ability.extra.healAmount, CalcPlanetsMult()}}
+        return {vars = {center.ability.extra.healAmount, center.ability.extra.planetMultiplier * CalcPlanetsMult()}}
     end,
     add_to_deck = function(self, card, from_debuff)
         for k, consumables in pairs(G.consumeables.cards) do
@@ -111,10 +106,13 @@ SMODS.Joker{
         end
 
         if context.joker_main then
-            return {
-			    mult = CalcPlanetsMult(),
-                card = card
-		    }
+            local returnMult = card.ability.extra.planetMultiplier * CalcPlanetsMult()
+            if returnMult > 0 then
+                return {
+			        mult = card.ability.extra.planetMultiplier * CalcPlanetsMult(),
+                    card = card
+		        }
+            end
         end
     end,
     set_badges = function(self, card, badges)
@@ -131,8 +129,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = true, 
     blueprint_compat = false,
-    eternal_compat = true, 
-    perishable_compat = true,
     no_pool_flag = 'akts_silence_transform',
     pos = {x = 2, y = 14},
     config = { 
@@ -143,8 +139,6 @@ SMODS.Joker{
         retriggerCount = 1,
         healAmount = 3,
         healApplied = false,
-        aktsSettingPrice = false,
-        aktsNewSellPrice = 0,
         transformCondCurrent = 0,
         transformCond = 15,
         transformLink = "j_akts_SilenceAlter",
@@ -167,7 +161,7 @@ SMODS.Joker{
             local targetList = MergeLists(CalcTaggedOwned(card.ability.extra.targetGroup[1]), CalcTaggedOwned(card.ability.extra.targetGroup[2]))
             for index, joker in pairs(targetList) do
                 local ability = context.other_card.ability
-                if ability and ability.extra and type(ability.extra) == "table" and "j_akts_" .. ability.name == joker then
+                if ability and ability.extra and type(ability.extra) == "table" and context.other_card.config.center.key == joker then
                     card.ability.extra.targetRetriggered = true
                     return {
                         message = localize('k_again_ex'),
@@ -206,9 +200,7 @@ SMODS.Joker{
 	cost = 8,
     unlocked = true,
     discovered = false,
-    blueprint_compat = true,
-    eternal_compat = true,
-    perishable_compat = true,
+    blueprint_compat = false,
     pos = {x = 3, y = 14},
     config = { 
       extra = {
@@ -220,8 +212,6 @@ SMODS.Joker{
         chipStorage = 0,
         undebuffCount = 1,
         enhanceChoice = {polychrome = true},
-        aktsSettingPrice = false,
-        aktsNewSellPrice = 0,
         tagClass = {"Supporter", "Medic"},
         tagFaction = {"Rhine", "Columbia"}
       }
@@ -320,7 +310,7 @@ SMODS.Joker{
             local targetList = MergeLists(CalcTaggedOwned(card.ability.extra.targetGroup[3]), MergeLists(CalcTaggedOwned(card.ability.extra.targetGroup[1]), CalcTaggedOwned(card.ability.extra.targetGroup[2])))
             for index, joker in pairs(targetList) do
                 local ability = context.other_card.ability
-                if ability and ability.extra and type(ability.extra) == "table" and "j_akts_" .. ability.name == joker then
+                if ability and ability.extra and type(ability.extra) == "table" and context.other_card.config.center.key == joker then
                     card.ability.extra.targetRetriggered = true
                     return {
                         message = localize('k_again_ex'),
@@ -350,8 +340,6 @@ SMODS.Joker{
     unlocked = true,
     discovered = true,
     blueprint_compat = true,
-    eternal_compat = true,
-    perishable_compat = true,
     pos = {x = 4, y = 14}, 
     config = { 
       extra = {
@@ -372,17 +360,20 @@ SMODS.Joker{
     end,
     calculate = function(self,card,context)
         if context.joker_main then
+            local scoreMultiplier = ((G.GAME.hands[card.ability.extra.handTypes[1]].played + G.GAME.hands[card.ability.extra.handTypes[2]].played) or 0) * card.ability.extra.multFactor
             if not G.AKTS_Globals.burnBurstApplied then
-                local addedElemInj = ((G.GAME.hands[card.ability.extra.handTypes[1]].played + G.GAME.hands[card.ability.extra.handTypes[2]].played) or 0) * card.ability.extra.burnFactor
-                calculateElemInjury(card, 'Burn', addedElemInj)
-                card_eval_status_text(card, 'extra', nil, nil, nil, {message = elemBurstChangeText(addedElemInj), G.C.ATTENTION})
+                if scoreMultiplier > 0 then
+                    local addedElemInj = ((G.GAME.hands[card.ability.extra.handTypes[1]].played + G.GAME.hands[card.ability.extra.handTypes[2]].played) or 0) * card.ability.extra.burnFactor
+                    calculateElemInjury(card, 'Burn', addedElemInj)
+                    card_eval_status_text(card, 'extra', nil, nil, nil, {message = elemBurstChangeText(addedElemInj), G.C.ATTENTION})
+                end
             elseif next(context.poker_hands[card.ability.extra.handTypes[2]]) and not context.blueprint then
                 card.ability.extra.multFactor = card.ability.extra.multFactor + card.ability.extra.multFactorScale
                 card.ability.extra.burnFactor = card.ability.extra.burnFactor + card.ability.extra.burnFactorScale
                 card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex'), G.C.MULT})
             end
             return {
-			    mult = ((G.GAME.hands[card.ability.extra.handTypes[1]].played + G.GAME.hands[card.ability.extra.handTypes[2]].played) or 0) * card.ability.extra.multFactor,
+			    mult = scoreMultiplier,
                 card = card
 		    }
         end
@@ -396,6 +387,62 @@ SMODS.Joker{
                     card = context.other_card
                 }
             end
+        end
+    end,
+    set_badges = function(self, card, badges)
+        aktsBadgeHelper(self,card,badges)
+    end
+}
+
+SMODS.Joker{
+    key = 'Nasti',
+    name = 'Nasti',
+    rarity = 3,
+    atlas = 'Jokers',
+	cost = 4,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = false,
+    pos = {x = 5, y = 14},
+    config = { 
+      extra = {
+        moneySpent = 0,
+        moneyThreshold = 15,
+        chipBonus = 0,
+        tagClass = {"Supporter"},
+        tagFaction = {"Rhine", "Columbia"}
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        info_queue[#info_queue+1] = G.P_CENTERS.c_akts_NastiDevice
+        return {vars = {center.ability.extra.moneyThreshold, center.ability.extra.moneySpent, center.ability.extra.chipBonus}}
+    end,
+    add_to_deck = function(self, card, from_debuff)
+        if not from_debuff then
+            local _card = SMODS.create_card({set = 'SummonConsumableType', area = G.consumables, edition = {negative = true}, key = "c_akts_NastiDevice"})
+            _card:add_to_deck()
+            G.consumeables:emplace(_card)
+        end
+    end,
+    calculate = function(self,card,context)
+        if context.money_altered and context.amount < 0 then
+            card.ability.extra.moneySpent = card.ability.extra.moneySpent - context.amount
+            if card.ability.extra.moneySpent >= card.ability.extra.moneySpent then
+                local copies = math.floor(card.ability.extra.moneySpent / card.ability.extra.moneyThreshold)
+                card.ability.extra.moneySpent = card.ability.extra.moneySpent % card.ability.extra.moneyThreshold
+                for i = 1, copies, 1 do
+                    local _card = SMODS.create_card({set = 'SummonConsumableType', area = G.consumables, edition = {negative = true}, key = "c_akts_NastiDevice"})
+                    _card:add_to_deck()
+                    G.consumeables:emplace(_card)
+                end
+            end
+        end
+
+        if context.joker_main and card.ability.extra.chipBonus > 0 then
+            return {
+                chips = card.ability.extra.chipBonus,
+                card = card
+            }
         end
     end,
     set_badges = function(self, card, badges)

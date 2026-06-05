@@ -151,3 +151,56 @@ SMODS.Enhancement {
         end
     end
 }
+
+SMODS.Enhancement {
+    key = "BloodAmber",
+    atlas = 'AKEnhancements',
+    pos = {
+        x = 3,
+        y = 0
+    },
+    order = 1,
+    no_rank = true,
+    no_suit = true,
+    always_scores = true,
+    replace_base_card = true,
+    weight = 0,
+    in_pool = function(self, args) return false end,
+    config = { bonus = -50 },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.bonus } }
+    end,
+    calculate = function(self, card, context)
+        if context.cardarea == G.play and context.main_scoring then
+            SMODS.destroy_cards(card, true, false, false)
+        end
+    end
+}
+
+SMODS.Enhancement {
+    key = "Revenant",
+    atlas = 'AKEnhancements',
+    pos = {
+        x = 4,
+        y = 0
+    },
+    order = 1,
+    any_suit = true,
+    weight = 0,
+    in_pool = function(self, args) return false end,
+    config = { 
+        Xmult = 3,
+        extra = {
+            previousEnhancement = "c_base",
+            round = 0,
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.Xmult } }
+    end,
+    calculate = function(self, card, context)
+        if context.end_of_round or (context.hand_drawn and not (G.GAME.blind or G.GAME.round ~= card.ability.extra.round)) then
+            card:set_ability(card.ability.extra.previousEnhancement)
+        end
+    end
+}

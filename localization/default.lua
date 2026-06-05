@@ -15,7 +15,7 @@ return {
                         "another {C:red}Rhodes Island{}",
                         "Joker triggers.",
                         "(Up to {C:attention}#3#{} times a round)",
-                        "{C:inactive,s:0.8}Currently{} {C:red,s:0.8}+#2#{} {C:inactive,s:0.8}Mult.",
+                        "{C:inactive,s:0.8}(Currently{} {C:red,s:0.8}+#2#{} {C:inactive,s:0.8}Mult)",
                     }
                 },
             },
@@ -141,7 +141,7 @@ return {
                     {
                         "{C:attention}Stone Cards'{} rank is treated as",
                         "the {C:attention}most common rank{} held in hand.",
-                        "{C:inactive}(Currently {C:attention}#1#{}{C:inactive}.)",
+                        "{C:inactive}(Currently {C:attention}#1#{}{C:inactive})",
                     },
                     {
                         "Every {C:attention}#2#{} {C:inactive}[#3#]{} times cards are drawn,",
@@ -151,13 +151,52 @@ return {
                 },      
             },
 
+            j_akts_Civilight = {
+                name = "Civilight Eterna",
+                text = {
+                    {
+                        "Adds {C:attention}#1#{} unenhanced cards with",
+                        "{C:attention}Red Seal{} to deck when obtained.",
+                    },
+                    {
+                        "Balances out {C:attention}ranks{} of all scored cards",
+                        "by {C:attention}#2#{} when scoring a card with a {C:attention}Red Seal{}.",
+                    },
+                    {
+                        "Balance {C:chips}Chips{} and {C:mult}Mult{} by {C:attention}#3#%{} when",
+                        "scoring a card with a {C:attention}Red Seal{}."
+                    }
+                },
+            },
+
+            j_akts_Pozemka = {
+                name = "Pozemka",
+                text = {
+                    {
+                        "Gains {X:mult,C:white}X#2#{} Mult during this hand",
+                        "for each {C:attention}#5#{} card in scored hand.",
+                    },
+                    {
+                        "Gains {X:mult,C:white}X#1#{} Mult during this hand",
+                        "for each {C:attention}#4#{} in scored hand.",
+                    },
+                    {
+                        "Gains the Mult {C:attention}permanently{} for each",
+                        "{C:attention}#4#{} of {C:attention}#5#{} in scored hand.",
+                        "suit and rank changes every round",
+                        "{C:inactive,s:0.8}(Currently{} {X:mult,C:white,s:0.8}X#3#{} {C:inactive,s:0.8}Mult)",
+
+                    }
+                },
+            },
+
             j_akts_Logos = {
                 name = "Logos",
                 text = {
                     {
                         "{C:mult}+#7#{} Mult for {C:attention}each unique rank",
                         "that was scored this round.",
-                        "{C:inactive}(Currently{} {C:mult}+#8#{} {C:inactive}Mult)"
+                        "{C:inactive,s:0.8}(Currently{} {C:mult,s:0.8}+#8#{} {C:inactive,s:0.8}Mult)"
                     },
                     {
                         "Immediately {C:attention}win the Blind",
@@ -170,7 +209,7 @@ return {
                         "{C:attention}-#2#{} hand size for",
                         "every {C:attention}#3#{} {C:inactive}[#4#]{} times this",
                         "Joker's effect wins a blind.",
-                        "{C:inactive}Currently{} {C:attention}#5#{} {C:inactive}hand size.{}"
+                        "{C:inactive}(Currently{} {C:attention}#5#{} {C:inactive}hand size){}"
                     },
                 },
             },
@@ -239,7 +278,7 @@ return {
                         "Creates an unowned {C:red}Aegir{}",
                         "Joker every {C:attention}#1# Flushes{} played",
                         "{C:inactive,s:0.8}(Must have room)",
-                        "{C:inactive,s:0.8}Currently{} {C:green,s:0.8}#2#{} {C:inactive,s:0.8}out of{} {C:green,s:0.8}#1#{} {C:inactive,s:0.8}played."                  
+                        "{C:inactive,s:0.8}(Currently{} {C:green,s:0.8}#2#{} {C:inactive,s:0.8}out of{} {C:green,s:0.8}#1#{} {C:inactive,s:0.8}played)"
                     },
                     {
                         "Scoring {C:attention}#3#s{} in {C:attention}Flushes{} are.",
@@ -254,7 +293,7 @@ return {
                         "{C:attention}+#1#{} hand size per",
                         "{C:red}Abyssal Hunter{} Joker",
                         "owned.",
-                        "{C:inactive,s:0.8}Currently{} {C:attention,s:0.8}+#2#{} {C:inactive,s:0.8}hand size.",               
+                        "{C:inactive,s:0.8}(Currently{} {C:attention,s:0.8}+#2#{} {C:inactive,s:0.8}hand size)",
                     },
                     {
                         "Gains {X:mult,C:white}X#3#{} Mult per",
@@ -262,7 +301,7 @@ return {
                         "owned and an additional",
                         "{X:mult,C:white}X#4#{} Mult if you own {C:attention}#5#+",
                         "{C:red}Abyssal Hunter{} Jokers.",
-                        "{C:inactive,s:0.8}Currently{} {X:mult,C:white,s:0.8}X#6#{} {C:inactive,s:0.8}Mult.",     
+                        "{C:inactive,s:0.8}(Currently{} {X:mult,C:white,s:0.8}X#6#{} {C:inactive,s:0.8}Mult)",
                     }
                 },
             },
@@ -306,7 +345,7 @@ return {
                         "{C:blue}+#2#{} Chips if less than",
                         "{C:attention}#3#%{} of blind requirement",
                         "is fulfilled.",
-                        "{C:inactive}Currently {}{C:blue}+#4# {C:inactive}Chips.{}",     
+                        "{C:inactive}(Currently {}{C:blue}+#4# {C:inactive}Chips){}",
                     }
                 },
             },
@@ -325,7 +364,7 @@ return {
                         "Gains {C:blue}+#3#{} Chips each",
                         "time a {C:attention}Steel{} or",
                         "{C:attention}Gold Card is scored.",
-                        "{C:inactive}(Currently {}{C:blue}+#4# {C:inactive}Chips.){}",
+                        "{C:inactive}(Currently {}{C:blue}+#4# {C:inactive}Chips){}",
                     },
                     --[[
                     {
@@ -360,8 +399,11 @@ return {
                         "to {C:attention}True{} card if poker hand",
                         "contains both a {C:attention}Straight{}",
                         "and a {C:attention}King{}.",
-                        "Creates a {C:spectral}Nearl the Radiant Knight{}",
-                        "Summon when sold.",
+                    },
+                    {
+                        "Can be {C:attention}used{} to create",
+                        "a {C:spectral}Nearl the Radiant Knight{}",
+                        "Summon and {C:attention}remove{} this Joker",
                         "{C:inactive,s:0.8}(Must have room)"
                     }
                 },
@@ -392,6 +434,22 @@ return {
                     {
                         "{C:inactive}Reverts into Mlynar{}",
                         "{C:inactive}in{} {C:attention}#4#{}{C:inactive} hand(s).",
+                    }
+                },
+            },
+
+            j_akts_Gravel = {
+                name = "Gravel",
+                text = {
+                    {
+                        "{X:attention,C:white,s:1.25}Fast Redeploy",
+                        "Each scored card gives {C:chips}+#1#{} chips",
+                        "if the {C:attention}combined{} ranks of all",
+                        "scored cards is {C:attention}#2# or less{}.",
+                    },
+                    {
+                        "{C:attention}+#3#{} hand size until {C:attention}first hand{} is",
+                        "played after obtaining this Joker.",
                     }
                 },
             },
@@ -444,7 +502,7 @@ return {
                         "blind requirement has not",
                         "been met, otherwise",
                         "{C:attention}stores{} that Mult. {C:inactive}(Max. #2# times){}",
-                        "{C:inactive}Currently{} {C:green}#3#{} {C:inactive}stored.{}",
+                        "{C:inactive}(Currently{} {C:green}#3#{} {C:inactive}stored){}",
                     },
                     {
                         "During {C:attention}Small Blind{} or",
@@ -469,11 +527,11 @@ return {
                     {
                         "Randomly applies {C:attention}1{} of the",
                         "following when {C:attention}hand is played{}:",
-                        "{X:attention,C:white}1{} : Enhances leftmost unenhanced ",
+                        "{X:attention,C:white}1:{} Enhances leftmost unenhanced ",
                         "card in played hand to {C:attention}Wild Card{}.",
-                        "{X:attention,C:white}2{} : This Joker's other effect    ",
+                        "{X:attention,C:white}2:{} This Joker's other effect    ",
                         "gains {C:blue}+#3#{} Chips and {C:red}+#4#{} Mult.",
-                        "{X:attention,C:white}3{} : Every played card permanently",
+                        "{X:attention,C:white}3:{} Every played card permanently",
                         "gains {C:blue}+#5#{} Chips when scored."
                     }
                 },
@@ -503,7 +561,7 @@ return {
                         "Retriggers {C:attention}all scored cards{}.",
                         "Retriggers them {C:attention}an additional time{}",
                         "for each {C:green}Sniper{} Joker owned",
-                        "{C:inactive} (Currently{C:green} #1#{}{C:inactive} owned.)",
+                        "{C:inactive} (Currently{C:green} #1#{}{C:inactive} owned)",
                     },
                     {
                         "Played cards have a {C:green}#5# in #2#{} chance",
@@ -547,6 +605,49 @@ return {
                 },
             },
 
+            j_akts_Executor = {
+                name = "Executor",
+                text = {
+                    {
+                        "Enhances rightmost unenhanced",
+                        "scored card to {C:attention}Glass Card{}",
+                        "until after scoring if poker hand",
+                        "is a {C:attention}Three of a Kind{}",
+                        "{C:green}#1# in #2#{} chance for this effect",
+                        "to enhance {C:attention}two{} cards instead.",
+                    },
+                    {
+                        "Transforms into",
+                        "{C:spectral}Executor the Ex Foedere{}",
+                        "after using 1 each of",
+                        "{C:tarot}Justice, Judgement{} and {C:tarot}Emperor{}",
+                        "Tarot cards. {C:inactive}(#3# of 3 used.)"
+                    }
+                },
+            },
+
+            j_akts_ExecutorAlter = {
+                name = "Executor the Ex Foedere",
+                text = {
+                    {
+                        "{C:attention}Ammo{} {C:inactive}[#1#]{}: When a {C:attention}Glass Card{} is",
+                        "destroyed while scoring, each",
+                        "other scoring card permanently",
+                        "gains {C:mult}+#3#{} Mult when scored."
+                    },
+                    {
+                        "Enhances rightmost unenhanced",
+                        "scored card to {C:attention}Glass Card{}",
+                        "until after scoring if poker hand",
+                        "is a {C:attention}Three/Four/Five of a Kind{}",
+                        "{C:green}#4#%{} chance for this effect",
+                        "to enhance {C:attention}all{} scored cards instead.",
+                        "{C:inactive,s:0.8}(Chance increases by {}{C:green,s:0.8}#5#%{} {C:inactive,s:0.8}each time",
+                        "{C:inactive,s:0.8} ammo is used.)"
+                    }
+                },
+            },
+
             j_akts_Surfer = {
                 name = "Surfer",
                 text = {
@@ -573,7 +674,7 @@ return {
                         "{C:attention}scored card{} has the {C:attention}same enhancement{},",
                         "then gains {C:mult}+#3#{} Mult if the {C:attention}third",
                         "{C:attention}scored card{} has the {C:attention}same enhancement{}.",
-                        "{C:inactive,s:0.8}(Currently {}{C:mult,s:0.8}+#4#{}{C:inactive,s:0.8} Mult.)"
+                        "{C:inactive,s:0.8}(Currently {}{C:mult,s:0.8}+#4#{}{C:inactive,s:0.8} Mult)"
                     },
                 },
             },
@@ -585,10 +686,10 @@ return {
                         "gain {C:dark_edition}Negative{}.",
                     },
                     {
-                        "Gives {C:mult}Mult{} equal to the amount",
+                        "Gives {C:mult}Mult{} equal to double the amount",
                         "of Mult on all {C:planet}Planet{} cards",
                         "held in hand.",
-                        "{C:inactive}(Currently {}{C:red}+#2#{} {C:inactive}Mult.{})"
+                        "{C:inactive}(Currently {}{C:red}+#2#{} {C:inactive}Mult)"
                     },
                     {
                         "{C:attention}Heals{} all Jokers by {C:green}#1#",
@@ -665,6 +766,17 @@ return {
                 },
             },
 
+            j_akts_Nasti = {
+                name = "Nasti",
+                text = {
+                    {
+                        "Creates 1 {C:dark_edition}Negative Support Device{}",
+                        "when {C:attention}bought {}or after {C:gold}$#1#{} are spent {C:inactive}[$#2#]{}",
+                        "{C:inactive,s:0.8}(Currently{} {C:chips,s:0.8}+#3#{}{C:inactive,s:0.8} Chips)",
+                    },
+                },
+            },
+
             j_akts_Provence = {
                 name = "Provence",
                 text = {
@@ -711,7 +823,105 @@ return {
                     {
                         "{C:mult}+#2#{} Mult for each {C:money}${} of {C:attention}sell value",
                         "that is missing from all owned Jokers.",
-                        "{C:inactive,s:0.8}(Currently{} {C:mult,s:0.8}+#3#{}{C:inactive,s:0.8} Mult.)"
+                        "{C:inactive,s:0.8}(Currently{} {C:mult,s:0.8}+#3#{}{C:inactive,s:0.8} Mult)"
+                    }
+                },
+            },
+            
+            j_akts_Kichisei = {
+                name = "Kichisei",
+                text = {
+                    {
+                        "{C:chips}+#1#{} Chips for each {C:attention}suit{} that scored ",
+                        "a {C:attention}Flush{} this round.",
+                        "{C:inactive,s:0.8}(Currently{} {C:chips,s:0.8}+#2#{}{C:inactive,s:0.8} Chips)",
+                    }
+                },
+            },
+
+            j_akts_Leizi = {
+                name = "Leizi",
+                text = {
+                    {
+                        "If the card to the {C:attention}right{} of a {C:attention}scored",
+                        "{C:attention}enhanced card{} is unenhanced, {C:attention}move{}",
+                        "that enhancement to card to the right.",
+                        "{C:inactive}(Triggers up to twice per hand){}",
+                    },
+                    {
+                        "Transforms into",
+                        "{C:spectral}Leizi the Thunderbringer{}",
+                        "after this effect triggers {C:attention}#1#{} {C:inactive}[#2#]{} times.",
+                    }
+                },
+            },
+
+            j_akts_LeiziAlter = {
+                name = "Leizi the Thunderbringer",
+                text = {
+                    {
+                        "If the card to the {C:attention}right{} of a {C:attention}scored",
+                        "{C:attention}enhanced card{} is unenhanced, {C:attention}move{}",
+                        "that enhancement to card to the right",
+                        "and gives {C:mult}+#1#{} Mult for {C:attention}each time{} this",
+                        "Joker moved an enhancement {C:attention}this hand{}"
+                    },
+                    {
+                        "Gives {C:attention}rightmost {}scoring unenhanced card",
+                        "{C:dark_edition}Thunderstruck{} when {C:attention}moving{} an {C:enhanced}Enhancement{}",
+                        "to it and this Joker {C:attention}moved{} at least",
+                        "{C:attention}#2#{} {C:enhanced}Enhancements{} this hand."
+                    }
+                },
+            },
+
+            j_akts_SwireAlter = {
+                name = "Swire the Elegant Wit",
+                text = {
+                    {
+                        "{X:money,C:white,s:1.25}Merchant",
+                        "Can spend {C:money}$#1#{} to destroy {C:attention}1{}",
+                        "selected card. {C:inactive}(Doubles cost when applied",
+                        "{C:inactive}and resets at end of round)"
+                    },
+                    {
+                        "Gives {C:mult}Mult{} equal to the {C:attention}total{} amount",
+                        "this Joker's Rental Tag spent and",
+                        "the amount of {C:money}money{} this Joker's",
+                        "other ability spent {C:attention}this round{}.",
+                        "{C:inactive,s:0.8}(Currently{} {C:mult,s:0.8}+#2#{}{C:inactive,s:0.8} Mult)"
+                    }
+                },
+            },
+
+            j_akts_Gitano = {
+                name = "Gitano",
+                text = {
+                    {
+                        "Gains {C:attention}1{} of these effects",
+                        "{C:attention}permanently{} when bought or when",
+                        "using {C:attention}High Priestess{} {C:tarot}Tarot{} card",
+                        "{C:inactive}(Max. 1 each){}",
+                    },
+                    {
+                        "{B:1,C:white}1:{} {C:attention}+1{} hand size{C:white}aaaaaaaaa{}",
+                        "{B:2,C:white}2:{} {C:red}+1{} discards per round",
+                        "{B:3,C:white}3:{} {C:hearts}+8{} Mult{C:white}aaaaaaaaaaaaaa{}",
+                    }
+                },
+            },
+
+            j_akts_Conviction = {
+                name = "Conviction",
+                text = {
+                    {
+                        "{C:mult}+#1#{} Mult",
+                        "{C:green}#2# in #4#{} chance to give {C:mult}+#5#{} Mult instead"
+                    },
+                    {
+                        "{C:green}#2# in #3#{} chance to be debuffed",
+                        "until {C:attention}start of next round{} when",
+                        "{C:attention}Blind{} is selected"
                     }
                 },
             },
@@ -761,7 +971,7 @@ return {
                         "{X:attention,C:white,s:1.25}Fast Redeploy",
                         "Creates a {C:spectral}Clone{} Summon",
                         "when obtained or when",
-                        "{C:tarot}Death Tarot Card{} is used. {C:inactive}(Max. #1#){}",
+                        "using {C:attention}Death{} {C:tarot}Tarot{} card {C:inactive}(Max. #1#){}",
                         "{C:inactive,s:0.8}(Must have room)",
                     },
                     {
@@ -786,6 +996,50 @@ return {
                         "Chips {C:chips}equal to #3# times",
                         "{C:chips}its rank{} instead.",
                     }
+                },
+            },
+
+            j_akts_Saileach = {
+                name = "Saileach",
+                text = {
+                    {
+                        "Creates a {C:dark_edition}Negative{} {C:attention}Eternal{}",
+                        "{C:spectral}Banner{} when obtained.",
+                    },
+                    {
+                        "When playing hand with {C:attention}0{} discards",
+                        "remaining, {C:attention}debuffs{} leftmost undebuffed",
+                        "{C:spectral}Banner{} until End of Ante, then",
+                        "this Joker gives {C:money}$#1#{} and {C:chips}+#2#{} chips",
+                        "each time a Joker triggers or a card is",
+                        "scored this hand. {C:inactive}(except itself){}"
+                    },
+                    {
+                        "Removes 1 {C:dark_edition}Negative{} {C:attention}Eternal{} {C:spectral}Banner",
+                        "from Jokers when sold or destroyed."
+                    }
+                },
+            },
+
+            j_akts_Rockrock = {
+                name = "Rockrock",
+                text = {
+                    {
+                        "Each card in your {C:attention}most played",
+                        "{C:attention}hand{} gives {C:red}+#2#{} Mult when scored.",
+                        ""
+                    },
+                    {
+                        "{X:red,C:white}Overload:{} Until the end of this",
+                        "round or until this ability is cancelled,",
+                        "each card in your {C:attention}most played",
+                        "{C:attention} hand{} gives {C:red}Mult{} equal to the number",
+                        "of times that {C:attention}poker hand{} has",
+                        "been played this run.",
+                        "This Joker is {C:attention}disabled{} for 1 hand for",
+                        "every hand played while {X:red,C:white}Overload{} was",
+                        "active afterwards {C:inactive}[#1#]{}",
+                    },
                 },
             },
 
@@ -817,6 +1071,11 @@ return {
                         "you dont own a {C:spectral}Necrass Joker{}.",
                     },
                     {
+                        "If you own another {C:spectral}Servant of Lamentation{}",
+                        "that has been upgraded {C:attention}#7# times",
+                        "{C:attention}fuses{} into a {C:spectral}Special Form{} with it.",
+                    },
+                    {
                         "{C:chips}+#1#{} Chips and {C:mult}+#2#{} Mult.",
                         "{X:attention,C:white}Upgrade 1:{} {C:chips}+#3#{} Chips for every",
                         "Joker destroyed by a {C:spectral}Necrass{}",
@@ -826,11 +1085,6 @@ return {
                         "{X:attention,C:white}Upgrade 2:{} Earn {C:money}$#6#{} when",
                         "another Joker is {C:attention}destroyed{}.",
                     },
-                    {
-                        "{X:attention,C:white}Upgrade 3:{} If you own another",
-                        "fully upgraded {C:spectral}Servant of Lamentation{}",
-                        "{C:attention}fuses{} into a {C:spectral}Special Form{} with it.",
-                    }
                 },
             },
 
@@ -853,6 +1107,29 @@ return {
                         "Creates a {C:attention}debuffed{} {C:dark_edition}Negative{}",
                         "{C:spectral}Joker{} at end of round",
                         "after this Joker has been upgraded {C:attention}#5# times{}."
+                    }
+                },
+            },
+
+            j_akts_Walter = {
+                name = "Wis'adel",
+                text = {
+                    {
+                        "Enhances {C:attention}#1#{} random cards in",
+                        "Deck to {C:attention}Revenant Cards{} when",
+                        "Blind is selected.",
+                    },
+                    {
+                        "Applies {C:chips}Chips{} from hands played",
+                        "that contain {C:attention}Revenant Cards{} to each",
+                        "blind of the ante.",
+                    },
+                    {
+                        "{X:red,C:white}Overload:{} Enhances up to {C:attention}#2#{} random",
+                        "unenhanced cards held in hand",
+                        "to undebuffable {C:attention}Revenant Cards{},",
+                        "but enhances {C:attention}#3#{} less card to",
+                        "{C:attention}Revenant Card{} next round"
                     }
                 },
             },
@@ -898,6 +1175,22 @@ return {
                     },
                 },
             },
+            c_akts_NastiDevice = {
+                name = "Support Device (Nasti)",
+                text = { 
+                    {
+                        "When used, consumes {C:attention}as many{}",
+                        "{C:dark_edition}Support Devices{} as possible and applies",
+                        "the effect based on the {C:attention}number used{}:",
+                        "{X:attention,C:white}1:{} All owned {C:dark_edition}Nasti{} Jokers permanently give {C:blue}+#1#{} Chips.{C:white}aa{}",
+                        "{X:attention,C:white}2:{} Draw your entire Deck.{C:white}aaaaaaaaaaaaaaaaaaaaaaaaaaa{}",
+                        "Shuffle all cards back into the deck after playing a hand",
+                        "{X:attention,C:white}3:{} Upgrades {C:dark_edition}Edition{} of leftmost owned {C:red}Rhine Lab{} Joker",
+                        "{X:attention,C:white}5:{} {C:attention}+1{} Joker Slot {C:inactive}(once only; {}{C:attention}#2#{}{C:inactive} left){}{C:white}saaaaaaaaaaaaaaaaa{}"
+                    },
+                },
+            },
+
         },
         Enhanced = {
             m_akts_True = {
@@ -929,7 +1222,107 @@ return {
                     "triggers {C:attention}#2#{} times."
                 },
             },
+            m_akts_BloodAmber = {
+                name = "Blood Amber",
+                text = {
+                    "{C:blue}#1#{} Chips",
+                    "no rank or suit",
+                    "{C:attention}Destroys{} self after being played."
+                }
+            },
+            m_akts_Revenant = {
+                name = "Revenant Card",
+                text = {
+                    "{X:mult,C:white} X#1# {} Mult",
+                    "Can be used as any suit.",
+                    "Reverts at end of round."
+                }
+            },
         },  
+        Edition = {
+            e_akts_thunderstruck = {
+				name = "Thunderstruck",
+				text = {
+					"{C:attention}Destroyed {}when scored, then {C:attention}moves {}",
+                    "{C:enhanced}Enhancement{} and {C:dark_edition}Edition{} of this",
+                    "card to the left until there is an",
+                    "{C:enhanced}Enhanced{} card and gives {X:red,C:white}X#1#{} Mult",
+                    "for each time the {C:enhanced}Enhancement{} moved.",
+                    "Loses {C:enhanced}Thunderstruck {}when discarded."
+				},
+			},
+            e_akts_corrupt = {
+				name = "Corrupted",
+				text = {
+					"{X:mult,C:white}X#1#{} Mult",
+                },
+			},
+        },
+        Blind = {
+            bl_akts_renegade = {
+                name = "The Renegade",
+                text = {
+                    "{C:attention}Destroys{} all cards",
+                    "in winning hand."
+                },
+            },
+            bl_akts_singer = {
+                name = "The Singer",
+                text = {
+                    "All Jokers lose {C:attention}$#1#{} Sell Value",
+                    "each hand. Debuffs all Jokers with",
+                    "{C:attention}$0{} Sell Value"
+                },
+            },
+            bl_akts_patriot = {
+                name = "The Patriot",
+                text = {
+                    "{C:chips}-#1#{} Base Chips",
+                },
+            },
+            bl_akts_sanguinarch = {
+                name = "The Sanguinarch",
+                text = {
+                    "Adds {C:attention}20{} {C:red}Blood Ambers{} to",
+                    "Deck. Removes {C:attention}5{} {C:red}Blood Ambers{}",
+                    "from Deck for each remaining hand",
+                    "after Blind is {C:attention}defeated."
+                },
+            },
+            bl_akts_source_code = {
+                name = "The Source Code",
+                text = {
+                    "Every {C:attention}second{} Play/Discard",
+                    "is {C:red}out of your control.",
+                },
+            },
+            bl_akts_carnevale = {
+                name = "The Carnevale",
+                text = {
+                    "{C:attention}Doubles{} Blind Payout if",
+                    "score catches fire. {C:money}$0{} otherwise",
+                },
+            },
+            bl_akts_seaborn = {
+                name = "The Seaborn",
+                text = {
+                    "Jokers that trigger are",
+                    "{C:attention}debuffed{} until {C:attention}next hand",
+                    "is played"
+                },
+            },
+            bl_akts_corrupt = {
+                name = "The Corrupting Heart",
+                text = {
+                    "{C:attention}Downgrades {}{C:dark_edition}Edition{} of {C:attention}all{}",
+                    "Jokers {C:attention}adjacent {}to {C:dark_edition}Corrupted{}",
+                    "{C:dark_edition}Edition{} Jokers each hand.",
+                    "If you have none, {C:attention}downgrades{}",
+                    "{C:dark_edition}Edition{} of {C:attention}#1#{} random Jokers.",
+                    "{C:inactive}(Ignores Negative {}{C:dark_edition}Editions{}{C:inactive}){}"
+                },
+            },
+        },
         Other = {
             ---info queue popups------
             ChipDebt = {
@@ -986,6 +1379,14 @@ return {
                     "specified amount.",
                 },
             },
+
+            Overload = {
+                name = "Overload",
+                text = {
+                    "Can be used {C:attention}once per Ante{},",
+                    "during a {C:attention}Blind"
+                },
+            },
             --------Joker Subclasses---------------
             Geek = {
                 name = "Geek",
@@ -1005,19 +1406,21 @@ return {
                     "have been sold this round.",
                 },
             },
+            Merchant = {
+                name = "Merchant",
+                text = {
+                    "Always spawns with a",
+                    "{C:attention}Rental Sticker",
+                    "{C:attention}Destroys{} self when entering",
+                    "shop while in {C:attention}debt{}."
+                },
+            },
             --------Packs---------------
             p_akts_redeploy_pack = {
                 name = "Fast Redeploy Pack",
                 text = {
                     "Choose {C:attention}#1#{} of up to",
                     "{C:attention}#2#{} {X:attention,C:white}Fast Redeploy{} Jokers",
-                },
-            },
-            --------Other---------------
-            edition_negative_consumable = {
-                name = "Negative",
-                text = {
-                    "{C:dark_edition}+1{} consumable slot",
                 },
             },
         },
@@ -1035,6 +1438,8 @@ return {
             k_akts_Vanguard = "Vanguard",
             k_akts_Guard = "Guard",
             k_akts_GuardMedic = "Guard/Medic",
+            k_akts_GuardSniper = "Guard/Sniper",
+            k_akts_GuardCaster = "Guard/Caster",
             k_akts_Defender = "Defender",
             k_akts_Sniper = "Sniper",
             k_akts_Caster = "Caster",
@@ -1064,6 +1469,9 @@ return {
             k_akts_RhineColumbia = "Rhine Lab/Columbia",
             k_akts_Siracusa = "Siracusa",
             k_akts_Higashi = "Higashi",
+            k_akts_Yan = "Yan",
+            k_akts_Sami = "Sami",
+            k_akts_Minos = "Minos",
             k_akts_RimBil = "Rim Billiton",
             k_akts_Victoria = "Victoria",
             k_akts_Tara = "Tara",
@@ -1076,7 +1484,8 @@ return {
             akts_plus_Stored = "Stored!",
             akts_hp_down = "Health Down!",
             akts_no_hp = "No HP!",
-            akts_bind_apply = "Bound!",
+            akts_merchant_bye = "NO DP!",
+            akts_stunned = "Stunned!",
             akts_downgrade = "Downgrade!",
             akts_crit = "Critical!",
             akts_heal = "Healed!",
@@ -1090,6 +1499,7 @@ return {
             akts_debt_payment = "Debt Payment!",
             akts_debt_free = "NO DEBT!",
             akts_gavial_win = "Soul of the Jungle!",
+            akts_CE_Balance = "Reconstructed!",
             akts_logos_win = "PERISH!",
             akts_red_active = "Chill.",
 
@@ -1101,11 +1511,21 @@ return {
             akts_mlynar_score = "CUT!",
             akts_Dodged = "Dodged!",
 
+            akts_double_trigger = "Double Trigger!",
+            akts_fedex_spec = "Damnatus!",
+
             akts_surfer_score = "DEF Down!",
 
             akts_silence_immortal = "Immortal!",
 
+            akts_gitano_buff_hand = "+ Hand Size",
+            akts_gitano_buff_discard = "+ Discard",
+            akts_gitano_buff_mult = "+ Mult",
+            akts_saileach_banner = "For Glory!",
+
             akts_summon_greater = "Fused!",
+
+            akts_Walter_Bang = "BANG!",
 
             akts_plus_hook = "Hooked!",
 
@@ -1116,16 +1536,18 @@ return {
             akts_injury = "Elemental Injury", 
             akts_burst_active = "Burst is Active!",
             akts_burst_trigger = "Burst Activated!",
+            akts_cancel = "Cancel",
 
             k_akts_redeploy_pack = "Fast Redeploy Pack",
 
+            akts_blind_renegade = "BANG!",
+            akts_blind_patriot = " times current ante",
             akts_jokers_only_config = "Balatrhodes Jokers only?",
-            akts_jokers_only_config_NoLegendaryNote = "*NOTE: This mod does not have a Legendary Joker,",
-            akts_jokers_only_config_NoLegendaryNote2 = "so using a Soul with this setting will crash the game",
         },
         labels = {
             k_akts_transformed = "Awoken",
+            akts_thunderstruck = "Thunderstruck",
+            akts_corrupt = "Corrupted"
         }
     }
-    
 }

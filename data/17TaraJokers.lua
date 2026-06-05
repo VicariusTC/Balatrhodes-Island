@@ -7,8 +7,6 @@ SMODS.Joker{
     unlocked = true,
     discovered = true,
     blueprint_compat = true,
-    eternal_compat = true,
-    perishable_compat = true,
     pos = {x = 0, y = 15},
     config = { 
       extra = {
@@ -22,7 +20,7 @@ SMODS.Joker{
         return {vars = {center.ability.extra.maxServantCount}}
     end,
     calculate = function(self,card,context)
-        if context.joker_main and G.jokers and G.jokers.cards then
+        if not context.blueprint and context.joker_main and G.jokers and G.jokers.cards then
             for k, joker in pairs(G.jokers.cards) do
                 if joker.debuff and not joker.ability.eternal then
                     G.E_MANAGER:add_event(Event({
@@ -38,7 +36,7 @@ SMODS.Joker{
             end
         end
 
-        if (context.joker_type_destroyed and context.card.ability and not (context.card.ability.name == "ServantGreater" or context.card.ability.name == "ServantLesser")) 
+        if (context.joker_type_destroyed and context.card.ability and not (context.card.config.center.key == "j_akts_ServantGreater" or context.card.config.center.key== "j_akts_ServantLesser")) 
         or (context.end_of_round and context.main_eval and context.game_over == false and G.GAME.blind) then
             HandleEblanaServant(card)
         end
@@ -57,8 +55,7 @@ SMODS.Joker{
     unlocked = true,
     no_collection = true,
     blueprint_compat = true,
-    eternal_compat = true,
-    perishable_compat = true,
+    perishable_compat = false,
     pos = {x = 1, y = 15},
     config = { 
       extra = {
@@ -71,7 +68,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.bonusChips, center.ability.extra.bonusMult, center.ability.extra.necrassDestructChipBonus, center.ability.extra.necrassDestructChipBonus * G.AKTS_Globals.necrassDestroyed, center.ability.extra.upgradeCount, center.ability.extra.upgrade2Cash}}
+        return {vars = {center.ability.extra.bonusChips, center.ability.extra.bonusMult, center.ability.extra.necrassDestructChipBonus, center.ability.extra.necrassDestructChipBonus * G.AKTS_Globals.necrassDestroyed, center.ability.extra.upgradeCount, center.ability.extra.upgrade2Cash, G.AKTS_Globals.lesserServantMaxLevel}}
     end,
     add_to_deck = function(self, card, from_debuff)
         card:set_eternal(true)
@@ -97,7 +94,7 @@ SMODS.Joker{
             local necrassFound = false
             for k, joker in pairs(G.jokers.cards) do
                 local ability = joker.ability
-                if ability and ability.extra and type(ability.extra) == "table" and "j_akts_" .. ability.name == "j_akts_Necrass" and joker ~= context.card then
+                if ability and ability.extra and type(ability.extra) == "table" and joker.config.center.key == "j_akts_Necrass" and joker ~= context.card then
                    necrassFound = true
                 end
             end
@@ -105,7 +102,7 @@ SMODS.Joker{
                 card:set_eternal(false)
                 SMODS.destroy_cards(card)
             end
-            if context.joker_type_destroyed and card.ability.extra.upgradeCount >= 2 and not (context.card.ability.name == "ServantGreater" or context.card.ability.name == "ServantLesser") then
+            if context.joker_type_destroyed and card.ability.extra.upgradeCount >= 2 and not (context.card.config.center.key == "j_akts_ServantGreater" or context.card.config.center.key == "j_akts_ServantLesser") then
                 return{
                     dollars = card.ability.extra.upgrade2Cash
                 }
@@ -114,7 +111,6 @@ SMODS.Joker{
     end,
 }
 
---needs slight tweak, so that if it is obtained when multiple jokers are destroyed and fusion happens, that a new lesser gets spawned before the greater is upgraded. Its minor, so low prio, but yea
 SMODS.Joker{
     key = 'ServantGreater',
     name = 'ServantGreater',
@@ -124,8 +120,7 @@ SMODS.Joker{
     unlocked = true,
     no_collection = true,
     blueprint_compat = true,
-    eternal_compat = true,
-    perishable_compat = true,
+    perishable_compat = false,
     pos = {x = 2, y = 15},
     config = { 
       extra = {

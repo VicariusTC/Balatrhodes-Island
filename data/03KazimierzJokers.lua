@@ -7,13 +7,12 @@ SMODS.Joker{
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = false, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = false, --can it be perishable
+    eternal_compat = false,
     no_pool_flag = 'akts_NearlAlter_transform',
     pos = {x = 0, y = 6}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
-        aktsSellValue = 0,
+        aktsUseButton = {"akts_nearl_retreat", "akts_nearl_can_retreat", "b_use"},
         tagClass = {"Guard"},
         tagFaction = {"Kazimierz"}
       }
@@ -26,7 +25,7 @@ SMODS.Joker{
     end,
     calculate = function(self,card,context)
         if context.selling_self and not context.blueprint and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-            local _card = create_card("SummonConsumableType", G.consumeables, nil, nil, nil, nil, 'c_akts_NearlTheRadiant')
+            local _card = SMODS.create_card({set = 'SummonConsumableType', area = G.consumeables, key = 'c_akts_NearlTheRadiant'})
             _card:add_to_deck()
             G.consumeables:emplace(_card)
             card_eval_status_text(_card, 'extra', nil, nil, nil, {message = localize("akts_plus_summon"), G.C.ATTENTION})
@@ -62,6 +61,25 @@ SMODS.Joker{
     end 
 }
 
+G.FUNCS.akts_nearl_can_retreat = function(e)
+    if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+        e.config.colour = G.C.MULT
+        e.config.button = "akts_nearl_retreat"
+        return
+    end
+    e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+    e.config.button = nil
+end
+
+G.FUNCS.akts_nearl_retreat = function(e)
+    e.config.ref_table:remove()
+    local _card = SMODS.create_card({set = 'SummonConsumableType', area = G.consumeables, key = 'c_akts_NearlTheRadiant'})
+     _card:add_to_deck()
+    G.consumeables:emplace(_card)
+    card_eval_status_text(_card, 'extra', nil, nil, nil, {message = localize("akts_plus_summon"), G.C.ATTENTION})
+    
+end
+
 SMODS.Joker{
     key = 'Mlynar',
     name = 'Mlynar',
@@ -71,8 +89,6 @@ SMODS.Joker{
     unlocked = true,
     discovered = true,
     blueprint_compat = false,
-    eternal_compat = true,
-    perishable_compat = true,
     no_pool_flag = 'akts_mlynar_transform',
     pos = {x = 1, y = 6},
     config = { 
@@ -109,9 +125,7 @@ SMODS.Joker{
 	cost = 7,
     unlocked = true,
     discovered = true,
-    blueprint_compat = false,
-    eternal_compat = true,
-    perishable_compat = true,
+    blueprint_compat = true,
     pos = {x = 2, y = 6},
     config = { 
       extra = {
@@ -142,7 +156,7 @@ SMODS.Joker{
                 totalCut = totalCut + card.ability.extra.finalCut * #context.scoring_hand
             end
             for i = 1, #context.scoring_hand do
-                if context.scoring_hand[i].config.center == G.P_CENTERS.m_akts_True then 
+                if SMODS.has_enhancement(context.scoring_hand[i], "m_akts_True") then 
                     totalCut = totalCut + card.ability.extra.trueCut
                 end
             end
@@ -165,6 +179,77 @@ SMODS.Joker{
         aktsBadgeHelper(self,card,badges)
     end 
 }
+
+SMODS.Joker{
+    key = 'Gravel',
+    name = 'Gravel',
+    rarity = 1,
+    atlas = 'Jokers',
+	cost = 3,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = true,
+    pos = {x = 3, y = 6},
+    config = {
+      extra = {
+        fastRedeployFlag = true,
+        isFirstHand = true,
+        bonusChips = 30,
+        bonusChipsRank = 10,
+        currentHandRank = 0,
+        handSizeBonus = 3,
+        handSizeBonusVisual = 3,
+        tagClass = {"Specialist"},
+        tagFaction = {"Kazimierz"}
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        info_queue[#info_queue+1] = {set = 'Other', key = "FastRedeploy"}
+        return {vars = {
+            center.ability.extra.bonusChips, center.ability.extra.bonusChipsRank, center.ability.extra.handSizeBonusVisual}}
+    end,
+    add_to_deck = function(self, card, from_debuff)
+        G.hand:change_size(card.ability.extra.handSizeBonus)
+    end,
+    remove_from_deck = function(self, card, from_debuff)
+        G.hand:change_size(-card.ability.extra.handSizeBonus)
+    end,
+    calculate = function(self,card,context)
+        if context.joker_main then
+            if card.ability.extra.isFirstHand then
+                G.hand:change_size(-card.ability.extra.handSizeBonus)
+                card.ability.extra.handSizeBonus = 0
+                card.ability.extra.isFirstHand = false
+            end
+            card.ability.extra.currentHandRank = 0
+        end
+
+        if context.individual and not context.end_of_round and context.cardarea == G.play and not context.other_card.debuff then
+            if card.ability.extra.currentHandRank == 0 then
+                for i = 1, #context.scoring_hand do
+                    local rank = context.scoring_hand[i]:get_id() % 14
+                    card.ability.extra.currentHandRank = card.ability.extra.currentHandRank + math.max(1, rank)
+                    if card.ability.extra.currentHandRank > 10 then
+                        break
+                    end
+                end
+            end
+            if card.ability.extra.currentHandRank <= 10 then
+                return {
+                    chips = card.ability.extra.bonusChips,
+					card = context.other_card
+                }
+            end
+        end
+
+        if context.selling_self and not context.blueprint then
+            PerformFastRedeploy("j_akts_Gravel", card)
+        end
+    end,
+    set_badges = function(self, card, badges)
+        aktsBadgeHelper(self,card,badges)
+    end
+}
 ----------------------------------------Base Kazimierz end----------------------------------------
 SMODS.Joker{
     key = 'Flametail', 
@@ -174,9 +259,7 @@ SMODS.Joker{
 	cost = 4,
     unlocked = true, 
     discovered = true, 
-    blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true,
+    blueprint_compat = false, 
     pos = {x = 0, y = 7}, 
     config = { 
       extra = {
@@ -201,7 +284,7 @@ SMODS.Joker{
             if #CalcTaggedOwned(card.ability.extra.tagFaction[2], card) > 0 then
                 kaziFactor = 2
             end
-            if math.random() <= (kaziFactor * G.GAME.probabilities.normal)/card.ability.extra.editionReq then
+            if SMODS.pseudorandom_probability(card, 'akts_random_seed', kaziFactor, card.ability.extra.editionReq) then
                 G.E_MANAGER:add_event(Event({
                     trigger = "after", 
                     delay = 0.25,
@@ -216,7 +299,7 @@ SMODS.Joker{
     calculate = function(self,card,context)
         if context.discard and not card.ability.extra.discActivated then
             card.ability.extra.discActivated = true
-            if math.random() <= card.ability.extra.currentChance/card.ability.extra.chanceReq then
+            if SMODS.pseudorandom_probability(card, 'akts_random_seed', card.ability.extra.currentChance, card.ability.extra.chanceReq) then
                 --gain cash, disc, reset.
                 card.ability.extra.currentChanceAdd = 0
                 card.ability.extra.currentChance = G.GAME.probabilities.normal - 1
@@ -252,8 +335,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = true, 
     blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true,
     pos = {x = 1, y = 7}, 
     config = { 
       extra = {
@@ -300,7 +381,7 @@ SMODS.Joker{
                     end
                 end
                 if not duplicate then
-                    local _card = create_card("Tarot", G.consumeables, nil, nil, nil, nil, nil)
+                    local _card = SMODS.create_card({set = "Tarot", area = G.consumeables})
                     _card:add_to_deck()
                     G.consumeables:emplace(_card)
                     card_eval_status_text(_card, 'extra', nil, nil, nil, {message = localize("k_plus_tarot"), G.C.PURPLE})

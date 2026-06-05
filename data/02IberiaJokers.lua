@@ -6,9 +6,7 @@ SMODS.Joker{
 	cost = 6,
     unlocked = true, 
     discovered = true, 
-    blueprint_compat = false, 
-    eternal_compat = true, 
-    perishable_compat = true,
+    blueprint_compat = true, 
     pos = {x = 0, y = 4}, 
     config = { 
       extra = {
@@ -64,12 +62,8 @@ SMODS.Joker{
                 chips = card.ability.extra.chipStorage,
             }
         end
-        if context.cardarea == G.play and context.individual and not context.other_card.debuff and not context.end_of_round and (context.other_card.config.center == G.P_CENTERS.m_akts_TempSteel or context.other_card.config.center == G.P_CENTERS.m_gold or context.other_card.config.center == G.P_CENTERS.m_steel) then
-            --[[
-            if context.other_card.config.center == G.P_CENTERS.m_akts_TempSteel then
-                context.other_card.ability.extra.remainingTurn = math.min(context.other_card.ability.extra.remainingTurn + 1, card.ability.extra.tempSteelTurns)
-            end
-            ]]
+        if not context.blueprint and context.cardarea == G.play and context.individual and not context.other_card.debuff and not context.end_of_round and 
+        (SMODS.has_enhancement(context.other_card, "m_akts_TempSteel")  or SMODS.has_enhancement(context.other_card, "m_gold") or SMODS.has_enhancement(context.other_card, "m_steel")) then
             card.ability.extra.chipStorage = card.ability.extra.chipStorage + card.ability.extra.chipIncrement
             return {
                 extra = {focus = card, message = localize('k_upgrade_ex')},
@@ -91,9 +85,7 @@ SMODS.Joker{
 	cost = 4,
     unlocked = true, 
     discovered = true, 
-    blueprint_compat = false, 
-    eternal_compat = true, 
-    perishable_compat = true,
+    blueprint_compat = true, 
     pos = {x = 1, y = 4}, 
     config = { 
       extra = {
@@ -111,9 +103,9 @@ SMODS.Joker{
         return {vars = {G.GAME.probabilities.normal, center.ability.extra.unenhanceChance, center.ability.extra.unenhanceBonusCash, center.ability.extra.unenhanceBonusMult, center.ability.extra.xMultStorage}}
     end,
     calculate = function(self,card,context)
-        if context.cardarea == G.hand and context.individual and not context.other_card.debuff and context.end_of_round
-        and (context.other_card.config.center == G.P_CENTERS.m_akts_TempSteel or context.other_card.config.center == G.P_CENTERS.m_steel or context.other_card.config.center == G.P_CENTERS.m_gold) then
-            local performUnenhance = math.random() <= G.GAME.probabilities.normal/card.ability.extra.unenhanceChance
+        if not context.blueprint and context.cardarea == G.hand and context.individual and not context.other_card.debuff and context.end_of_round
+        and (SMODS.has_enhancement(context.other_card, "m_akts_TempSteel")  or SMODS.has_enhancement(context.other_card, "m_gold") or SMODS.has_enhancement(context.other_card, "m_steel")) then
+            local performUnenhance = SMODS.pseudorandom_probability(card, 'akts_random_seed', 1, card.ability.extra.unenhanceChance)
             if performUnenhance then
                 context.other_card:set_ability(G.P_CENTERS.c_base, nil, true)
                 card.ability.extra.xMultStorage = card.ability.extra.xMultStorage + card.ability.extra.unenhanceBonusMult

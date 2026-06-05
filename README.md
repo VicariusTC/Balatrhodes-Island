@@ -4,14 +4,15 @@ My very own Arknights mod for Balatro!
 The Goal of this mod is to faithfully recreate many Arknights Operators and translate them into Balatro.
 
 # Features
-- 40+ New Jokers
+- 50+ New Jokers
 - New Rarity: Awoken. Awoken Jokers cannot be obtained through normal means and tend to be obtained through other Jokers
 - Summon Cards: New consumables from this mod, typically obtained through Jokers
+- Several new Boss Blinds
 - Much more is planned, so stay tuned for that!
 
 # Requirements
 
-- [Steamodded](https://github.com/Steamodded/smods)  ≥ `1.0.0-beta-0827c`
+- [Steamodded](https://github.com/Steamodded/smods)  ≥ `>=1.0.0~BETA-1620a`
 - [Lovely](https://github.com/ethangreen-dev/lovely-injector) ≥ `0.7`
 
 # Installation

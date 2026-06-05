@@ -70,7 +70,8 @@ function Card:set_cost()
     if self.ability and (self.ability.extra and type(self.ability.extra) == "table" and self.ability.extra.aktsSellValue) then
         self.sell_cost = self.ability.extra.aktsSellValue or 0
     end
-    if setCustomSellPrice() then self.sell_cost = setCustomSellPrice() end
+    --if setCustomSellPrice() then self.sell_cost = setCustomSellPrice() end
+    if G.AKTS_Globals.customPriceSetter then self.sell_cost = G.AKTS_Globals.customPriceSetter end
     if self.area and self.ability.couponed and (self.area == G.shop_jokers or self.area == G.shop_booster) then self.cost = 0 end
     self.sell_cost_label = self.facing == 'back' and '?' or self.sell_cost    
 end
@@ -148,7 +149,69 @@ function Card:get_id()
     end
     return cardGetId(self)
 end
--------------------------------------------------------
+--------------------------------------------------------
+-----hook for uiElements, table[1] = func, table[2] canUse, table[3] = name
+local G_UIDEF_use_and_sell_buttons_ref = G.UIDEF.use_and_sell_buttons
+function G.UIDEF.use_and_sell_buttons(card)
+    local uiButtons =  G_UIDEF_use_and_sell_buttons_ref(card)
+    if (card.area == G.jokers) and card.ability and card.ability.extra and type(card.ability.extra) == "table" and card.ability.extra.aktsUseButton then
+        local sell = nil
+        local use = nil
+        local jokerUse = nil
+
+        sell = {n=G.UIT.C, config={align = "cr"}, nodes={
+        {n=G.UIT.C, config={ref_table = card, align = "cr",padding = 0.1, r=0.08, minw = 1.25, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = 'sell_card', func = 'can_sell_card'}, nodes={
+            {n=G.UIT.B, config = {w=0.1,h=0.6}},
+            {n=G.UIT.C, config={align = "tm"}, nodes={
+            {n=G.UIT.R, config={align = "cm", maxw = 1.25}, nodes={
+                {n=G.UIT.T, config={text = localize('b_sell'),colour = G.C.UI.TEXT_LIGHT, scale = 0.4, shadow = true}}
+            }},
+            {n=G.UIT.R, config={align = "cm"}, nodes={
+                {n=G.UIT.T, config={text = localize('$'),colour = G.C.WHITE, scale = 0.4, shadow = true}},
+                {n=G.UIT.T, config={ref_table = card, ref_value = 'sell_cost_label',colour = G.C.WHITE, scale = 0.55, shadow = true}}
+            }}
+            }}
+        }},
+        }}
+         jokerUse = 
+            {n=G.UIT.C, config={align = "cr"}, nodes={
+            
+            {n=G.UIT.C, config={ref_table = card, align = "cr",maxw = 1.25, padding = 0.1, r=0.08, minw = 1.25, minh = (card.area and card.area.config.type == 'joker') and 0 or 1, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = card.ability.extra.aktsUseButton[1], func = card.ability.extra.aktsUseButton[2]}, nodes={
+                {n=G.UIT.B, config = {w=0.1,h=0.6}},
+                {n=G.UIT.T, config={text = localize(card.ability.extra.aktsUseButton[3]),colour = G.C.UI.TEXT_LIGHT, scale = 0.55, shadow = true}}
+            }}
+        }}
+        uiButtons = {
+      n=G.UIT.ROOT, config = {padding = 0, colour = G.C.CLEAR}, nodes={
+        {n=G.UIT.C, config={padding = 0.15, align = 'cl'}, nodes={
+          {n=G.UIT.R, config={align = 'cl'}, nodes={
+            sell
+          }},
+          {n=G.UIT.R, config={align = 'cl'}, nodes={
+            use
+          }},
+          {n=G.UIT.R, config={align = 'cl'}, nodes={
+            jokerUse
+          }},
+        }},
+    }}
+    end
+    return uiButtons
+end
+--------------------------------------------------
+---hook debuff drawstep
+
+local debuffRef = SMODS.DrawSteps.debuff.func
+function SMODS.DrawSteps.debuff.func(self)
+    if self.aktsSeabornStun then
+        SMODS.DrawSteps.front.func(self)
+        return
+    end
+    debuffRef(self)
+
+end
+
+---------------------------------------------------
 local gameStart = Game.start_run
 function Game:start_run(args)
     local ret = gameStart(self, args)
@@ -177,7 +240,7 @@ Create_Joker = function (itemList, card, edition, debuffed, msg)
     if msg then
         card_eval_status_text(card or G.jokers.cards[1], 'extra', nil, nil, nil, {message = msg, G.C.ATTENTION})
     end  
-    local pickedJoker = pseudorandom_element(itemList, pseudoseed(math.random(500)))
+    local pickedJoker = pseudorandom_element(itemList, pseudoseed("akts_random_seed"))
     local new_card = create_card('Joker', G.jokers, nil,nil,nil,nil,pickedJoker)
     if edition then
         new_card:set_edition(edition, true)
@@ -192,17 +255,16 @@ end
 
 ----------------------------------------------------------
 flip_cards = function(card)
-   card:flip()
-   delay(0.1)
-   G.E_MANAGER:add_event(
-      Event(
-         {trigger = 'after',delay = 0.15,func = function() 
-            card:flip();
-            card:juice_up(0.3, 0.3);
-            return true end
-         }  
-      )
-   )
+   G.E_MANAGER:add_event(Event({
+        trigger = 'after',
+        delay = 0.15,
+        func = function()
+            card:flip()
+            play_sound('card1', 1)
+            card:juice_up(0.3, 0.3)
+            return true
+        end
+    }))
 end
 ----------------------------------------
 --Added for instant destruction when scoring.
@@ -287,7 +349,9 @@ gavialAlterDebtPayment = function(card, chipPool, mode)
     end
     
     if cardExtra.currentdebt == 0 then
-        card:set_eternal(false)
+        if not cardExtra.wasEternal then
+            card:set_eternal(false)
+        end
         cardExtra.fulldebt = 0
     end
     return chipPool
@@ -320,8 +384,6 @@ end
 jokerTransform = function(card, newJoker)
     local new_card = G.P_CENTERS[newJoker]
     if card.config.center == new_card then return end
-
-    local old_key = card.config.center.keyd
     card.children.center = Sprite(card.T.x, card.T.y, card.T.w, card.T.h, G.ASSET_ATLAS[new_card.atlas], new_card.pos)
     card.children.center.states.hover = card.states.hover
     card.children.center.states.click = card.states.click
@@ -510,8 +572,15 @@ setGeekDebuff = function(card)
         }))
     else
         card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('akts_hp_down'), colour = G.C.MULT})
-        card.ability.extra.aktsSellValue = card.ability.extra.aktsSellValue - 1
+        card.ability.extra.aktsSellValue = math.max(0, card.ability.extra.aktsSellValue - 1)
         card:set_cost()
+    end
+end
+
+handleMerchant = function (card)
+    if G.GAME.dollars < 0 then
+        card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('akts_merchant_bye'), G.C.ATTENTION})
+        SMODS.destroy_cards(card)
     end
 end
 
@@ -592,7 +661,7 @@ elemBurstChangeText = function(added)
 end
 
 --returns index position of card in table or 0 if not found.
-isInTable = function(card, table)
+indexOfTable = function(card, table)
     for j,w in pairs(table) do
         if w == card then
             return j
@@ -635,29 +704,6 @@ Round = function(num, numDecimalPlaces)
     return math.floor(num * multiplier + 0.5) / multiplier
 end
 
-BindHand = function (duration, card)
-    if G.AKTS_Globals.blindBound == 0 then
-        card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("akts_bind_apply"), G.C.ATTENTION})
-        G.AKTS_Globals.bindHandScore = Round((hand_chips * mult), 2)
-        G.AKTS_Globals.blindBound = duration
-    end 
-end
-
-ApplyBoundHand = function (card, context)
-    if context.joker_main and leftmostActivatedTrue("akts_bind", getJokerSlot(card)) and G.AKTS_Globals.blindBound > 0 then
-        G.AKTS_Globals.blindBound = G.AKTS_Globals.blindBound - 1
-        return G.AKTS_Globals.bindHandScoreMultiplier * G.AKTS_Globals.bindHandScore
-    end
-    return 0
-end
-
-GetBindText = function ()
-    if G.AKTS_Globals.blindBound == 0 then
-        return ""
-    end
-    return G.AKTS_Globals.bindHandScore .. " Chips are bound to Blind for "..G.AKTS_Globals.blindBound .. " hands."
-end
-
 HealJoker = function (healer, target)
     local sellValue = target.sell_cost
     local targetCost = target.cost
@@ -665,15 +711,14 @@ HealJoker = function (healer, target)
         targetCost = math.min(targetCost, target.ability.extra.aktsCostValue)
     end
     if sellValue < math.max(math.floor(targetCost/2), 1) then
-        healer.ability.extra.aktsSettingPrice = true
-        healer.ability.extra.aktsNewSellPrice =  math.min(math.max(math.floor(targetCost/2), 1), sellValue + healer.ability.extra.healAmount)
+        
+        G.AKTS_Globals.customPriceSetter =  math.min(math.max(math.floor(targetCost/2), 1), sellValue + healer.ability.extra.healAmount)
         if target.ability.extra.aktsSellValue then
-            target.ability.extra.aktsSellValue = healer.ability.extra.aktsNewSellPrice
+            target.ability.extra.aktsSellValue = G.AKTS_Globals.customPriceSetter
         end
         target:set_cost()
         card_eval_status_text(target, 'extra', nil, nil, nil, {message = localize("akts_heal"), G.C.GREEN})
-        healer.ability.extra.aktsSettingPrice = false
-        healer.ability.extra.aktsNewSellPrice = 0
+        G.AKTS_Globals.customPriceSetter = nil
     end
 end
 
@@ -817,5 +862,30 @@ IsServantFusion = function (card, target, servantCount, maxUpgradeLevel)
 end
 
 IdOf = function(card) 
-    return "j_akts_" .. card.ability.name
+    return card.config.center.key
+end
+
+GetGitanoBuff = function (card)
+    if #card.ability.extra.missingBuffs == 0 then
+        return
+    end
+    local buff = pseudorandom_element(card.ability.extra.missingBuffs, pseudoseed("akts_random_seed"))
+    table.remove(card.ability.extra.missingBuffs, indexOfTable(buff, card.ability.extra.missingBuffs))
+    card:juice_up()
+    if buff == "handSize" then
+        card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('akts_gitano_buff_hand')})
+        card.ability.extra.colours[1] = G.C.GREEN
+        card.ability.extra.appliedBuffs.handSize = card.ability.extra.handSizeBonus
+        G.hand:change_size(card.ability.extra.appliedBuffs.handSize)
+    elseif buff == "discard" then
+        card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('akts_gitano_buff_discard')})
+        card.ability.extra.colours[2] = G.C.GREEN
+        card.ability.extra.appliedBuffs.discards = card.ability.extra.discardBonus
+        G.GAME.round_resets.discards = G.GAME.round_resets.discards + card.ability.extra.appliedBuffs.discards
+        ease_discard(card.ability.extra.appliedBuffs.discards)
+    else
+        card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('akts_gitano_buff_mult')})
+        card.ability.extra.colours[3] = G.C.GREEN
+        card.ability.extra.appliedBuffs.mult = card.ability.extra.multBonus
+    end
 end

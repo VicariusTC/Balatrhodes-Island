@@ -9,8 +9,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = true, 
     blueprint_compat = false, 
-    eternal_compat = true, 
-    perishable_compat = true,
     pos = {x = 0, y = 2}, 
     config = { 
       extra = {
@@ -27,7 +25,7 @@ SMODS.Joker{
         return {vars = {center.ability.extra.flushThreshold, center.ability.extra.flushPlayed, center.ability.extra.targetNum}}
     end,
     calculate = function(self,card,context)
-        if context.cardarea == G.jokers and context.scoring_hand and not context.blueprint then
+        if context.cardarea == G.jokers and context.scoring_hand then
             if context.before and next(context.poker_hands['Flush']) then
                 for i = 1, #context.scoring_hand do
                     if context.scoring_hand[i]:get_id() == 8 then 
@@ -42,7 +40,7 @@ SMODS.Joker{
                 end
                 delay(0.2) 
             end
-            if context.joker_main and not context.blueprint and next(context.poker_hands['Flush']) then
+            if context.joker_main and next(context.poker_hands['Flush']) then
                 card.ability.extra.flushPlayed = card.ability.extra.flushPlayed + 1
                 if card.ability.extra.flushPlayed >= card.ability.extra.flushThreshold then
                     if G.jokers.config.card_limit > (#G.jokers.cards + G.GAME.joker_buffer) then
@@ -74,8 +72,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = true, 
     blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true,
     pos = {x = 1, y = 2}, 
     config = { 
       extra = {
@@ -125,8 +121,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = true, 
     blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true,
     no_pool_flag = 'akts_specter_transform',
     pos = {x = 2, y = 2}, 
     config = { 
@@ -181,8 +175,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = false, 
     blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true,
     pos = {x = 3, y = 2}, 
     config = { 
       extra = {
@@ -233,7 +225,7 @@ SMODS.Joker{
                 card = card
             }
         end
-        if context.end_of_round and not self.debuff and context.game_over 
+        if not context.blueprint and context.end_of_round and not self.debuff and context.game_over
         and not card.ability.extra.prevDeathHasTriggered and card.ability.extra.akts_save then
             if leftmostActivatedTrue("akts_save", getJokerSlot(card)) then
                 G.E_MANAGER:add_event(Event({
@@ -274,9 +266,7 @@ SMODS.Joker{
 	cost = 5,
     unlocked = true, 
     discovered = true, 
-    blueprint_compat = false, 
-    eternal_compat = true, 
-    perishable_compat = true,
+    blueprint_compat = true,
     pos = {x = 4, y = 2}, 
     config = { 
       extra = {
@@ -294,8 +284,10 @@ SMODS.Joker{
     end,
     calculate = function(self,card,context)
         if context.cardarea == G.jokers and context.joker_main and G.GAME.blind then
-            if ((hand_chips * mult) + G.GAME.chips + card.ability.extra.chipStorage)/G.GAME.blind.chips <= 0.01 * card.ability.extra.blindReq then
-                card.ability.extra.chipStorage = card.ability.extra.chipStorage + card.ability.extra.chipIncrement
+            if (SMODS.calculate_round_score() + G.GAME.chips + card.ability.extra.chipStorage)/G.GAME.blind.chips <= 0.01 * card.ability.extra.blindReq then
+                if not context.blueprint then
+                    card.ability.extra.chipStorage = card.ability.extra.chipStorage + card.ability.extra.chipIncrement
+                end
                 return {
                     card = card,
                     chips = card.ability.extra.chipStorage,

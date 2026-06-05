@@ -1,11 +1,12 @@
 ----------------------------------------------
 ------------MOD CODE -------------------------
-
 SMODS.Atlas({
-    key = 'modicon',
-    path = 'modicon.png',
+    key = 'akts_blind',
+    path = 'AKBlinds.png',
     px = 34,
-    py = 34
+    py = 34,
+    atlas_table = 'ANIMATION_ATLAS',
+    frames = 42
 })
 
 SMODS.Rarity{
@@ -26,6 +27,9 @@ SMODS.load_file("data/jokerFunctions.lua")()
 SMODS.load_file("data/jokers.lua")()
 SMODS.load_file("data/consumables.lua")()
 SMODS.load_file("data/enhancements.lua")()
+SMODS.load_file("data/editions.lua")()
+SMODS.load_file("data/globals.lua")()
+SMODS.load_file("data/bossBlinds.lua")()
 SMODS.load_file("data/00RhodesJokers.lua")()
 SMODS.load_file("data/01AegirJokers.lua")()
 SMODS.load_file("data/02IberiaJokers.lua")()
@@ -37,9 +41,13 @@ SMODS.load_file("data/07ColumbiaJokers.lua")()
 SMODS.load_file("data/08RhineLabJokers.lua")()
 SMODS.load_file("data/10SiracusaJokers.lua")()
 SMODS.load_file("data/11HigashiJokers.lua")()
+SMODS.load_file("data/12YanJokers.lua")()
+SMODS.load_file("data/13SamiJokers.lua")()
+SMODS.load_file("data/14MinosJokers.lua")()
 SMODS.load_file("data/15RimBillitonJokers.lua")()
 SMODS.load_file("data/16VictoriaJokers.lua")()
 SMODS.load_file("data/17TaraJokers.lua")()
+SMODS.load_file("data/LegendaryJokers.lua")()
 
 SMODS.current_mod.config_tab = function()
 	return {n = G.UIT.ROOT, config = {
@@ -48,16 +56,6 @@ SMODS.current_mod.config_tab = function()
         {n = G.UIT.R, config = {align = "cl", padding = 0}, nodes = {
             {n = G.UIT.C, config = { align = "cl", padding = 0.05 }, nodes = {
                 create_toggle{ col = true, label = localize("akts_jokers_only_config"), scale = 1, w = 0, shadow = true, ref_table = Balatrhodes_Config, ref_value = "balatrhodes_only"},
-            }},
-        }},
-        {n = G.UIT.R, config = {align = "cl", padding = 0}, nodes = {
-            {n = G.UIT.C, config = { align = "cl", padding = 0.05 }, nodes = {
-                {n = G.UIT.T, config = {text = localize("akts_jokers_only_config_NoLegendaryNote"), colour = G.C.UI.TEXT_LIGHT, scale = 0.33, shadow = true}}
-            }},
-        }},
-        {n = G.UIT.R, config = {align = "cl", padding = 0}, nodes = {
-            {n = G.UIT.C, config = { align = "cl", padding = 0.05 }, nodes = {
-                {n = G.UIT.T, config = {text = localize("akts_jokers_only_config_NoLegendaryNote2"), colour = G.C.UI.TEXT_LIGHT, scale = 0.33, shadow = true}}
             }},
         }},
 	}}

@@ -7,8 +7,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = true, 
     blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true,
     pos = {x = 4, y = 0}, 
     config = { 
       extra = {
@@ -37,7 +35,7 @@ SMODS.Joker{
                 Create_Joker(rhodesList, card, nil, nil, localize("akts_plus_summon"))
             end
         else
-            card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_no_space_ex"), G.C.INACTIVE})
+            card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_no_space_ex")})
         end
     end,
     calculate = function(self,card,context)
@@ -50,7 +48,7 @@ SMODS.Joker{
         --Check for Rhodes Trigger
         if not context.blueprint and (context.post_trigger) and card.ability.extra.maxMultScaleCurrent < card.ability.extra.maxMultScaleRound then --and calcTaggedOwned(card.ability.extra.tagFaction[1])[context.other_joker.name]
             local ownedRhodes = CalcTaggedOwned(card.ability.extra.tagFaction[1])
-            if isInTable('j_akts_' .. context.other_card.ability.name, ownedRhodes) ~= 0 and context.other_card ~= card then
+            if indexOfTable(context.other_card.config.center.key, ownedRhodes) ~= 0 and context.other_card ~= card then
                 card.ability.extra.maxMultScaleCurrent = card.ability.extra.maxMultScaleCurrent + 1
                 card.ability.extra.multStore = card.ability.extra.multStore + card.ability.extra.multScale
                 card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex'), G.C.ATTENTION})
@@ -77,8 +75,6 @@ SMODS.Joker{
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
     pos = {x = 0, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
@@ -93,14 +89,14 @@ SMODS.Joker{
     end,
     add_to_deck = function(self, card, from_debuff)
         if not from_debuff and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-            local _card = create_card('SummonConsumableType', G.consumeables, nil, nil, nil, nil, 'c_akts_Mon3tr')
+            local _card = SMODS.create_card({set = 'SummonConsumableType', area = G.consumeables, key = 'c_akts_Mon3tr'})
             _card:add_to_deck()
             G.consumeables:emplace(_card)
             card_eval_status_text(_card, 'extra', nil, nil, nil, {message = localize('akts_plus_Mon3tr'), colour = G.C.PURPLE})
         end
     end,
     calculate = function(self,card,context)
-        if context.cardarea == G.play and context.individual and not context.other_card.debuff and not context.end_of_round and context.other_card.config.center == G.P_CENTERS.m_akts_True then
+        if context.cardarea == G.play and context.individual and not context.other_card.debuff and not context.end_of_round and SMODS.has_enhancement(context.other_card, "m_akts_True") then
             return {
                 dollars = card.ability.extra.cash
             }
@@ -108,7 +104,7 @@ SMODS.Joker{
 
         if context.setting_blind and context.main_eval and G.GAME.blind and (G.GAME.blind.boss) then
             if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-                local _card = create_card("SummonConsumableType", G.consumeables, nil, nil, nil, nil, 'c_akts_Mon3tr')
+                local _card = SMODS.create_card({set = 'SummonConsumableType', area = G.consumeables, key = 'c_akts_Mon3tr'})
                 _card:add_to_deck()
                 G.consumeables:emplace(_card)
                 card_eval_status_text(_card, 'extra', nil, nil, nil, {message = localize("akts_plus_Mon3tr"), G.C.PURPLE})
@@ -126,11 +122,9 @@ SMODS.Joker{
     rarity = 1,
     atlas = 'Jokers',
 	cost = 3,
+    blueprint_compat = true,
     unlocked = true, 
     discovered = true, 
-    blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true,
     pos = {x = 1, y = 0}, 
     config = { 
       extra = {
@@ -157,10 +151,10 @@ SMODS.Joker{
         if context.selling_self and not context.blueprint then
             G.E_MANAGER:add_event(Event({
                 func = (function()
-                    local pickedTag = pseudorandom_element(card.ability.extra.tagList, pseudoseed(math.random(500)))
+                    local pickedTag = pseudorandom_element(card.ability.extra.tagList, pseudoseed("akts_random_seed"))
                     add_tag(Tag(pickedTag))
-                    play_sound('generic1', 0.9 + math.random()*0.1, 0.8)
-                    play_sound('holo1', 1.2 + math.random()*0.1, 0.4)
+                    play_sound('generic1', 0.9 + pseudorandom(pseudoseed("akts_random_seed"))*0.1, 0.8)
+                    play_sound('holo1', 1.2 + pseudorandom(pseudoseed("akts_random_seed"))*0.1, 0.4)
                     return true
                 end)
             }))
@@ -183,8 +177,7 @@ SMODS.Joker{
     unlocked = true, 
     discovered = true, 
     blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true,
+    perishable_compat = false,
     no_pool_flag = 'akts_gavial_transform',
     pos = {x = 2, y = 0}, 
     config = { 
@@ -214,7 +207,7 @@ SMODS.Joker{
             end
         end
         if #unenhanced > 0 then
-            local pickedMed = pseudorandom_element(unenhanced, pseudoseed(math.random(500)))
+            local pickedMed = pseudorandom_element(unenhanced, pseudoseed("akts_random_seed"))
             pickedMed:set_edition(card.ability.extra.enhanceChoice, true)
             card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('akts_gavial_edition'), colour = G.C.PURPLE})
         end
@@ -222,10 +215,10 @@ SMODS.Joker{
     calculate = function(self,card,context)
         if context.cardarea == G.play and context.individual and not context.other_card.debuff and not context.end_of_round then
             local returnMult = 1
-            if context.other_card.config.center == G.P_CENTERS.m_wild then
-                returnMult = math.random(100* card.ability.extra.wildLower, 100* card.ability.extra.wildUpper) /100
+            if SMODS.has_enhancement(context.other_card, "m_wild") then
+                returnMult = card.ability.extra.wildLower + pseudorandom(pseudoseed("akts_random_seed")) * (card.ability.extra.wildUpper - card.ability.extra.wildLower)
             else
-                returnMult = math.random(100*card.ability.extra.scoredLower, 100*card.ability.extra.scoredUpper)/100
+                returnMult = card.ability.extra.scoredLower + pseudorandom(pseudoseed("akts_random_seed")) * (card.ability.extra.scoredUpper - card.ability.extra.scoredLower)
             end
             G.E_MANAGER:add_event(Event({func = (function() card:juice_up(); return true end)}))
             return {
@@ -233,10 +226,10 @@ SMODS.Joker{
             }
         end
         if context.cardarea == G.jokers and context.scoring_hand then
-            if context.before then
+            if context.before and #context.full_hand == 5 then
                 local transformable = false
                 for i = 1, #context.full_hand do
-                    if context.full_hand[i].config.center ~= G.P_CENTERS.m_wild then
+                    if not SMODS.has_enhancement(context.full_hand[i], "m_wild")  then
                         transformable = false 
                         break
                     end
@@ -263,9 +256,8 @@ SMODS.Joker{
 	cost = 5,
     unlocked = true, 
     discovered = false, 
+    perishable_compat = false,
     blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true,
     pos = {x = 3, y = 0}, 
     config = { 
       extra = {
@@ -279,6 +271,7 @@ SMODS.Joker{
         wildLower = 1.25,
         wildUpper = 2,
         akts_save = true,
+        wasEternal = false,
         tagClass = {"Guard", "Medic"},
         tagFaction = {"Rhodes", "Sargon"}
       }
@@ -297,10 +290,10 @@ SMODS.Joker{
     calculate = function(self,card,context)
         if context.cardarea == G.play and context.individual and not context.other_card.debuff and not context.end_of_round then
             local returnMult = 1
-            if context.other_card.config.center == G.P_CENTERS.m_wild then
-                returnMult = math.random(100* card.ability.extra.wildLower, 100* card.ability.extra.wildUpper) /100
+            if SMODS.has_enhancement(context.other_card, "m_wild")  then
+                returnMult = card.ability.extra.wildLower + pseudorandom(pseudoseed("akts_random_seed")) * (card.ability.extra.wildUpper - card.ability.extra.wildLower)
             else
-                returnMult = math.random(100*card.ability.extra.scoredLower, 100*card.ability.extra.scoredUpper)/100
+                returnMult = card.ability.extra.scoredLower + pseudorandom(pseudoseed("akts_random_seed")) * (card.ability.extra.scoredUpper - card.ability.extra.scoredLower)
             end 
             G.E_MANAGER:add_event(Event({func = (function() card:juice_up(); return true end)}))
             return {
@@ -308,11 +301,11 @@ SMODS.Joker{
             }
         end
 
-        if context.hand_drawn then
+        if not context.blueprint and context.hand_drawn then
             G.GAME.chips = gavialAlterDebtPayment(card, G.GAME.chips, 'tax')
         end
 
-        if context.end_of_round and context.cardarea == G.jokers then
+        if not context.blueprint and context.end_of_round and context.cardarea == G.jokers then
             local cardExtra = card.ability.extra
             local fullyDebted = (G.GAME.chips - (cardExtra.debtPayment * cardExtra.fulldebt)) /G.GAME.blind.chips < cardExtra.minReqScore / 100
             if fullyDebted then
@@ -321,6 +314,7 @@ SMODS.Joker{
             if G.GAME.chips/G.GAME.blind.chips < 1 and not fullyDebted and cardExtra.akts_save and leftmostActivatedTrue("akts_save", getJokerSlot(card)) then
                 cardExtra.currentdebt = cardExtra.currentdebt + (G.GAME.blind.chips - G.GAME.chips)
                 cardExtra.fulldebt = cardExtra.fulldebt + (G.GAME.blind.chips - G.GAME.chips)
+                card.ability.extra.wasEternal = SMODS.is_eternal(card)
                 card:set_eternal(true)
                 G.GAME.chips = G.GAME.blind.chips
                 G.STATE = G.STATES.HAND_PLAYED
@@ -350,8 +344,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = true, 
     blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true,
     no_pool_flag = 'akts_yato_sold',
     pos = {x = 5, y = 0}, 
     config = { 
@@ -369,7 +361,9 @@ SMODS.Joker{
     end,
     calculate = function(self,card,context)
         if context.joker_main and (G.GAME.current_round.hands_played == 0 or card.ability.extra.isFirstHand) then
-            card.ability.extra.isFirstHand = false
+            if not context.blueprint then
+                card.ability.extra.isFirstHand = false
+            end
             return {
 					chips = card.ability.extra.bonusChips,
 					card = card
@@ -399,8 +393,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = false, 
     blueprint_compat = true, 
-    eternal_compat = false, 
-    perishable_compat = true,
     pos = {x = 6, y = 0}, 
     config = { 
       extra = {
@@ -422,7 +414,9 @@ SMODS.Joker{
             local bonusChips = card.ability.extra.bonusChips
             local bonusMult = card.ability.extra.bonusMult
             if card.ability.extra.isFirstHand then
-                card.ability.extra.isFirstHand = false
+                if not context.blueprint then
+                    card.ability.extra.isFirstHand = false
+                end
                 bonusChips = bonusChips * card.ability.extra.firstHandMultiplier
                 bonusMult = bonusMult * card.ability.extra.firstHandMultiplier
             end
@@ -450,9 +444,7 @@ SMODS.Joker{
 	cost = 4,
     unlocked = true, 
     discovered = true, 
-    blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true,
+    blueprint_compat = false, 
     pos = {x = 7, y = 0}, 
     config = { 
       extra = {
@@ -490,7 +482,7 @@ SMODS.Joker{
                 returnChips = (1/math.max(abExtra.firstHandDivisorLimit, abExtra.targetHands - abExtra.handDivisorMinus)) * G.GAME.blind.chips
             end
             abExtra.isFirstHand = false
-            if returnChips > (mult * hand_chips) and returnChips > G.AKTS_Globals.redMaxChips then
+            if returnChips > SMODS.calculate_round_score() and returnChips > G.AKTS_Globals.redMaxChips then
                 card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("akts_red_active"), G.C.ATTENTION})
                 mult = mod_mult(0)
                 hand_chips = mod_chips(0)
@@ -519,9 +511,7 @@ SMODS.Joker{
 	cost = 10,
     unlocked = true, 
     discovered = true, 
-    blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true,
+    blueprint_compat = false, 
     pos = {x = 8, y = 0}, 
     config = { 
       extra = {
@@ -566,7 +556,7 @@ SMODS.Joker{
             local ranks = {}
             for i, cards in pairs(G.hand.cards) do
                 local rank = cards:get_id()
-                if rank > 0 and cards.config.center ~= G.P_CENTERS.m_stone then
+                if rank > 0 and not SMODS.has_enhancement(cards, "m_stone")  then
                     ranks[rank] = (ranks[rank] or 0) + 1
                 end   
             end
@@ -590,6 +580,181 @@ SMODS.Joker{
         aktsBadgeHelper(self,card,badges)
     end  
 }
+
+SMODS.Joker{
+    key = 'Civilight',
+    name = 'Civilight',
+    rarity = 3,
+    atlas = 'Jokers',
+	cost = 8,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = false,
+    pos = {x = 9, y = 0},
+    config = {
+      extra = {
+        targetSeal = "Red",
+        sealAdds = 3,
+        rankBalance = 1,
+        ranks = {},
+        balancePercentage = 15,
+        tagClass = {"Supporter"},
+        tagFaction = {"Rhodes"}
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        info_queue[#info_queue+1] = {key = string.lower(center.ability.extra.targetSeal) ..'_seal', set = 'Other'}
+        return {vars = {center.ability.extra.sealAdds, center.ability.extra.rankBalance, center.ability.extra.balancePercentage}}
+    end,
+
+    add_to_deck = function(self, card, from_debuff)
+        for i = 1, 3, 1 do
+            local newCard = SMODS.add_card{set = 'Base', area = G.deck, no_edition = true, seal = card.ability.extra.targetSeal}
+            playing_card_joker_effects({newCard})
+        end
+    end,
+    calculate = function(self,card,context)
+        if context.cardarea == G.jokers and context.scoring_hand and context.before then
+            G.AKTS_Globals.CERanks = {}
+        end
+
+       if context.individual and not context.end_of_round and context.cardarea == G.play and not context.other_card.debuff and context.other_card.seal == card.ability.extra.targetSeal then
+        local avgRank = 0
+        local ranks = G.AKTS_Globals.CERanks
+        if #ranks == 0 then
+            for i = 1, #context.scoring_hand do
+                local id = context.scoring_hand[i]:get_id()
+                if id > 0 then
+                    table.insert(ranks, id)
+                    avgRank = avgRank + ranks[#ranks]
+                end
+            end
+        else
+            for i = 1, #ranks do
+                avgRank = avgRank + ranks[i]
+            end
+        end
+        avgRank = round_number(avgRank/#context.scoring_hand, 0)
+        local index = 0
+        for i = 1, #context.scoring_hand do
+            local id = context.scoring_hand[i]:get_id()
+            if id > 0 then
+                index = index + 1
+                if ranks[index] < avgRank then
+                    local change = math.min(avgRank - ranks[index], card.ability.extra.rankBalance)
+                    ranks[index] = ranks[index] + change
+                    G.E_MANAGER:add_event(Event({
+                        func = (function()
+                            SMODS.modify_rank(context.scoring_hand[i], change)
+                            context.scoring_hand[i]:juice_up()
+                            return true
+                        end)
+                    }))
+                elseif ranks[index] > avgRank then
+                    local change = -math.min(ranks[index] - avgRank, card.ability.extra.rankBalance)
+                    ranks[index] = ranks[index] + change
+                    G.E_MANAGER:add_event(Event({
+                        func = (function ()
+                            SMODS.modify_rank(context.scoring_hand[i], change)
+                            context.scoring_hand[i]:juice_up()
+                            return true
+                        end)
+                    }))
+                end
+            end
+        end
+
+        local change = (math.abs(hand_chips - mult) / 2) * (0.01 * card.ability.extra.balancePercentage)
+        if hand_chips > mult then
+            hand_chips = mod_chips(hand_chips - change)
+            mult = mod_mult(mult + change)
+        else
+            hand_chips = mod_chips(hand_chips + change)
+            mult = mod_mult(mult - change)
+        end
+        return {
+            card = card,
+            message = localize("akts_CE_Balance"),
+            colour = G.C.PURPLE
+        }
+       end
+    end,
+    set_badges = function(self, card, badges)
+        aktsBadgeHelper(self,card,badges)
+    end
+}
+
+SMODS.Joker{
+    key = 'Pozemka',
+    name = 'Pozemka',
+    rarity = 2,
+    atlas = 'Jokers',
+	cost = 7,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = true,
+    pos = {x = 9, y = 1},
+    config = {
+      extra = {
+        rankMult = 0.15,
+        suitMult = 0.15,
+        persistentMult = 1,
+        tagClass = {"Sniper"},
+        tagFaction = {"Rhodes"}
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.rankMult, center.ability.extra.suitMult, center.ability.extra.persistentMult, 
+                        localize((G.AKTS_Globals.pozemkaCards or {}).rank or 'Ace', 'ranks'), localize((G.AKTS_Globals.pozemkaCards or {}).suit or 'Spades', 'suits_plural')}}
+    end,
+    calculate = function(self,card,context)
+        if context.joker_main and context.scoring_hand then
+            local totalTempMult = 0
+            for i, _card in ipairs(context.scoring_hand) do
+                if not _card.debuff then
+                    local tempMult = 0
+                    if _card:is_suit(G.AKTS_Globals.pozemkaCards.suit) then
+                        tempMult = tempMult + card.ability.extra.suitMult
+                    end
+                    if _card:get_id() == G.AKTS_Globals.pozemkaCards.id then
+                        tempMult = tempMult + card.ability.extra.rankMult
+                    end
+
+                    if tempMult == card.ability.extra.rankMult + card.ability.extra.suitMult and not context.blueprint then
+                        card.ability.extra.persistentMult = card.ability.extra.persistentMult + tempMult
+                        card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex'), G.C.ATTENTION})
+                    else
+                        totalTempMult = totalTempMult + tempMult
+                    end
+                end
+            end
+            if card.ability.extra.persistentMult + totalTempMult > 1 then
+                return {
+                    xmult = card.ability.extra.persistentMult + totalTempMult,
+                }
+            end
+        end
+    end,
+    set_badges = function(self, card, badges)
+        aktsBadgeHelper(self,card,badges)
+    end
+}
+
+function reset_PozemkaRankSuit()
+    G.AKTS_Globals.pozemkaCards = { rank = 'Ace', suit = 'Spades' }
+    local valid_cards = {}
+    for _, playing_card in ipairs(G.playing_cards) do
+        if not SMODS.has_no_suit(playing_card) and not SMODS.has_no_rank(playing_card) then
+            valid_cards[#valid_cards + 1] = playing_card
+        end
+    end
+    local target = pseudorandom_element(valid_cards, pseudoseed('akts_Pozy'))
+    if target then
+        G.AKTS_Globals.pozemkaCards.suit = target.base.suit
+        G.AKTS_Globals.pozemkaCards.rank = target.base.value
+        G.AKTS_Globals.pozemkaCards.id = target.base.id
+    end
+end
 ----------------------------------------Base Rhodes end----------------------------------------
 SMODS.Joker{
     key = 'Logos',
@@ -599,9 +764,7 @@ SMODS.Joker{
 	cost = 7,
     unlocked = true, 
     discovered = true, 
-    blueprint_compat = false, 
-    eternal_compat = true, 
-    perishable_compat = true,
+    blueprint_compat = true, 
     pos = {x = 0, y = 1}, 
     config = { 
       extra = {
@@ -629,7 +792,7 @@ SMODS.Joker{
         G.hand:change_size(-card.ability.extra.curHandSize)
     end,
     calculate = function(self,card,context)
-        if context.cardarea == G.jokers and context.scoring_hand then
+        if not context.blueprint and context.cardarea == G.jokers and context.scoring_hand then
             if context.before then
                 card.ability.extra.perishFlagA = false
                 card.ability.extra.akts_save = false
@@ -648,12 +811,12 @@ SMODS.Joker{
                 end
             end
         end
-        if context.hand_drawn then
+        if not context.blueprint and context.hand_drawn then
             if card.ability.extra.playedRankPlus == #card.ability.extra.playedRank and G.GAME.chips/G.GAME.blind.chips < 1 and leftmostActivatedTrue("perishFlagA", getJokerSlot(card)) then
                 end_round()
             end
         end
-        if context.end_of_round then
+        if not context.blueprint and context.end_of_round then
             card.ability.extra.perishFlagA = false
             if G.GAME.chips/G.GAME.blind.chips < 1 and card.ability.extra.akts_save and leftmostActivatedTrue("akts_save", getJokerSlot(card)) then
                 card.ability.extra.akts_save = false
@@ -698,8 +861,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = true, 
     blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true,
     no_pool_flag = 'akts_blaze_transform',
     pos = {x = 1, y = 1}, 
     config = { 
@@ -725,13 +886,13 @@ SMODS.Joker{
             local returnMult = card.ability.extra.bonusMult
             if not context.blueprint then
                 card.ability.extra.extraCardsPlayed = card.ability.extra.extraCardsPlayed + 1
-            end
-            if card.ability.extra.extraCardsPlayed % card.ability.extra.extraCardsReq == 0 then
-                card.ability.extra.extraCardsPlayed = 0
-                returnMult = card.ability.extra.critBonusMult
-                if card.ability.extra.aktsSellValue > 0 and not context.blueprint then
-                    card.ability.extra.aktsSellValue = card.ability.extra.aktsSellValue - 1
-                    card:set_cost()
+                if card.ability.extra.extraCardsPlayed % card.ability.extra.extraCardsReq == 0 then
+                    card.ability.extra.extraCardsPlayed = 0
+                    returnMult = card.ability.extra.critBonusMult
+                    if card.ability.extra.aktsSellValue > 0 then
+                        card.ability.extra.aktsSellValue = card.ability.extra.aktsSellValue - 1
+                        card:set_cost()
+                    end
                 end
             end
             return {
@@ -760,8 +921,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = false, 
     blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true,
     pos = {x = 2, y = 1}, 
     config = { 
       extra = {
@@ -791,7 +950,7 @@ SMODS.Joker{
     end,
     calculate = function(self,card,context)
         --Find AoE Targets and set them up.
-        if context.cardarea == G.jokers and context.scoring_hand then
+        if not context.blueprint and context.cardarea == G.jokers and context.scoring_hand then
             if context.before then                
                 card.ability.extra.aoEMain = {{nil,nil,nil,nil,nil},{0,0,0,0,0},{0,0,0,0,0}, {'Burn'}}
                 for i, v in pairs(context.full_hand) do
@@ -878,8 +1037,6 @@ SMODS.Joker{
     unlocked = true, 
     discovered = true, 
     blueprint_compat = false, 
-    eternal_compat = true, 
-    perishable_compat = true,
     pos = {x = 3, y = 1}, 
     config = { 
       extra = {

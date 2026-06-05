@@ -7,8 +7,6 @@ SMODS.Joker{
     unlocked = true,
     discovered = true,
     blueprint_compat = true,
-    eternal_compat = true,
-    perishable_compat = true,
     pos = {x = 0, y = 13},
     config = { 
       extra = {
@@ -29,7 +27,7 @@ SMODS.Joker{
     calculate = function(self,card,context)
       if context.cardarea == G.jokers and context.joker_main then
         if G.GAME.blind then
-          local currentChips =  ((hand_chips * mult) + G.GAME.chips)/G.GAME.blind.chips
+          local currentChips =  (SMODS.calculate_round_score() + G.GAME.chips)/G.GAME.blind.chips
           local snipersOwned = CalcTaggedOwned(card.ability.extra.bonusChanceConditionTypes[1])
           local siracusaOwned = CalcTaggedOwned(card.ability.extra.bonusChanceConditionTypes[2], snipersOwned)
           local bonusChips = math.floor(currentChips / (0.01 * card.ability.extra.bonusChipsInterval)) * card.ability.extra.bonusChips
@@ -64,8 +62,6 @@ SMODS.Joker{
     unlocked = true,
     discovered = true,
     blueprint_compat = true,
-    eternal_compat = true,
-    perishable_compat = true,
     pos = {x = 1, y = 13},
     config = { 
       extra = {
@@ -95,7 +91,14 @@ SMODS.Joker{
           return
         end
         if card.ability.extra.nextScoredCount == 1 then
-          card.ability.extra.nextScoredCount = card.ability.extra.scoredCountDefault
+          if not context.blueprint then
+            G.E_MANAGER:add_event(Event({func = (
+              function()
+                card.ability.extra.nextScoredCount = card.ability.extra.scoredCountDefault
+                return true
+              end),
+            }))
+          end
           card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_reset')})
           return {
             card = card,
@@ -104,7 +107,14 @@ SMODS.Joker{
             dollars = card.ability.extra.bonusCash
           }
         end
-        card.ability.extra.nextScoredCount = card.ability.extra.nextScoredCount - 1
+        if not context.blueprint then
+          G.E_MANAGER:add_event(Event({func = (
+            function() 
+              card.ability.extra.nextScoredCount = card.ability.extra.nextScoredCount - 1
+              return true
+            end),
+          }))
+        end
         return {
             card = card,
             chips = card.ability.extra.bonusChips,
