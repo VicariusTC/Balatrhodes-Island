@@ -220,14 +220,18 @@ SMODS.Consumable{
     use = function(self,card,area,copier)
         local eatDevices = function (count)
             local deleted = 0
+            local targets = {}
             for i, v in ipairs(G.consumeables.cards) do
-                if deleted == count then
+                if deleted == count -1 then
                     break
                 end
                 if v.config.center.key == 'c_akts_NastiDevice' then
-                    v:remove()
+                    table.insert(targets, v)
                     deleted = deleted + 1
                 end
+            end
+            for i, v in ipairs(targets) do
+                v:remove()
             end
         end
 
@@ -252,16 +256,19 @@ SMODS.Consumable{
             for _, v in ipairs(G.jokers.cards) do
                 for _, val in ipairs(rhines) do
                     if val == v.config.center.key then
-                        if not v.edition or not (v.edition.type == "negative" or v.edition.type == "polychrome") then
+                        if not v.edition or not (v.edition.key == "e_negative" or v.edition.key == "e_polychrome") then
                             eatDevices(card.ability.extra.bonusThresholds[3])
                             if not v.edition then
                                 v:set_edition({foil = true})
                                 return
                             end
-                            if v.edition.type == "foil" then
+                            if v.edition.key == "e_akts_corrupt" then
+                                v:set_edition()
+                            end
+                            if v.edition.key == "e_foil" then
                                 v:set_edition({holo = true})
                                 return
-                            end 
+                            end
                             v:set_edition({polychrome = true})
                             return
                         end
